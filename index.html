@@ -8,20 +8,20 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --primary: #818CF8;
-    --primary-light: #1E1B4B;
-    --surface: #0F0F10;
-    --card: #1C1C1E;
-    --text: #F3F4F6;
-    --sub: #9CA3AF;
-    --border: #2C2C2E;
+    --primary: rgba(133,107,255,1);
+    --primary-light: rgba(34,14,88,1);
+    --surface: rgba(29,30,32,1);
+    --card: rgba(43,46,49,1);
+    --text: rgba(255,255,255,1);
+    --sub: rgba(160,164,171,1);
+    --border: rgba(68,70,75,1);
     --radius: 16px;
-    --tag-bg: #27272A;
+    --tag-bg: rgba(68,70,75,1);
   }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #1C1C1E;
+    background: rgba(31,31,31,1);
     color: var(--text);
     min-height: 100vh;
     display: flex;
@@ -41,7 +41,7 @@
 
   /* 화면이 작을 때는 꽉 채움 */
   @media (max-height: 900px), (max-width: 430px) {
-    body { align-items: flex-start; background: var(--surface); }
+    body { align-items: flex-start; background: rgba(31,31,31,1); }
     #app { width: 100%; height: 100vh; border-radius: 0; box-shadow: none; }
   }
 
