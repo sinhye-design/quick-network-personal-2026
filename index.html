@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>NetWork</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #4F46E5;
+    --primary-light: #EEF2FF;
+    --surface: #F9FAFB;
+    --card: #FFFFFF;
+    --text: #111827;
+    --sub: #6B7280;
+    --border: #E5E7EB;
+    --radius: 16px;
+    --tag-bg: #F3F4F6;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #1C1C1E;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #app {
+    width: 390px;
+    height: 844px;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    border-radius: 44px;
+    box-shadow: 0 0 0 10px #2C2C2E, 0 0 0 12px #3A3A3C, 0 30px 80px rgba(0,0,0,.7);
+  }
+
+  /* 화면이 작을 때는 꽉 채움 */
+  @media (max-height: 900px), (max-width: 430px) {
+    body { align-items: flex-start; background: var(--surface); }
+    #app { width: 100%; height: 100vh; border-radius: 0; box-shadow: none; }
+  }
+
+  /* ── SCREEN ── */
+  .screen {
+    display: none;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .screen.active { display: flex; }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .topbar h1 { font-size: 18px; font-weight: 700; flex: 1; }
+  .topbar .logo { font-size: 20px; font-weight: 800; color: var(--primary); }
+  .back-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 22px; color: var(--text); padding: 0 4px;
+    line-height: 1;
+  }
+
+  /* ── SCROLL BODY ── */
+  .scroll-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px 100px;
+  }
+
+  /* ── FORM ── */
+  .form-section { margin-bottom: 28px; }
+  .form-section h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sub);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 12px;
+  }
+  .field { margin-bottom: 14px; }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sub);
+    margin-bottom: 6px;
+  }
+  .field input, .field textarea, .field select {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--card);
+    outline: none;
+    transition: border .15s;
+    font-family: inherit;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--primary); }
+  .field textarea { resize: none; height: 90px; }
+  .field input::placeholder, .field textarea::placeholder { color: #C4C4C4; }
+
+  /* avatar picker */
+  .avatar-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .avatar-opt {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    font-size: 22px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    border: 3px solid transparent;
+    background: var(--tag-bg);
+    transition: border .15s;
+  }
+  .avatar-opt.selected { border-color: var(--primary); }
+
+  /* tag input */
+  .tag-input-wrap {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 10px;
+    background: var(--card);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 48px;
+    cursor: text;
+  }
+  .tag-input-wrap:focus-within { border-color: var(--primary); }
+  .tag-chip {
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .tag-chip .rm { cursor: pointer; font-size: 15px; line-height: 1; }
+  .tag-input-wrap input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    min-width: 80px;
+    flex: 1;
+    padding: 2px 4px;
+  }
+
+  /* ── BUTTON ── */
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: opacity .15s, transform .1s;
+  }
+  .btn:active { transform: scale(.98); opacity: .85; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-outline {
+    background: none;
+    border: 1.5px solid var(--border);
+    color: var(--text);
+  }
+  .btn-sm {
+    width: auto;
+    padding: 8px 18px;
+    font-size: 14px;
+    border-radius: 20px;
+  }
+
+  /* ── HOME ── */
+  .home-scroll { flex: 1; overflow-y: auto; }
+
+  .home-header {
+    background: var(--card);
+    padding: 16px 16px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .home-toprow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .home-toprow .logo { font-size: 22px; font-weight: 800; color: var(--primary); flex: 1; }
+  .home-toprow .my-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 26px; line-height: 1;
+  }
+
+  .search-bar {
+    position: relative;
+    margin-bottom: 12px;
+  }
+  .search-bar input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 24px;
+    padding: 10px 14px 10px 40px;
+    font-size: 14px;
+    background: var(--surface);
+    outline: none;
+    font-family: inherit;
+  }
+  .search-bar input:focus { border-color: var(--primary); }
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--sub);
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  .filter-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scrollbar-width: none;
+  }
+  .filter-row::-webkit-scrollbar { display: none; }
+  .filter-chip {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--tag-bg);
+    color: var(--sub);
+    border: none;
+    transition: background .15s, color .15s;
+  }
+  .filter-chip.active {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  /* ── LIST STATS ── */
+  .list-stats {
+    font-size: 13px;
+    color: var(--sub);
+    padding: 12px 16px 4px;
+  }
+
+  /* ── CARD ── */
+  .card-list { display: flex; flex-direction: column; gap: 12px; padding: 8px 16px 100px; }
+
+  .person-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: border .15s, box-shadow .15s;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .person-card:active { box-shadow: 0 4px 16px rgba(79,70,229,.15); border-color: var(--primary); }
+  .person-card.mine { border-color: var(--primary); background: var(--primary-light); }
+
+  .avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    font-size: 24px;
+    background: var(--tag-bg);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-info { flex: 1; min-width: 0; }
+  .card-name {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .badge-me {
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--primary);
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
+  .card-role {
+    font-size: 13px;
+    color: var(--sub);
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    background: var(--tag-bg);
+    color: var(--sub);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .tag.primary { background: var(--primary-light); color: var(--primary); }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--sub);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 15px; }
+
+  /* ── FAB ── */
+  .fab {
+    position: absolute;
+    bottom: 24px;
+    right: 16px;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-size: 28px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(79,70,229,.4);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .15s;
+    z-index: 20;
+  }
+  .fab:active { transform: scale(.92); }
+
+  /* ── DETAIL ── */
+  .detail-hero {
+    background: var(--primary);
+    padding: 40px 20px 30px;
+    text-align: center;
+    color: #fff;
+  }
+  .detail-avatar {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    font-size: 44px;
+    background: rgba(255,255,255,.2);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+  }
+  .detail-name { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+  .detail-role { font-size: 15px; opacity: .85; }
+
+  .detail-body { padding: 20px 16px 100px; display: flex; flex-direction: column; gap: 16px; }
+
+  .info-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .info-card h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--sub);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 10px;
+  }
+  .info-card p { font-size: 15px; line-height: 1.6; color: var(--text); }
+  .info-card .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .contact-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 15px;
+  }
+  .contact-btn:last-child { border-bottom: none; }
+  .contact-btn .icon { font-size: 20px; width: 24px; text-align: center; }
+  .contact-btn .val { flex: 1; }
+  .contact-btn .arrow { color: var(--sub); }
+
+  .edit-row { display: flex; gap: 10px; margin-top: 8px; }
+
+  /* ── TOAST ── */
+  #toast {
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #1F2937;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity .3s, transform .3s;
+    pointer-events: none;
+    z-index: 100;
+    white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ───── SCREEN: 등록 ───── -->
+  <div class="screen active" id="screen-register">
+    <div class="topbar">
+      <span class="logo">NetWork</span>
+      <h1>내 프로필 등록</h1>
+    </div>
+    <div class="scroll-body">
+
+      <div class="form-section">
+        <h3>아바타</h3>
+        <div class="avatar-row" id="avatar-row"></div>
+      </div>
+
+      <div class="form-section">
+        <h3>기본 정보</h3>
+        <div class="field">
+          <label>이름 *</label>
+          <input id="r-name" type="text" placeholder="홍길동">
+        </div>
+        <div class="field">
+          <label>직업 / 역할 *</label>
+          <input id="r-role" type="text" placeholder="프로덕트 디자이너 @ 카카오">
+        </div>
+        <div class="field">
+          <label>소속 / 회사</label>
+          <input id="r-company" type="text" placeholder="(주) 스타트업">
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>소개</h3>
+        <div class="field">
+          <label>한줄 소개 *</label>
+          <textarea id="r-bio" placeholder="간단하게 자신을 소개해 주세요."></textarea>
+        </div>
+        <div class="field">
+          <label>관심사 태그 <span style="color:var(--sub);font-weight:400">(입력 후 Enter)</span></label>
+          <div class="tag-input-wrap" id="tag-wrap">
+            <input id="tag-input" type="text" placeholder="AI, 스타트업 …">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>연락처</h3>
+        <div class="field">
+          <label>이메일</label>
+          <input id="r-email" type="email" placeholder="hello@example.com">
+        </div>
+        <div class="field">
+          <label>링크드인 / 링크</label>
+          <input id="r-link" type="url" placeholder="https://linkedin.com/in/…">
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="submitRegister()">등록 완료</button>
+    </div>
+  </div>
+
+  <!-- ───── SCREEN: 홈 ───── -->
+  <div class="screen" id="screen-home">
+    <div class="home-header">
+      <div class="home-toprow">
+        <span class="logo">NetWork</span>
+        <button class="my-btn" onclick="goMyProfile()" title="내 프로필">👤</button>
+      </div>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input id="search-input" type="text" placeholder="이름, 직업으로 검색…" oninput="renderList()">
+      </div>
+      <div class="filter-row" id="filter-row"></div>
+    </div>
+    <div class="home-scroll">
+      <div class="list-stats" id="list-stats"></div>
+      <div class="card-list" id="card-list"></div>
+    </div>
+  </div>
+
+  <!-- ───── SCREEN: 상세 ───── -->
+  <div class="screen" id="screen-detail">
+    <div class="topbar">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <h1 id="detail-title">프로필</h1>
+      <div style="width:32px"></div>
+    </div>
+    <div style="overflow-y:auto;flex:1">
+      <div class="detail-hero">
+        <div class="detail-avatar" id="d-avatar"></div>
+        <div class="detail-name" id="d-name"></div>
+        <div class="detail-role" id="d-role"></div>
+      </div>
+      <div class="detail-body">
+        <div class="info-card" id="d-bio-card">
+          <h4>소개</h4>
+          <p id="d-bio"></p>
+        </div>
+        <div class="info-card" id="d-tags-card">
+          <h4>관심사</h4>
+          <div class="tag-row" id="d-tags"></div>
+        </div>
+        <div class="info-card" id="d-contact-card">
+          <h4>연락처</h4>
+          <div id="d-contacts"></div>
+        </div>
+        <div class="edit-row" id="d-edit-row" style="display:none">
+          <button class="btn btn-outline" onclick="editMyProfile()">프로필 수정</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="fab" id="fab-add" onclick="goRegister()" title="참여자 추가">＋</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────
+const AVATARS = ['😊','🤓','😎','🧑‍💻','👩‍💼','🧑‍🎨','👨‍🔬','🦸','🧑‍🚀','🎯'];
+
+const DUMMY = [
+  { id: 'd1', avatar: '🤓', name: '김민준', role: '풀스택 개발자 @ 네이버', company: '네이버', bio: '웹과 모바일을 넘나드는 개발자입니다. 새로운 기술 탐구를 좋아합니다.', tags: ['React', 'Node.js', 'AI'], email: 'minjun@naver.com', link: '' },
+  { id: 'd2', avatar: '👩‍💼', name: '이서연', role: 'Product Manager @ 카카오', company: '카카오', bio: 'PM 3년차, 사용자 중심 제품을 만드는 것이 목표입니다.', tags: ['스타트업', 'UX', '그로스해킹'], email: 'seoyeon@kakao.com', link: 'https://linkedin.com' },
+  { id: 'd3', avatar: '🧑‍🎨', name: '박지훈', role: 'UX 디자이너 @ 토스', company: '토스', bio: '핀테크 UX를 중심으로 사용자 경험을 설계합니다.', tags: ['Figma', 'UX', '핀테크'], email: '', link: 'https://toss.im' },
+  { id: 'd4', avatar: '😎', name: '최수아', role: 'AI 연구원 @ KAIST', company: 'KAIST', bio: '자연어처리와 생성 AI를 연구하고 있습니다.', tags: ['AI', 'NLP', '딥러닝'], email: 'sooah@kaist.ac.kr', link: '' },
+];
+
+let state = {
+  myId: null,
+  people: [],
+  selectedTag: '전체',
+  editingId: null,
+  detailId: null,
+  prevScreen: 'home',
+};
+
+function load() {
+  const raw = localStorage.getItem('nw_state');
+  if (raw) {
+    const saved = JSON.parse(raw);
+    state.myId = saved.myId || null;
+    state.people = saved.people || [];
+  }
+  if (state.people.length === 0) state.people = [...DUMMY];
+}
+
+function save() {
+  localStorage.setItem('nw_state', JSON.stringify({ myId: state.myId, people: state.people }));
+}
+
+// ── SCREENS ───────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  document.getElementById('fab-add').style.display = id === 'home' ? 'flex' : 'none';
+}
+
+function goBack() {
+  showScreen(state.prevScreen || 'home');
+  if (state.prevScreen === 'home') renderList();
+}
+
+// ── REGISTER SCREEN ────────────────────────────────────────
+let selectedAvatar = AVATARS[0];
+let registerTags = [];
+
+function initRegisterForm() {
+  const row = document.getElementById('avatar-row');
+  row.innerHTML = '';
+  AVATARS.forEach(a => {
+    const d = document.createElement('div');
+    d.className = 'avatar-opt' + (a === selectedAvatar ? ' selected' : '');
+    d.textContent = a;
+    d.onclick = () => {
+      selectedAvatar = a;
+      document.querySelectorAll('.avatar-opt').forEach(x => x.classList.remove('selected'));
+      d.classList.add('selected');
+    };
+    row.appendChild(d);
+  });
+
+  const tagInput = document.getElementById('tag-input');
+  tagInput.onkeydown = e => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const val = tagInput.value.trim().replace(/,$/, '');
+      if (val && !registerTags.includes(val)) {
+        registerTags.push(val);
+        renderRegisterTags();
+      }
+      tagInput.value = '';
+    }
+    if (e.key === 'Backspace' && !tagInput.value && registerTags.length) {
+      registerTags.pop();
+      renderRegisterTags();
+    }
+  };
+  document.getElementById('tag-wrap').onclick = () => tagInput.focus();
+}
+
+function renderRegisterTags() {
+  const wrap = document.getElementById('tag-wrap');
+  const input = document.getElementById('tag-input');
+  wrap.innerHTML = '';
+  registerTags.forEach((t, i) => {
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip';
+    chip.innerHTML = `${t}<span class="rm" data-i="${i}">×</span>`;
+    chip.querySelector('.rm').onclick = () => { registerTags.splice(i, 1); renderRegisterTags(); };
+    wrap.appendChild(chip);
+  });
+  wrap.appendChild(input);
+  input.focus();
+}
+
+function fillFormForEdit(person) {
+  selectedAvatar = person.avatar;
+  document.getElementById('r-name').value = person.name;
+  document.getElementById('r-role').value = person.role;
+  document.getElementById('r-company').value = person.company || '';
+  document.getElementById('r-bio').value = person.bio;
+  document.getElementById('r-email').value = person.email || '';
+  document.getElementById('r-link').value = person.link || '';
+  registerTags = [...(person.tags || [])];
+  initRegisterForm();
+  renderRegisterTags();
+  document.querySelector('#screen-register .topbar h1').textContent = '프로필 수정';
+}
+
+function clearForm() {
+  selectedAvatar = AVATARS[0];
+  registerTags = [];
+  ['r-name','r-role','r-company','r-bio','r-email','r-link'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  initRegisterForm();
+  renderRegisterTags();
+  document.querySelector('#screen-register .topbar h1').textContent = '내 프로필 등록';
+}
+
+function submitRegister() {
+  const name = document.getElementById('r-name').value.trim();
+  const role = document.getElementById('r-role').value.trim();
+  const bio  = document.getElementById('r-bio').value.trim();
+  if (!name || !role || !bio) { toast('이름, 역할, 소개를 입력해 주세요.'); return; }
+
+  const person = {
+    id: state.editingId || ('u' + Date.now()),
+    avatar: selectedAvatar,
+    name, role,
+    company: document.getElementById('r-company').value.trim(),
+    bio,
+    tags: [...registerTags],
+    email: document.getElementById('r-email').value.trim(),
+    link: document.getElementById('r-link').value.trim(),
+  };
+
+  if (state.editingId) {
+    const idx = state.people.findIndex(p => p.id === state.editingId);
+    if (idx !== -1) state.people[idx] = person;
+    state.editingId = null;
+    toast('프로필이 수정됐어요 ✓');
+  } else {
+    state.people.push(person);
+    if (!state.myId) state.myId = person.id;
+    toast('등록 완료! 환영해요 🎉');
+  }
+
+  save();
+  clearForm();
+  showScreen('home');
+  renderList();
+}
+
+function goRegister() {
+  state.editingId = null;
+  clearForm();
+  state.prevScreen = 'home';
+  showScreen('register');
+}
+
+function editMyProfile() {
+  const me = state.people.find(p => p.id === state.myId);
+  if (!me) return;
+  state.editingId = me.id;
+  fillFormForEdit(me);
+  state.prevScreen = 'detail';
+  showScreen('register');
+}
+
+// ── HOME / LIST ────────────────────────────────────────────
+function allTags() {
+  const set = new Set(['전체']);
+  state.people.forEach(p => (p.tags || []).forEach(t => set.add(t)));
+  return [...set];
+}
+
+function renderFilters() {
+  const row = document.getElementById('filter-row');
+  row.innerHTML = '';
+  allTags().forEach(tag => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-chip' + (tag === state.selectedTag ? ' active' : '');
+    btn.textContent = tag;
+    btn.onclick = () => { state.selectedTag = tag; renderFilters(); renderList(); };
+    row.appendChild(btn);
+  });
+}
+
+function renderList() {
+  const q = (document.getElementById('search-input').value || '').toLowerCase();
+  let list = state.people.filter(p => {
+    const matchQ = !q || p.name.toLowerCase().includes(q) || p.role.toLowerCase().includes(q) || (p.company||'').toLowerCase().includes(q);
+    const matchTag = state.selectedTag === '전체' || (p.tags || []).includes(state.selectedTag);
+    return matchQ && matchTag;
+  });
+
+  // 내 프로필 먼저
+  list.sort((a, b) => (b.id === state.myId ? 1 : 0) - (a.id === state.myId ? 1 : 0));
+
+  const el = document.getElementById('card-list');
+  const stats = document.getElementById('list-stats');
+  stats.textContent = `참여자 ${list.length}명`;
+
+  if (list.length === 0) {
+    el.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><p>검색 결과가 없어요</p></div>`;
+    return;
+  }
+
+  el.innerHTML = '';
+  list.forEach(p => {
+    const isMe = p.id === state.myId;
+    const card = document.createElement('div');
+    card.className = 'person-card' + (isMe ? ' mine' : '');
+    card.innerHTML = `
+      <div class="avatar">${p.avatar}</div>
+      <div class="card-info">
+        <div class="card-name">${p.name}${isMe ? '<span class="badge-me">나</span>' : ''}</div>
+        <div class="card-role">${p.role}</div>
+        <div class="card-tags">${(p.tags||[]).slice(0,3).map(t => `<span class="tag${isMe?' primary':''}">${t}</span>`).join('')}</div>
+      </div>
+    `;
+    card.onclick = () => openDetail(p.id);
+    el.appendChild(card);
+  });
+}
+
+function goMyProfile() {
+  if (!state.myId) { toast('먼저 프로필을 등록해 주세요.'); return; }
+  openDetail(state.myId);
+}
+
+// ── DETAIL ────────────────────────────────────────────────
+function openDetail(id) {
+  const p = state.people.find(x => x.id === id);
+  if (!p) return;
+  state.detailId = id;
+  state.prevScreen = 'home';
+
+  document.getElementById('d-avatar').textContent = p.avatar;
+  document.getElementById('d-name').textContent = p.name;
+  document.getElementById('d-role').textContent = p.role;
+  document.getElementById('detail-title').textContent = p.name;
+  document.getElementById('d-bio').textContent = p.bio;
+
+  const tagsEl = document.getElementById('d-tags');
+  tagsEl.innerHTML = (p.tags||[]).map(t => `<span class="tag primary">${t}</span>`).join('');
+  document.getElementById('d-tags-card').style.display = p.tags?.length ? '' : 'none';
+
+  const contacts = document.getElementById('d-contacts');
+  contacts.innerHTML = '';
+  if (p.email) {
+    contacts.innerHTML += `<a class="contact-btn" href="mailto:${p.email}"><span class="icon">✉️</span><span class="val">${p.email}</span><span class="arrow">›</span></a>`;
+  }
+  if (p.link) {
+    contacts.innerHTML += `<a class="contact-btn" href="${p.link}" target="_blank"><span class="icon">🔗</span><span class="val">${p.link}</span><span class="arrow">›</span></a>`;
+  }
+  if (p.company) {
+    contacts.innerHTML += `<div class="contact-btn" style="cursor:default"><span class="icon">🏢</span><span class="val">${p.company}</span></div>`;
+  }
+  document.getElementById('d-contact-card').style.display = (p.email || p.link || p.company) ? '' : 'none';
+
+  const editRow = document.getElementById('d-edit-row');
+  editRow.style.display = p.id === state.myId ? 'flex' : 'none';
+
+  showScreen('detail');
+}
+
+// ── TOAST ─────────────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ── INIT ──────────────────────────────────────────────────
+function init() {
+  load();
+  initRegisterForm();
+
+  if (state.myId) {
+    showScreen('home');
+    renderFilters();
+    renderList();
+  } else {
+    showScreen('register');
+  }
+}
+
+init();
+</script>
+</body>
+</html>
