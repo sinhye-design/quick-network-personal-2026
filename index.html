@@ -8,15 +8,15 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --primary: rgba(133,107,255,1);
-    --primary-light: rgba(34,14,88,1);
-    --surface: rgba(29,30,32,1);
-    --card: rgba(43,46,49,1);
-    --text: rgba(255,255,255,1);
-    --sub: rgba(160,164,171,1);
-    --border: rgba(68,70,75,1);
+    --primary: rgba(7,202,127,1);
+    --primary-light: rgba(7,202,127,0.15);
+    --surface: rgba(31,31,31,1);
+    --card: rgba(46,46,46,1);
+    --text: rgba(254,254,254,1);
+    --sub: rgba(166,166,166,1);
+    --border: rgba(58,58,58,0.6);
     --radius: 16px;
-    --tag-bg: rgba(68,70,75,1);
+    --tag-bg: rgba(66,66,66,1);
   }
 
   body {
@@ -183,7 +183,7 @@
     transition: opacity .15s, transform .1s;
   }
   .btn:active { transform: scale(.98); opacity: .85; }
-  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary { background: var(--primary); color: rgba(0,0,0,1); }
   .btn-outline {
     background: none;
     border: 1.5px solid var(--border);
@@ -267,7 +267,7 @@
   }
   .filter-chip.active {
     background: var(--primary);
-    color: #fff;
+    color: rgba(0,0,0,1);
   }
 
   /* ── LIST STATS ── */
@@ -292,7 +292,7 @@
     transition: border .15s, box-shadow .15s;
     box-shadow: 0 1px 4px rgba(0,0,0,.06);
   }
-  .person-card:active { box-shadow: 0 4px 16px rgba(79,70,229,.15); border-color: var(--primary); }
+  .person-card:active { box-shadow: 0 4px 16px rgba(7,202,127,.15); border-color: var(--primary); }
   .person-card.mine { border-color: var(--primary); background: var(--primary-light); }
 
   .avatar {
@@ -317,7 +317,7 @@
     font-size: 11px;
     font-weight: 700;
     background: var(--primary);
-    color: #fff;
+    color: rgba(0,0,0,1);
     padding: 2px 7px;
     border-radius: 20px;
   }
@@ -360,11 +360,11 @@
     width: 56px; height: 56px;
     border-radius: 50%;
     background: var(--primary);
-    color: #fff;
+    color: rgba(0,0,0,1);
     font-size: 28px;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(79,70,229,.4);
+    box-shadow: 0 4px 16px rgba(7,202,127,.4);
     display: flex; align-items: center; justify-content: center;
     transition: transform .15s;
     z-index: 20;
@@ -376,7 +376,7 @@
     background: var(--primary);
     padding: 40px 20px 30px;
     text-align: center;
-    color: #fff;
+    color: rgba(0,0,0,1);
   }
   .detail-avatar {
     width: 88px; height: 88px;
