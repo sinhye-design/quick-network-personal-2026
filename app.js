@@ -14,7 +14,10 @@ function avDiv(idx, size) {
   const name = AVATARS[idx % AVATARS.length];
   const bg = AV_COLORS[idx % AV_COLORS.length];
   const imgSize = Math.round(size * 0.65);
-  return `<div class="av-circle" style="width:${size}px;height:${size}px;background:${bg}"><img src="character/${name}.svg" width="${imgSize}" height="${imgSize}"></div>`;
+  // SVG 이미지를 마스크로 사용하여 배경색(캐릭터 색상)이 채워지도록 설정
+  return `<div class="av-circle" style="width:${size}px;height:${size}px;background:#1F1F1F;">
+    <div style="width:${imgSize}px;height:${imgSize}px;background-color:${bg};-webkit-mask:url('character/${name}.svg') no-repeat center/contain;mask:url('character/${name}.svg') no-repeat center/contain;"></div>
+  </div>`;
 }
 
 const PURPOSES_LIST = [
@@ -248,8 +251,10 @@ function buildAvatarPicker() {
   AVATARS.forEach((name,i)=>{
     const d=document.createElement('div');
     d.className='avatar-opt'+(i===rAvatar?' selected':'');
-    d.style.background=AV_COLORS[i%AV_COLORS.length];
-    d.innerHTML=`<img src="character/${name}.svg" width="28" height="28">`;
+    const bg = AV_COLORS[i%AV_COLORS.length];
+    d.innerHTML=`<div class="av-circle" style="width:44px;height:44px;background:#1F1F1F;">
+      <div style="width:28px;height:28px;background-color:${bg};-webkit-mask:url('character/${name}.svg') no-repeat center/contain;mask:url('character/${name}.svg') no-repeat center/contain;"></div>
+    </div>`;
     d.onclick=()=>{rAvatar=i;document.querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');};
     row.appendChild(d);
   });

@@ -406,8 +406,8 @@ body {
 }
 
 .avatar-opt {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   font-size: 22px;
   display: flex;
@@ -415,7 +415,7 @@ body {
   justify-content: center;
   cursor: pointer;
   border: 3px solid transparent;
-  background: var(--card2);
+  background: #1F1F1F;
   transition: border .15s;
 }
 
