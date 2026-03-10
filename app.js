@@ -2,18 +2,20 @@
 // DATA
 // ═══════════════════════════════════
 const AVATARS = [
-  {em:'🐥',bg:'#3A2E00'},
-  {em:'🐙',bg:'#2A1F3D'},
-  {em:'🦎',bg:'#0F2D1A'},
-  {em:'👾',bg:'#0F1F3D'},
-  {em:'🤖',bg:'#2D0F0F'},
-  {em:'🐸',bg:'#0A2A14'},
-  {em:'🦊',bg:'#2D1800'},
-  {em:'🐧',bg:'#0A1F2A'},
-  {em:'🐢',bg:'#0F2A1A'},
-  {em:'🦋',bg:'#1F0A2A'},
+  'Bird','Cat','Dog','Jellyfish','Koala','Monkey','Otter','Quokka','Rabbit','Snail','Snowman','Whale'
 ];
-const AV_COLORS = ['#4A3800','#3A2855','#1A4A2A','#1A2E55','#4A1A1A','#1A3D22','#3D2500','#1A2E3D'];
+const AV_COLORS = [
+  '#30B6FD','#FF9257','#07CA7F','#FF84EF',
+  '#856BFF','#FECC06','#FF6F22','#00AD6B',
+  '#FFF280','#5C5C5C','#3A3A3A','#856BFF'
+];
+
+function avDiv(idx, size) {
+  const name = AVATARS[idx % AVATARS.length];
+  const bg = AV_COLORS[idx % AV_COLORS.length];
+  const imgSize = Math.round(size * 0.65);
+  return `<div class="av-circle" style="width:${size}px;height:${size}px;background:${bg}"><img src="character/${name}.svg" width="${imgSize}" height="${imgSize}"></div>`;
+}
 
 const PURPOSES_LIST = [
   {id:'info',label:'정보 교류 (업계/기술 트렌드)'},
@@ -214,7 +216,7 @@ function buildRegStep() {
         <div class="form-section-title">카드 미리보기</div>
         <div class="p-card" style="margin-bottom:0">
           <div class="p-card-top" style="cursor:default;padding-bottom:12px">
-            <div class="p-card-av" style="background:${AV_COLORS[rAvatar%AV_COLORS.length]}">${AVATARS[rAvatar].em}</div>
+            ${avDiv(rAvatar, 44)}
             <div class="p-card-info">
               <div class="p-card-name">${esc(S.regData.name||'닉네임')}</div>
             </div>
@@ -243,11 +245,11 @@ function buildRegStep() {
 
 function buildAvatarPicker() {
   const row=document.getElementById('av-row');
-  AVATARS.forEach((a,i)=>{
+  AVATARS.forEach((name,i)=>{
     const d=document.createElement('div');
     d.className='avatar-opt'+(i===rAvatar?' selected':'');
-    d.textContent=a.em;
     d.style.background=AV_COLORS[i%AV_COLORS.length];
+    d.innerHTML=`<img src="character/${name}.svg" width="28" height="28">`;
     d.onclick=()=>{rAvatar=i;document.querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');};
     row.appendChild(d);
   });
@@ -369,49 +371,43 @@ function renderHomeList() {
   }
   el.innerHTML='';
   list.forEach(p => {
-    const avData = AVATARS[p.avIdx||0];
-    const avColor = AV_COLORS[(p.avIdx||0)%AV_COLORS.length];
     const purposeObj = PURPOSES_LIST.find(x=>x.id===p.purpose);
     const isRequested = S.requestedIds.has(p.id);
     const isExpanded = S.expandedId === p.id;
+    const avIdx = p.avIdx||0;
+    const purposeShort = purposeObj ? purposeObj.label.replace(/ \(.+\)$/,'') : '';
 
     const card = document.createElement('div');
     card.className = 'p-card'+(isExpanded?' expanded':'')+(isRequested?' requested':'');
     card.id = 'pcard-'+p.id;
-    const interestTags = (p.interests||p.tags||[]).slice(0,3).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
-    const purposeShort = purposeObj ? purposeObj.label.replace(/ \(.+\)$/,'') : '';
     card.innerHTML = `
       <div class="p-card-top" onclick="toggleCard('${p.id}')">
-        <div class="p-card-av" style="background:${avColor}">${avData.em}</div>
+        ${avDiv(avIdx, 44)}
         <div class="p-card-info">
           <div class="p-card-name">${esc(p.name)}</div>
-          <div class="p-card-role">${esc(p.role||'')}${p.company ? ` · ${esc(p.company)}` : ''}</div>
         </div>
         ${isRequested
-          ? `<span class="net-cancel-pill" onclick="openCancelModal('${p.id}',event)">네트워킹 취소</span>`
+          ? `<button class="net-cancel-pill" onclick="openCancelModal('${p.id}',event)">네트워킹 취소</button>`
           : `<span class="p-card-arrow">›</span>`
         }
       </div>
       <div class="p-card-tag-row">
-        ${purposeObj ? `<span class="purpose-tag">${esc(purposeShort)}</span>` : ''}
-        ${interestTags}
+        ${purposeObj ? `<span class="purpose-tag"><span class="bm">🔖</span>${esc(purposeShort)}</span>` : ''}
       </div>
       <div class="p-card-expand">
-        <div class="expand-rows">
-          ${p.role ? `<div class="expand-row"><span class="expand-row-label">직무</span><span>${esc(p.role)}</span></div>` : ''}
-          ${p.career ? `<div class="expand-row"><span class="expand-row-label">경력</span><span>${esc(p.career)}</span></div>` : ''}
-          ${p.company ? `<div class="expand-row"><span class="expand-row-label">소속</span><span>${esc(p.company)}</span></div>` : ''}
+        <div class="expand-header">
+          ${avDiv(avIdx, 52)}
+          <div class="expand-info">
+            <div class="expand-name">${esc(p.name)}</div>
+            ${(p.role||p.career) ? `<div class="expand-meta">${[p.role,p.career].filter(Boolean).map(esc).join(' | ')}</div>` : ''}
+            ${p.company ? `<div class="expand-meta">${esc(p.company)}</div>` : ''}
+          </div>
         </div>
         ${(p.interests||p.tags||[]).length ? `
-        <div class="expand-label-title">관심분야</div>
         <div class="expand-chips">
           ${(p.interests||p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}
         </div>` : ''}
-        ${purposeObj ? `
-        <div class="expand-label-title">참여 목적</div>
-        <div class="expand-chips">
-          <span class="purpose-tag">${esc(purposeObj.label)}</span>
-        </div>` : ''}
+        ${purposeObj ? `<div class="expand-purpose"><span class="bm">🔖</span>${esc(purposeObj.label)}</div>` : ''}
         <div class="expand-bottom">
           ${!isRequested
             ? `<button class="net-request-btn" onclick="openNetModal('${p.id}',event)">네트워킹 신청</button>`
@@ -543,13 +539,18 @@ function buildFilterSheet() {
       </div>
     </div>
     <div class="filter-section">
-      <div class="filter-section-title">경력 <span class="filter-count-badge" id="fc-career">0/5</span></div>
-      <div class="chip-row career-chips">
-        <button class="chip career-chip" onclick="toggleCareerChip(this,'학생')"><span class="career-label">학생</span><span class="career-sub">-</span></button>
-        <button class="chip career-chip" onclick="toggleCareerChip(this,'신입')"><span class="career-label">신입</span><span class="career-sub">1년 이하</span></button>
-        <button class="chip career-chip" onclick="toggleCareerChip(this,'주니어')"><span class="career-label">주니어</span><span class="career-sub">1~3년</span></button>
-        <button class="chip career-chip" onclick="toggleCareerChip(this,'미드레벨')"><span class="career-label">미드레벨</span><span class="career-sub">4~9년</span></button>
-        <button class="chip career-chip" onclick="toggleCareerChip(this,'시니어')"><span class="career-label">시니어</span><span class="career-sub">10년 이상</span></button>
+      <div class="filter-section-title">경력</div>
+      <div class="dual-range-wrap">
+        <div class="dual-range-track"><div class="dual-range-fill" id="career-fill"></div></div>
+        <input type="range" class="range-thumb" id="career-min" min="0" max="4" value="0" oninput="updateDualRange()">
+        <input type="range" class="range-thumb" id="career-max" min="0" max="4" value="4" oninput="updateDualRange()">
+      </div>
+      <div class="range-labels">
+        <span class="range-label" data-i="0">학생<br><span class="range-sub">-</span></span>
+        <span class="range-label" data-i="1">신입<br><span class="range-sub">1년 이하</span></span>
+        <span class="range-label" data-i="2">주니어<br><span class="range-sub">1~3년</span></span>
+        <span class="range-label" data-i="3">미드레벨<br><span class="range-sub">4~9년</span></span>
+        <span class="range-label" data-i="4">시니어<br><span class="range-sub">10년 이상</span></span>
       </div>
     </div>
     <div class="filter-section">
@@ -569,11 +570,20 @@ function toggleAccordion(id) {
 function toggleJobChip(btn) { btn.classList.toggle('selected'); }
 function toggleInterestChip(btn) { btn.classList.toggle('selected'); }
 function togglePurposeChip(btn) { btn.classList.toggle('selected'); }
-function toggleCareerChip(btn) {
-  btn.classList.toggle('selected');
-  const sel = document.querySelectorAll('.career-chip.selected').length;
-  const badge = document.getElementById('fc-career');
-  if (badge) badge.textContent = sel+'/5';
+function updateDualRange() {
+  const minEl = document.getElementById('career-min');
+  const maxEl = document.getElementById('career-max');
+  const fill = document.getElementById('career-fill');
+  if (!minEl||!maxEl||!fill) return;
+  let minV = parseInt(minEl.value), maxV = parseInt(maxEl.value);
+  if (minV > maxV) { minEl.value = maxV; minV = maxV; }
+  if (maxV < minV) { maxEl.value = minV; maxV = minV; }
+  const pct = 25; // 100/4
+  fill.style.left = (minV * pct) + '%';
+  fill.style.width = ((maxV - minV) * pct) + '%';
+  document.querySelectorAll('.range-label').forEach((l,i) => {
+    l.classList.toggle('active', i >= minV && i <= maxV);
+  });
 }
 
 function resetFilter() {
@@ -600,11 +610,9 @@ function renderQR() {
   const body=document.getElementById('qr-body');
   const me=S.people.find(p=>p.id===S.myId);
   if(!me){body.innerHTML=`<div class="empty-state"><div class="ei">🪪</div><p>프로필을 먼저 등록해 주세요</p></div>`;return;}
-  const av=AVATARS[me.avIdx||0];
-  const avc=AV_COLORS[(me.avIdx||0)%AV_COLORS.length];
   body.innerHTML=`
     <div class="qr-card">
-      <div class="qr-code-box" style="background:${avc};font-size:90px;line-height:1">${av.em}</div>
+      <div class="qr-code-box">${avDiv(me.avIdx||0, 100)}</div>
       <div class="qr-name">${esc(me.name)}</div>
       <div class="qr-role">${esc(me.role)}</div>
       ${me.status?`<div class="qr-status">"${esc(me.status)}"</div>`:''}
@@ -650,11 +658,9 @@ function renderNotif() {
 function renderMypage() {
   const body=document.getElementById('mypage-body');
   const me=S.people.find(p=>p.id===S.myId);
-  const av=me?AVATARS[me.avIdx||0]:AVATARS[0];
-  const avc=me?AV_COLORS[(me.avIdx||0)%AV_COLORS.length]:'#333';
   body.innerHTML=`
     <div class="mypage-profile-section">
-      <div class="mypage-av" style="background:${avc}">${av.em}</div>
+      ${avDiv(me?.avIdx||0, 64)}
       <div class="mypage-info">
         <div class="mypage-name">${me?esc(me.name):'프로필 미등록'}</div>
         <div class="mypage-role">${me?esc(me.role):''}</div>
@@ -721,16 +727,16 @@ function renderMsgs() {
       const p2=S.people.find(x=>x.id===m.cardId);
       const row=document.createElement('div');
       row.className='msg-row'+(m.from==='me'?' me':'');
-      if(m.from!=='me'){const av=S.people.find(x=>x.id===S.currentChat);const avEl=document.createElement('div');avEl.className='msg-av';avEl.textContent=av?AVATARS[av.avIdx||0].em:'?';row.appendChild(avEl);}
+      if(m.from!=='me'){const av=S.people.find(x=>x.id===S.currentChat);const avEl=document.createElement('div');avEl.className='msg-av';avEl.innerHTML=av?avDiv(av.avIdx||0,28):'';row.appendChild(avEl);}
       const bubble=document.createElement('div');
       bubble.className='chat-card-bubble';
-      bubble.innerHTML=`<div style="width:36px;height:36px;border-radius:50%;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:${AV_COLORS[(p2?.avIdx||0)%AV_COLORS.length]}">${p2?AVATARS[p2.avIdx||0].em:'?'}</div><div><div class="cc-name">${esc(p2?.name||'?')}</div><div class="cc-role">${esc(p2?.role||'')}</div></div>`;
+      bubble.innerHTML=`${avDiv(p2?.avIdx||0,36)}<div><div class="cc-name">${esc(p2?.name||'?')}</div><div class="cc-role">${esc(p2?.role||'')}</div></div>`;
       bubble.onclick=()=>openDetail(m.cardId,'chatroom');
       row.appendChild(bubble);el.appendChild(row);return;
     }
     const row=document.createElement('div');
     row.className='msg-row'+(m.from==='me'?' me':'');
-    if(m.from!=='me'){const av=S.people.find(x=>x.id===S.currentChat);const avEl=document.createElement('div');avEl.className='msg-av';avEl.textContent=av?AVATARS[av.avIdx||0].em:'?';row.appendChild(avEl);}
+    if(m.from!=='me'){const av=S.people.find(x=>x.id===S.currentChat);const avEl=document.createElement('div');avEl.className='msg-av';avEl.innerHTML=av?avDiv(av.avIdx||0,28):'';row.appendChild(avEl);}
     const bubble=document.createElement('div');bubble.className='msg-bubble';bubble.textContent=m.text;
     const tEl=document.createElement('span');tEl.className='msg-time';tEl.textContent=m.time;
     row.appendChild(bubble);row.appendChild(tEl);el.appendChild(row);
@@ -772,11 +778,9 @@ function openDetailFromChat(){if(S.currentChat)openDetail(S.currentChat,'chatroo
 function openDetail(id,from) {
   const p=S.people.find(x=>x.id===id);if(!p)return;
   S.prevScreen=from||'home';
-  const av=AVATARS[p.avIdx||0];
-  const avc=AV_COLORS[(p.avIdx||0)%AV_COLORS.length];
   const isMe=p.id===S.myId;
-  document.getElementById('d-av').textContent=av.em;
-  document.getElementById('d-av').style.background='rgba(255,255,255,.2)';
+  document.getElementById('d-av').innerHTML=avDiv(p.avIdx||0, 80);
+  document.getElementById('d-av').style.cssText='';
   document.getElementById('d-name').textContent=p.name;
   document.getElementById('d-role').textContent=p.role;
   document.getElementById('detail-title').textContent=p.name;
