@@ -16,33 +16,37 @@ const AVATARS = [
 const AV_COLORS = ['#4A3800','#3A2855','#1A4A2A','#1A2E55','#4A1A1A','#1A3D22','#3D2500','#1A2E3D'];
 
 const PURPOSES_LIST = [
-  {id:'network',label:'네트워킹/인맥 확장',icon:'🤝'},
-  {id:'info',label:'정보교류',icon:'💡'},
-  {id:'mentor',label:'멘토링/조언 받기',icon:'🎓'},
-  {id:'mentee',label:'멘토링/조언 주기',icon:'🌱'},
-  {id:'job',label:'취업/이직',icon:'💼'},
-  {id:'hire',label:'채용 (인재 발굴)',icon:'🔍'},
-  {id:'invest',label:'투자/비즈니스 파트너',icon:'💰'},
+  {id:'info',label:'정보 교류 (업계/기술 트렌드)'},
+  {id:'collab',label:'협업/프로젝트 팀원 찾기'},
+  {id:'mentor',label:'멘토링/조언 받기'},
+  {id:'job',label:'취업/이직'},
+  {id:'hire',label:'채용 (정식 채용/인재 발굴)'},
+  {id:'invest',label:'투자/비즈니스 파트너 찾기'},
+  {id:'network',label:'네트워킹/인맥 확장 (커뮤니티)'},
 ];
 
 const JOB_CATEGORIES = [
-  {id:'sw',label:'소프트웨어 개발',subs:['프론트엔드','백엔드','풀스택','모바일','AI 엔지니어','데이터 엔지니어','클라우드 엔지니어']},
-  {id:'data',label:'데이터&AI',subs:['데이터 분석','ML 엔지니어','AI 연구']},
+  {id:'sw',label:'소프트웨어 개발',subs:['프론트엔드','백엔드','풀스택','모바일','AI 엔지니어','데이터 엔지니어','네트워크 엔지니어링','시스템 아키텍처','클라우드 엔지니어']},
+  {id:'data',label:'데이터 & AI',subs:['데이터 분석','ML 엔지니어','AI 연구']},
   {id:'plan',label:'기획',subs:['서비스 기획','PM','PO']},
+  {id:'ops',label:'운영',subs:['CS','운영 기획','커뮤니티']},
   {id:'design',label:'UI/UX 디자인',subs:['UX 디자인','UI 디자인','프로덕트 디자인']},
+  {id:'graphic',label:'그래픽 디자인',subs:['브랜드 디자인','모션 그래픽','일러스트']},
   {id:'mkt',label:'마케팅',subs:['그로스','브랜드','콘텐츠']},
-  {id:'biz',label:'세일즈&비즈니스',subs:['B2B 영업','파트너십','사업개발']},
-  {id:'startup',label:'창업&경영',subs:['창업가','C-level','투자자']},
+  {id:'biz',label:'세일즈 & 비즈니스',subs:['B2B 영업','파트너십','사업개발']},
+  {id:'startup',label:'창업 & 경영',subs:['창업가','C-level']},
+  {id:'invest',label:'투자 & VC',subs:['VC','엔젤 투자','IR']},
+  {id:'edu',label:'연구 & 교육',subs:['연구원','교수','강사']},
 ];
 
 const INTEREST_LIST = ['소프트웨어 개발','데이터 & AI','클라우드 & 인프라','보안 & 블록체인','핀테크 & 금융','헬스케어 & 바이오','이커머스 & 마케팅','엔터테인먼트 & 미디어','스타트업 & 창업'];
 
 const DUMMY = [
-  {id:'d1',avIdx:3,name:'닉네임글자수_123',role:'프론트엔드 개발자',career:'주니어',company:'스타트업',bio:'웹 개발 3년차입니다. 새로운 사람들과 교류하고 싶어요.',tags:['React','Node.js'],purpose:'network',status:'협업 파트너 찾아요'},
-  {id:'d2',avIdx:0,name:'닉네임글자수_456',role:'프로덕트 매니저',career:'미드레벨',company:'카카오',bio:'PM 5년차. 좋은 프로덕트를 만드는 법을 공유하고 싶어요.',tags:['UX','기획'],purpose:'info',status:'정보 교류 환영'},
-  {id:'d3',avIdx:1,name:'닉네임글자수_789',role:'UX 디자이너',career:'시니어',company:'토스',bio:'핀테크 UX 경력 7년. 멘토링 해드릴 수 있어요.',tags:['Figma','디자인'],purpose:'mentor',status:'멘토링 신청 받아요'},
-  {id:'d4',avIdx:2,name:'닉네임글자수_012',role:'AI 연구원',career:'미드레벨',company:'KAIST',bio:'자연어처리 연구 중. 산업계 분들과 얘기 나누고 싶어요.',tags:['AI','NLP'],purpose:'info',status:'AI 협업 관심'},
-  {id:'d5',avIdx:4,name:'닉네임글자수_345',role:'스타트업 창업자',career:'시니어',company:'핀업',bio:'B2B SaaS 창업 2년차. 투자자분들 찾고 있어요.',tags:['B2B','SaaS'],purpose:'invest',status:'Series A 준비 중'},
+  {id:'d1',avIdx:3,name:'닉네임글자수_123',role:'프론트엔드 개발자',career:'주니어',company:'스타트업',bio:'웹 개발 3년차입니다. 새로운 사람들과 교류하고 싶어요.',tags:['프론트엔드','풀스택'],interests:['소프트웨어 개발','스타트업 & 창업'],purpose:'collab',status:'협업 파트너 찾아요'},
+  {id:'d2',avIdx:0,name:'닉네임글자수_456',role:'프로덕트 매니저',career:'미드레벨',company:'카카오',bio:'PM 5년차. 좋은 프로덕트를 만드는 법을 공유하고 싶어요.',tags:['서비스 기획','PM'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'info',status:'정보 교류 환영'},
+  {id:'d3',avIdx:1,name:'닉네임글자수_789',role:'UX 디자이너',career:'시니어',company:'토스',bio:'핀테크 UX 경력 7년. 멘토링 해드릴 수 있어요.',tags:['UI/UX 디자인'],interests:['핀테크 & 금융','이커머스 & 마케팅'],purpose:'mentor',status:'멘토링 신청 받아요'},
+  {id:'d4',avIdx:2,name:'닉네임글자수_012',role:'AI 엔지니어',career:'미드레벨',company:'KAIST',bio:'자연어처리 연구 중. 산업계 분들과 얘기 나누고 싶어요.',tags:['AI 엔지니어','데이터 엔지니어'],interests:['데이터 & AI','소프트웨어 개발'],purpose:'info',status:'AI 협업 관심'},
+  {id:'d5',avIdx:4,name:'닉네임글자수_345',role:'스타트업 창업자',career:'시니어',company:'핀업',bio:'B2B SaaS 창업 2년차. 투자자분들 찾고 있어요.',tags:['창업 & 경영'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'invest',status:'Series A 준비 중'},
 ];
 
 const MOCK_CHATS = {
@@ -70,6 +74,7 @@ let S = {
   requestedIds: new Set(),
   expandedId: null,
   pendingRequestId: null,
+  pendingCancelId: null,
   prevScreen: null,
   regStep: 1,
   regData: {},
@@ -333,12 +338,12 @@ function toggleNetworking() {
     listArea.classList.remove('blurred');
     tip.style.display = 'none';
     if (!S.qrBannerDismissed) qrBanner.style.display = 'block';
-    toast('네트워킹에 참여했어요!');
+    toast('네트워킹 ON!');
   } else {
     listArea.classList.add('blurred');
     tip.style.display = 'block';
     qrBanner.style.display = 'none';
-    toast('네트워킹 참여가 중단됐어요');
+    toast('네트워킹을 종료했어요');
   }
 }
 
@@ -359,7 +364,7 @@ function renderHomeList() {
   if (!el) return;
   const list = S.people.filter(p => p.id !== S.myId);
   if (!list.length) {
-    el.innerHTML=`<div class="empty-state"><div class="ei">👥</div><p>아직 참여자가 없어요</p></div>`;
+    el.innerHTML=`<div class="empty-state"><div class="ei">👥</div><p>아직 참여자가 없어요.<br>조금만 기다리면 새로운 만남이 시작될 거예요!</p></div>`;
     return;
   }
   el.innerHTML='';
@@ -373,36 +378,44 @@ function renderHomeList() {
     const card = document.createElement('div');
     card.className = 'p-card'+(isExpanded?' expanded':'')+(isRequested?' requested':'');
     card.id = 'pcard-'+p.id;
+    const interestTags = (p.interests||p.tags||[]).slice(0,3).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+    const purposeShort = purposeObj ? purposeObj.label.replace(/ \(.+\)$/,'') : '';
     card.innerHTML = `
       <div class="p-card-top" onclick="toggleCard('${p.id}')">
         <div class="p-card-av" style="background:${avColor}">${avData.em}</div>
         <div class="p-card-info">
           <div class="p-card-name">${esc(p.name)}</div>
+          <div class="p-card-role">${esc(p.role||'')}${p.company ? ` · ${esc(p.company)}` : ''}</div>
         </div>
         ${isRequested
-          ? `<span class="net-cancel-pill" onclick="cancelRequest('${p.id}',event)">네트워킹 취소</span>`
+          ? `<span class="net-cancel-pill" onclick="openCancelModal('${p.id}',event)">네트워킹 취소</span>`
           : `<span class="p-card-arrow">›</span>`
         }
       </div>
       <div class="p-card-tag-row">
-        ${purposeObj ? `<span class="purpose-tag"><span class="bm">🔖</span>${esc(purposeObj.label)}</span>` : ''}
+        ${purposeObj ? `<span class="purpose-tag">${esc(purposeShort)}</span>` : ''}
+        ${interestTags}
       </div>
       <div class="p-card-expand">
-        <div class="expand-header">
-          <div class="expand-av" style="background:${avColor}">${avData.em}</div>
-          <div>
-            <div class="expand-name">${esc(p.name)}</div>
-            <div class="expand-meta">${esc(p.role||'')}${p.career?` | ${p.career}`:''}${p.company?`<br>${esc(p.company)}`:''}</div>
-          </div>
+        <div class="expand-rows">
+          ${p.role ? `<div class="expand-row"><span class="expand-row-label">직무</span><span>${esc(p.role)}</span></div>` : ''}
+          ${p.career ? `<div class="expand-row"><span class="expand-row-label">경력</span><span>${esc(p.career)}</span></div>` : ''}
+          ${p.company ? `<div class="expand-row"><span class="expand-row-label">소속</span><span>${esc(p.company)}</span></div>` : ''}
         </div>
+        ${(p.interests||p.tags||[]).length ? `
+        <div class="expand-label-title">관심분야</div>
         <div class="expand-chips">
-          ${(p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}
-        </div>
+          ${(p.interests||p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}
+        </div>` : ''}
+        ${purposeObj ? `
+        <div class="expand-label-title">참여 목적</div>
+        <div class="expand-chips">
+          <span class="purpose-tag">${esc(purposeObj.label)}</span>
+        </div>` : ''}
         <div class="expand-bottom">
-          <div class="expand-purpose"><span class="bm">🔖</span>${purposeObj?esc(purposeObj.label):''}</div>
           ${!isRequested
             ? `<button class="net-request-btn" onclick="openNetModal('${p.id}',event)">네트워킹 신청</button>`
-            : `<button class="net-request-btn" style="background:var(--card3);color:var(--sub)" onclick="cancelRequest('${p.id}',event)">신청 취소</button>`
+            : `<button class="net-request-btn net-cancel-btn" onclick="openCancelModal('${p.id}',event)">네트워킹 취소</button>`
           }
         </div>
       </div>
@@ -444,25 +457,49 @@ function closeModal() {
 
 function confirmNetRequest() {
   if (!S.pendingRequestId) return;
-  S.requestedIds.add(S.pendingRequestId);
+  const pid = S.pendingRequestId;
+  S.requestedIds.add(pid);
   save();
   closeModal();
   renderHomeList();
-  toast('네트워킹을 신청했어요!');
-  // simulate accept after 2s
-  const pid = S.pendingRequestId || [...S.requestedIds].slice(-1)[0];
+  document.getElementById('net-sent-modal').classList.remove('hidden');
+  // simulate accept after 4s
   setTimeout(() => {
     createChatIfNeeded(pid);
+    document.getElementById('net-sent-modal').classList.add('hidden');
     toast('매칭됐어요! 채팅을 시작해 보세요 🎉');
     document.getElementById('notif-badge').style.display = 'flex';
     document.getElementById('notif-badge').textContent = '1';
-  }, 2500);
+  }, 4000);
 }
 
-function cancelRequest(pid, e) {
+function closeSentModal() {
+  document.getElementById('net-sent-modal').classList.add('hidden');
+}
+
+function enableNotif() {
+  closeSentModal();
+  toast('알림이 설정됐어요 🔔');
+}
+
+function openCancelModal(pid, e) {
   if (e) e.stopPropagation();
+  S.pendingCancelId = pid;
+  document.getElementById('net-cancel-modal').classList.remove('hidden');
+}
+
+function closeCancelModal() {
+  document.getElementById('net-cancel-modal').classList.add('hidden');
+  S.pendingCancelId = null;
+}
+
+function confirmCancelRequest() {
+  const pid = S.pendingCancelId;
+  if (!pid) return;
   S.requestedIds.delete(pid);
-  save(); renderHomeList();
+  save();
+  closeCancelModal();
+  renderHomeList();
   toast('네트워킹 신청을 취소했어요');
 }
 
@@ -506,16 +543,13 @@ function buildFilterSheet() {
       </div>
     </div>
     <div class="filter-section">
-      <div class="filter-section-title">경력</div>
-      <div class="range-wrap">
-        <input type="range" class="range-slider" min="0" max="4" value="2" id="career-range" oninput="updateRangeLabel(this)">
-        <div class="range-labels">
-          <span class="range-label" data-i="0">학생</span>
-          <span class="range-label" data-i="1">신입<br><span style="font-size:10px">1년 이하</span></span>
-          <span class="range-label active" data-i="2">주니어<br><span style="font-size:10px">1-3년</span></span>
-          <span class="range-label" data-i="3">미드레벨<br><span style="font-size:10px">4-9년</span></span>
-          <span class="range-label" data-i="4">시니어<br><span style="font-size:10px">10년 이상</span></span>
-        </div>
+      <div class="filter-section-title">경력 <span class="filter-count-badge" id="fc-career">0/5</span></div>
+      <div class="chip-row career-chips">
+        <button class="chip career-chip" onclick="toggleCareerChip(this,'학생')"><span class="career-label">학생</span><span class="career-sub">-</span></button>
+        <button class="chip career-chip" onclick="toggleCareerChip(this,'신입')"><span class="career-label">신입</span><span class="career-sub">1년 이하</span></button>
+        <button class="chip career-chip" onclick="toggleCareerChip(this,'주니어')"><span class="career-label">주니어</span><span class="career-sub">1~3년</span></button>
+        <button class="chip career-chip" onclick="toggleCareerChip(this,'미드레벨')"><span class="career-label">미드레벨</span><span class="career-sub">4~9년</span></button>
+        <button class="chip career-chip" onclick="toggleCareerChip(this,'시니어')"><span class="career-label">시니어</span><span class="career-sub">10년 이상</span></button>
       </div>
     </div>
     <div class="filter-section">
@@ -535,10 +569,11 @@ function toggleAccordion(id) {
 function toggleJobChip(btn) { btn.classList.toggle('selected'); }
 function toggleInterestChip(btn) { btn.classList.toggle('selected'); }
 function togglePurposeChip(btn) { btn.classList.toggle('selected'); }
-
-function updateRangeLabel(el) {
-  const labels = el.closest('.range-wrap').querySelectorAll('.range-label');
-  labels.forEach((l,i) => l.classList.toggle('active', i==el.value));
+function toggleCareerChip(btn) {
+  btn.classList.toggle('selected');
+  const sel = document.querySelectorAll('.career-chip.selected').length;
+  const badge = document.getElementById('fc-career');
+  if (badge) badge.textContent = sel+'/5';
 }
 
 function resetFilter() {

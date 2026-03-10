@@ -110,6 +110,31 @@
     </div>
   </div>
 
+  <!-- 네트워킹 신청 완료 모달 -->
+  <div class="modal-overlay hidden" id="net-sent-modal">
+    <div class="modal-box">
+      <div class="modal-sent-icon">🎉</div>
+      <div class="modal-title">네트워킹이 신청되었어요!</div>
+      <div class="modal-desc" id="sent-modal-desc">요청 수락 시 알림으로 알려드릴게요.</div>
+      <div class="modal-actions">
+        <button class="modal-no" onclick="closeSentModal()">괜찮아요</button>
+        <button class="modal-yes" onclick="enableNotif()">알림받기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 네트워킹 취소 확인 모달 -->
+  <div class="modal-overlay hidden" id="net-cancel-modal">
+    <div class="modal-box">
+      <div class="modal-title">네트워킹 취소</div>
+      <div class="modal-desc">네트워킹 신청을 취소할까요?</div>
+      <div class="modal-actions">
+        <button class="modal-no" onclick="closeCancelModal()">취소하기</button>
+        <button class="modal-yes" style="background:var(--danger)" onclick="confirmCancelRequest()">확인</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 필터 바텀시트 -->
   <div class="sheet-overlay hidden" id="filter-sheet">
     <div class="sheet">

@@ -199,6 +199,14 @@ body {
 .chip.selected { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
 .chip.selected-orange { background: var(--orange-bg); color: var(--orange-light); border-color: var(--orange); }
 
+/* Career chips */
+.career-chips { display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto; }
+.career-chips::-webkit-scrollbar { display: none; }
+.career-chip { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 12px; }
+.career-label { font-size: 13px; font-weight: 600; }
+.career-sub { font-size: 10px; color: var(--sub); white-space: nowrap; }
+.career-chip.selected .career-sub { color: var(--primary); }
+
 /* ── TAGS ── */
 .tag { background: var(--card2); color: var(--sub); border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 500; }
 .tag.primary { background: var(--primary-light); color: var(--primary); }
@@ -369,13 +377,14 @@ body {
 }
 .p-card-info { flex: 1; min-width: 0; }
 .p-card-name {
-  font-size: 14px; font-weight: 700; margin-bottom: 0;
+  font-size: 14px; font-weight: 700; margin-bottom: 2px;
   display: flex; align-items: center; gap: 6px;
 }
+.p-card-role { font-size: 12px; color: var(--sub); }
 .p-card-arrow { color: var(--sub); font-size: 16px; flex-shrink: 0; transition: transform .2s; }
 .p-card.expanded .p-card-arrow { transform: rotate(90deg); }
 
-.p-card-tag-row { padding: 8px 14px 12px 14px; }
+.p-card-tag-row { padding: 8px 14px 12px 14px; display: flex; flex-wrap: wrap; gap: 6px; }
 
 /* Expanded content */
 .p-card-expand {
@@ -384,34 +393,28 @@ body {
 }
 .p-card.expanded .p-card-expand { display: block; }
 
-.expand-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 12px; }
-.expand-av {
-  width: 56px; height: 56px; border-radius: 50%; font-size: 30px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.expand-name { font-size: 16px; font-weight: 800; margin-bottom: 3px; }
-.expand-meta { font-size: 12px; color: var(--sub); margin-bottom: 2px; }
+.expand-rows { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.expand-row { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.expand-row-label { color: var(--sub); font-size: 12px; width: 36px; flex-shrink: 0; }
+.expand-label-title { font-size: 12px; font-weight: 700; color: var(--sub); margin-bottom: 7px; }
 .expand-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-.expand-bottom {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px;
-}
-.expand-purpose { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: var(--orange-light); }
-.expand-purpose .bm { color: var(--orange); }
+.expand-bottom { display: flex; justify-content: flex-end; margin-top: 4px; }
 
 .net-request-btn {
-  padding: 9px 18px; border-radius: 20px; background: var(--primary);
+  padding: 10px 20px; border-radius: 20px; background: var(--primary);
   border: none; font-size: 13px; font-weight: 700; color: #fff;
   cursor: pointer; font-family: inherit; white-space: nowrap;
   transition: opacity .15s, transform .1s;
 }
 .net-request-btn:active { transform: scale(.95); opacity: .85; }
+.net-cancel-btn { background: rgba(255,76,76,.15) !important; color: var(--danger) !important; border: 1px solid rgba(255,76,76,.3); }
 
 .net-cancel-pill {
   display: inline-flex; align-items: center;
   background: rgba(255,76,76,.15); color: var(--danger);
   border: 1px solid rgba(255,76,76,.3); border-radius: 20px;
   padding: 5px 12px; font-size: 12px; font-weight: 700;
-  margin-left: auto;
+  margin-left: auto; cursor: pointer;
 }
 
 /* ── NETWORKING REQUEST MODAL ── */
@@ -426,6 +429,7 @@ body {
   background: var(--card2); border-radius: 20px; padding: 28px 24px;
   width: 100%; text-align: center; border: 1px solid rgba(255,255,255,.1);
 }
+.modal-sent-icon { font-size: 36px; margin-bottom: 12px; }
 .modal-title { font-size: 18px; font-weight: 800; line-height: 1.4; margin-bottom: 10px; }
 .modal-desc { font-size: 13px; color: var(--sub); line-height: 1.6; margin-bottom: 24px; }
 .modal-actions { display: flex; gap: 10px; }
