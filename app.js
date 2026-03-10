@@ -5,9 +5,8 @@ const AVATARS = [
   'Bird','Cat','Dog','Jellyfish','Koala','Monkey','Otter','Quokka','Rabbit','Snail','Snowman','Whale'
 ];
 const AV_COLORS = [
-  '#30B6FD','#FF9257','#07CA7F','#FF84EF',
-  '#856BFF','#FECC06','#FF6F22','#00AD6B',
-  '#FFF280','#5C5C5C','#3A3A3A','#856BFF'
+  '#4ade80', '#fb923c', '#f87171', '#fde047',
+  '#60a5fa', '#c084fc', '#f472b6', '#ffffff'
 ];
 
 function avDiv(charIdx, colorIdx, size) {
