@@ -140,7 +140,7 @@ body {
 }
 
 .toggle-switch.on {
-  background: var(--orange);
+  background: #fb923c; /* orange 400 */
 }
 
 .toggle-switch::after {

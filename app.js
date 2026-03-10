@@ -10,13 +10,13 @@ const AV_COLORS = [
   '#FFF280','#5C5C5C','#3A3A3A','#856BFF'
 ];
 
-function avDiv(idx, size) {
-  const name = AVATARS[idx % AVATARS.length];
-  const bg = AV_COLORS[idx % AV_COLORS.length];
+function avDiv(charIdx, colorIdx, size) {
+  const name = AVATARS[charIdx % AVATARS.length];
+  const bg = AV_COLORS[colorIdx % AV_COLORS.length];
   const imgSize = Math.round(size * 0.65);
-  // SVG 이미지를 마스크로 사용하여 배경색(캐릭터 색상)이 채워지도록 설정
+  const svgBase64 = typeof SVG_DATA !== 'undefined' && SVG_DATA[name] ? SVG_DATA[name] : `character/${name}.svg`;
   return `<div class="av-circle" style="width:${size}px;height:${size}px;background:#1F1F1F;">
-    <div style="width:${imgSize}px;height:${imgSize}px;background-color:${bg};-webkit-mask:url('character/${name}.svg') no-repeat center/contain;mask:url('character/${name}.svg') no-repeat center/contain;"></div>
+    <div style="width:${imgSize}px;height:${imgSize}px;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/contain;mask:url('${svgBase64}') no-repeat center/contain;"></div>
   </div>`;
 }
 
@@ -47,11 +47,11 @@ const JOB_CATEGORIES = [
 const INTEREST_LIST = ['소프트웨어 개발','데이터 & AI','클라우드 & 인프라','보안 & 블록체인','핀테크 & 금융','헬스케어 & 바이오','이커머스 & 마케팅','엔터테인먼트 & 미디어','스타트업 & 창업'];
 
 const DUMMY = [
-  {id:'d1',avIdx:3,name:'닉네임글자수_123',role:'프론트엔드 개발자',career:'주니어',company:'스타트업',bio:'웹 개발 3년차입니다. 새로운 사람들과 교류하고 싶어요.',tags:['프론트엔드','풀스택'],interests:['소프트웨어 개발','스타트업 & 창업'],purpose:'collab',status:'협업 파트너 찾아요'},
-  {id:'d2',avIdx:0,name:'닉네임글자수_456',role:'프로덕트 매니저',career:'미드레벨',company:'카카오',bio:'PM 5년차. 좋은 프로덕트를 만드는 법을 공유하고 싶어요.',tags:['서비스 기획','PM'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'info',status:'정보 교류 환영'},
-  {id:'d3',avIdx:1,name:'닉네임글자수_789',role:'UX 디자이너',career:'시니어',company:'토스',bio:'핀테크 UX 경력 7년. 멘토링 해드릴 수 있어요.',tags:['UI/UX 디자인'],interests:['핀테크 & 금융','이커머스 & 마케팅'],purpose:'mentor',status:'멘토링 신청 받아요'},
-  {id:'d4',avIdx:2,name:'닉네임글자수_012',role:'AI 엔지니어',career:'미드레벨',company:'KAIST',bio:'자연어처리 연구 중. 산업계 분들과 얘기 나누고 싶어요.',tags:['AI 엔지니어','데이터 엔지니어'],interests:['데이터 & AI','소프트웨어 개발'],purpose:'info',status:'AI 협업 관심'},
-  {id:'d5',avIdx:4,name:'닉네임글자수_345',role:'스타트업 창업자',career:'시니어',company:'핀업',bio:'B2B SaaS 창업 2년차. 투자자분들 찾고 있어요.',tags:['창업 & 경영'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'invest',status:'Series A 준비 중'},
+  {id:'d1',name:'닉네임글자수_123',role:'프론트엔드 개발자',career:'주니어',company:'스타트업',bio:'웹 개발 3년차입니다. 새로운 사람들과 교류하고 싶어요.',tags:['프론트엔드','풀스택'],interests:['소프트웨어 개발','스타트업 & 창업'],purpose:'collab',status:'협업 파트너 찾아요'},
+  {id:'d2',name:'닉네임글자수_456',role:'프로덕트 매니저',career:'미드레벨',company:'카카오',bio:'PM 5년차. 좋은 프로덕트를 만드는 법을 공유하고 싶어요.',tags:['서비스 기획','PM'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'info',status:'정보 교류 환영'},
+  {id:'d3',name:'닉네임글자수_789',role:'UX 디자이너',career:'시니어',company:'토스',bio:'핀테크 UX 경력 7년. 멘토링 해드릴 수 있어요.',tags:['UI/UX 디자인'],interests:['핀테크 & 금융','이커머스 & 마케팅'],purpose:'mentor',status:'멘토링 신청 받아요'},
+  {id:'d4',name:'닉네임글자수_012',role:'AI 엔지니어',career:'미드레벨',company:'KAIST',bio:'자연어처리 연구 중. 산업계 분들과 얘기 나누고 싶어요.',tags:['AI 엔지니어','데이터 엔지니어'],interests:['데이터 & AI','소프트웨어 개발'],purpose:'info',status:'AI 협업 관심'},
+  {id:'d5',name:'닉네임글자수_345',role:'스타트업 창업자',career:'시니어',company:'핀업',bio:'B2B SaaS 창업 2년차. 투자자분들 찾고 있어요.',tags:['창업 & 경영'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'invest',status:'Series A 준비 중'},
 ];
 
 const MOCK_CHATS = {
@@ -88,6 +88,7 @@ let S = {
 };
 
 let rAvatar = 0;
+let rColor = 0;
 let rTags = [];
 let rPurpose = null;
 let rWant = null;
@@ -104,7 +105,11 @@ function load() {
       S.requestedIds = new Set(s.requestedIds||[]);
     }
   } catch(e){}
-  if (!S.people.length) S.people = DUMMY.map(d=>({...d}));
+  if (!S.people.length) S.people = DUMMY.map(d=>({
+    ...d,
+    avIdx: Math.floor(Math.random() * AVATARS.length),
+    colIdx: Math.floor(Math.random() * AV_COLORS.length)
+  }));
   if (!Object.keys(S.chats).length) S.chats = JSON.parse(JSON.stringify(MOCK_CHATS));
 }
 
@@ -155,10 +160,10 @@ function startReg(editing) {
     const p = S.people.find(x=>x.id===editing);
     if (p) {
       S.regData = {name:p.name,role:p.role,company:p.company||'',bio:p.bio,email:p.email||'',link:p.link||''};
-      rAvatar = p.avIdx||0; rTags=[...(p.tags||[])]; rPurpose=p.purpose||null; rWant=p.want||null;
+      rAvatar = p.avIdx||0; rColor = p.colIdx||0; rTags=[...(p.tags||[])]; rPurpose=p.purpose||null; rWant=p.want||null;
     }
   } else {
-    S.regData={}; rAvatar=0; rTags=[]; rPurpose=null; rWant=null;
+    S.regData={}; rAvatar=0; rColor=0; rTags=[]; rPurpose=null; rWant=null;
   }
   buildRegStep(); showScreen('register');
 }
@@ -174,7 +179,9 @@ function buildRegStep() {
     body.innerHTML=`
       <div class="form-section">
         <div class="form-section-title">아바타</div>
-        <div class="avatar-row" id="av-row"></div>
+        <div class="avatar-row" id="av-row" style="margin-bottom:16px;"></div>
+        <div class="form-section-title">배경 색상</div>
+        <div class="avatar-row" id="color-row"></div>
       </div>
       <div class="form-section">
         <div class="form-section-title">기본 정보</div>
@@ -219,7 +226,7 @@ function buildRegStep() {
         <div class="form-section-title">카드 미리보기</div>
         <div class="p-card" style="margin-bottom:0">
           <div class="p-card-top" style="cursor:default;padding-bottom:12px">
-            ${avDiv(rAvatar, 44)}
+            ${avDiv(rAvatar, rColor, 44)}
             <div class="p-card-info">
               <div class="p-card-name">${esc(S.regData.name||'닉네임')}</div>
             </div>
@@ -251,12 +258,22 @@ function buildAvatarPicker() {
   AVATARS.forEach((name,i)=>{
     const d=document.createElement('div');
     d.className='avatar-opt'+(i===rAvatar?' selected':'');
-    const bg = AV_COLORS[i%AV_COLORS.length];
+    const svgBase64 = typeof SVG_DATA!=='undefined'&&SVG_DATA[name]?SVG_DATA[name]:`character/${name}.svg`;
     d.innerHTML=`<div class="av-circle" style="width:44px;height:44px;background:#1F1F1F;">
-      <div style="width:28px;height:28px;background-color:${bg};-webkit-mask:url('character/${name}.svg') no-repeat center/contain;mask:url('character/${name}.svg') no-repeat center/contain;"></div>
+      <div style="width:28px;height:28px;background-color:#999;-webkit-mask:url('${svgBase64}') no-repeat center/contain;mask:url('${svgBase64}') no-repeat center/contain;"></div>
     </div>`;
-    d.onclick=()=>{rAvatar=i;document.querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');};
+    d.onclick=()=>{rAvatar=i;document.getElementById('av-row').querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');};
     row.appendChild(d);
+  });
+  const crow=document.getElementById('color-row');
+  if(!crow) return;
+  AV_COLORS.forEach((bg,i)=>{
+    const d=document.createElement('div');
+    d.className='avatar-opt'+(i===rColor?' selected':'');
+    d.style.cssText = `width:44px;height:44px;border-radius:50%;background:${bg};cursor:pointer;border:3px solid transparent;`;
+    if(i===rColor) d.style.borderColor='var(--primary)';
+    d.onclick=()=>{rColor=i;document.getElementById('color-row').querySelectorAll('.avatar-opt').forEach(x=>x.style.borderColor='transparent');d.style.borderColor='var(--primary)';};
+    crow.appendChild(d);
   });
 }
 
@@ -317,7 +334,7 @@ function regStep2Next() {
 
 function submitReg() {
   const status=document.getElementById('r-status').value.trim();
-  const person={id:S.editingId||('u'+Date.now()),avIdx:rAvatar,...S.regData,tags:[...rTags],purpose:rPurpose,want:rWant,status};
+  const person={id:S.editingId||('u'+Date.now()),avIdx:rAvatar,colIdx:rColor,...S.regData,tags:[...rTags],purpose:rPurpose,want:rWant,status};
   if(S.editingId){
     const idx=S.people.findIndex(p=>p.id===S.editingId);
     if(idx!==-1)S.people[idx]=person;
@@ -387,7 +404,7 @@ function renderHomeList() {
     card.id = 'pcard-'+p.id;
     card.innerHTML = `
       <div class="p-card-top" onclick="toggleCard('${p.id}')">
-        ${avDiv(avIdx, 44)}
+        ${avDiv(avIdx, p.colIdx||0, 44)}
         <div class="p-card-info">
           <div class="p-card-name">${esc(p.name)}</div>
         </div>
@@ -401,7 +418,7 @@ function renderHomeList() {
       </div>
       <div class="p-card-expand">
         <div class="expand-header">
-          ${avDiv(avIdx, 52)}
+          ${avDiv(avIdx, p.colIdx||0, 52)}
           <div class="expand-info">
             <div class="expand-name">${esc(p.name)}</div>
             ${(p.role||p.career) ? `<div class="expand-meta">${[p.role,p.career].filter(Boolean).map(esc).join(' | ')}</div>` : ''}
@@ -617,7 +634,7 @@ function renderQR() {
   if(!me){body.innerHTML=`<div class="empty-state"><div class="ei">🪪</div><p>프로필을 먼저 등록해 주세요</p></div>`;return;}
   body.innerHTML=`
     <div class="qr-card">
-      <div class="qr-code-box">${avDiv(me.avIdx||0, 100)}</div>
+      <div class="qr-code-box">${avDiv(me.avIdx||0, me.colIdx||0, 100)}</div>
       <div class="qr-name">${esc(me.name)}</div>
       <div class="qr-role">${esc(me.role)}</div>
       ${me.status?`<div class="qr-status">"${esc(me.status)}"</div>`:''}
@@ -665,7 +682,7 @@ function renderMypage() {
   const me=S.people.find(p=>p.id===S.myId);
   body.innerHTML=`
     <div class="mypage-profile-section">
-      ${avDiv(me?.avIdx||0, 64)}
+      ${avDiv(me?.avIdx||0, me?.colIdx||0, 64)}
       <div class="mypage-info">
         <div class="mypage-name">${me?esc(me.name):'프로필 미등록'}</div>
         <div class="mypage-role">${me?esc(me.role):''}</div>
@@ -732,16 +749,16 @@ function renderMsgs() {
       const p2=S.people.find(x=>x.id===m.cardId);
       const row=document.createElement('div');
       row.className='msg-row'+(m.from==='me'?' me':'');
-      if(m.from!=='me'){const av=S.people.find(x=>x.id===S.currentChat);const avEl=document.createElement('div');avEl.className='msg-av';avEl.innerHTML=av?avDiv(av.avIdx||0,28):'';row.appendChild(avEl);}
+      if(m.from!=='me'){const av=S.people.find(x=>x.id===S.currentChat);const avEl=document.createElement('div');avEl.className='msg-av';avEl.innerHTML=av?avDiv(av.avIdx||0,av.colIdx||0,28):'';row.appendChild(avEl);}
       const bubble=document.createElement('div');
       bubble.className='chat-card-bubble';
-      bubble.innerHTML=`${avDiv(p2?.avIdx||0,36)}<div><div class="cc-name">${esc(p2?.name||'?')}</div><div class="cc-role">${esc(p2?.role||'')}</div></div>`;
+      bubble.innerHTML=`${avDiv(p2?.avIdx||0,p2?.colIdx||0,36)}<div><div class="cc-name">${esc(p2?.name||'?')}</div><div class="cc-role">${esc(p2?.role||'')}</div></div>`;
       bubble.onclick=()=>openDetail(m.cardId,'chatroom');
       row.appendChild(bubble);el.appendChild(row);return;
     }
     const row=document.createElement('div');
     row.className='msg-row'+(m.from==='me'?' me':'');
-    if(m.from!=='me'){const av=S.people.find(x=>x.id===S.currentChat);const avEl=document.createElement('div');avEl.className='msg-av';avEl.innerHTML=av?avDiv(av.avIdx||0,28):'';row.appendChild(avEl);}
+    if(m.from!=='me'){const av=S.people.find(x=>x.id===S.currentChat);const avEl=document.createElement('div');avEl.className='msg-av';avEl.innerHTML=av?avDiv(av.avIdx||0,av.colIdx||0,28):'';row.appendChild(avEl);}
     const bubble=document.createElement('div');bubble.className='msg-bubble';bubble.textContent=m.text;
     const tEl=document.createElement('span');tEl.className='msg-time';tEl.textContent=m.time;
     row.appendChild(bubble);row.appendChild(tEl);el.appendChild(row);
@@ -784,7 +801,7 @@ function openDetail(id,from) {
   const p=S.people.find(x=>x.id===id);if(!p)return;
   S.prevScreen=from||'home';
   const isMe=p.id===S.myId;
-  document.getElementById('d-av').innerHTML=avDiv(p.avIdx||0, 80);
+  document.getElementById('d-av').innerHTML=avDiv(p.avIdx||0, p.colIdx||0, 80);
   document.getElementById('d-av').style.cssText='';
   document.getElementById('d-name').textContent=p.name;
   document.getElementById('d-role').textContent=p.role;
