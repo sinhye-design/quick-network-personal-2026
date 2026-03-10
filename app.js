@@ -253,24 +253,33 @@ function buildRegStep() {
 
 function buildAvatarPicker() {
   const row=document.getElementById('av-row');
+  row.innerHTML='';
   AVATARS.forEach((name,i)=>{
     const d=document.createElement('div');
     d.className='avatar-opt'+(i===rAvatar?' selected':'');
+    const bg = AV_COLORS[rColor % AV_COLORS.length];
     const svgBase64 = typeof SVG_DATA!=='undefined'&&SVG_DATA[name]?SVG_DATA[name]:`character/${name}.svg`;
     d.innerHTML=`<div class="av-circle" style="width:48px;height:48px;background:#1F1F1F;">
-      <div style="width:100%;height:100%;background-color:#999;-webkit-mask:url('${svgBase64}') no-repeat center/85%;mask:url('${svgBase64}') no-repeat center/85%;"></div>
+      <div style="width:100%;height:100%;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/85%;mask:url('${svgBase64}') no-repeat center/85%;"></div>
     </div>`;
     d.onclick=()=>{rAvatar=i;document.getElementById('av-row').querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');};
     row.appendChild(d);
   });
   const crow=document.getElementById('color-row');
   if(!crow) return;
+  crow.innerHTML='';
   AV_COLORS.forEach((bg,i)=>{
     const d=document.createElement('div');
     d.className='avatar-opt'+(i===rColor?' selected':'');
     d.style.cssText = `width:44px;height:44px;border-radius:50%;background:${bg};cursor:pointer;border:3px solid transparent;`;
     if(i===rColor) d.style.borderColor='var(--primary)';
-    d.onclick=()=>{rColor=i;document.getElementById('color-row').querySelectorAll('.avatar-opt').forEach(x=>x.style.borderColor='transparent');d.style.borderColor='var(--primary)';};
+    d.onclick=()=>{
+      rColor=i;
+      document.getElementById('color-row').querySelectorAll('.avatar-opt').forEach(x=>x.style.borderColor='transparent');
+      d.style.borderColor='var(--primary)';
+      buildAvatarPicker(); // 캐릭터 색상 즉시 업데이트
+      buildRegStep(); // 미리보기 카드 등 업데이트
+    };
     crow.appendChild(d);
   });
 }
