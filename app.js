@@ -12,10 +12,9 @@ const AV_COLORS = [
 function avDiv(charIdx, colorIdx, size) {
   const name = AVATARS[charIdx % AVATARS.length];
   const bg = AV_COLORS[colorIdx % AV_COLORS.length];
-  const imgSize = Math.round(size * 0.65);
   const svgBase64 = typeof SVG_DATA !== 'undefined' && SVG_DATA[name] ? SVG_DATA[name] : `character/${name}.svg`;
   return `<div class="av-circle" style="width:${size}px;height:${size}px;background:#1F1F1F;">
-    <div style="width:${imgSize}px;height:${imgSize}px;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/contain;mask:url('${svgBase64}') no-repeat center/contain;"></div>
+    <div style="width:100%;height:100%;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/85%;mask:url('${svgBase64}') no-repeat center/85%;"></div>
   </div>`;
 }
 
@@ -258,8 +257,8 @@ function buildAvatarPicker() {
     const d=document.createElement('div');
     d.className='avatar-opt'+(i===rAvatar?' selected':'');
     const svgBase64 = typeof SVG_DATA!=='undefined'&&SVG_DATA[name]?SVG_DATA[name]:`character/${name}.svg`;
-    d.innerHTML=`<div class="av-circle" style="width:44px;height:44px;background:#1F1F1F;">
-      <div style="width:28px;height:28px;background-color:#999;-webkit-mask:url('${svgBase64}') no-repeat center/contain;mask:url('${svgBase64}') no-repeat center/contain;"></div>
+    d.innerHTML=`<div class="av-circle" style="width:48px;height:48px;background:#1F1F1F;">
+      <div style="width:100%;height:100%;background-color:#999;-webkit-mask:url('${svgBase64}') no-repeat center/85%;mask:url('${svgBase64}') no-repeat center/85%;"></div>
     </div>`;
     d.onclick=()=>{rAvatar=i;document.getElementById('av-row').querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');};
     row.appendChild(d);
