@@ -140,7 +140,8 @@ body {
 }
 
 .toggle-switch.on {
-  background: #fb923c; /* orange 400 */
+  background: #fb923c;
+  /* orange 400 */
 }
 
 .toggle-switch::after {
@@ -400,14 +401,15 @@ body {
 
 /* ── AVATAR ── */
 .avatar-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
   gap: 10px;
-  flex-wrap: wrap;
 }
 
 .avatar-opt {
-  width: 44px;
-  height: 44px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   font-size: 22px;
   display: flex;
@@ -700,8 +702,16 @@ body {
   gap: 8px;
 }
 
-.home-toprow .app-name { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -.3px; }
-.home-toprow .qr-icon-btn { margin-left: auto; }
+.home-toprow .app-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -.3px;
+}
+
+.home-toprow .qr-icon-btn {
+  margin-left: auto;
+}
 
 /* Tab bar */
 .tab-bar {
@@ -787,56 +797,6 @@ body {
   align-items: center;
   gap: 6px;
   flex-shrink: 0;
-}
-
-.qr-banner .close {
-  cursor: pointer;
-  font-size: 16px;
-  line-height: 1;
-  opacity: .8;
-}
-
-/* Toggle off overlay */
-.toggle-off-tip {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(26, 26, 26, .92);
-  border-radius: 12px;
-  padding: 12px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  text-align: center;
-  line-height: 1.5;
-  pointer-events: none;
-  z-index: 5;
-  white-space: nowrap;
-}
-
-/* list area */
-.list-area {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px 16px 90px;
-  position: relative;
-}
-
-.list-area::-webkit-scrollbar {
-  display: none;
-}
-
-.list-area.blurred>* {
-  filter: blur(5px);
-  pointer-events: none;
-  user-select: none;
-}
-
-/* Avatar circle (shared) */
-.av-circle {
-  border-radius: 50%;
-  display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
@@ -1763,4 +1723,8 @@ body {
   font-size: 11px;
   color: var(--sub);
   margin-top: 3px;
+}
+.av-circle {
+  border-radius: 50%;
+  overflow: hidden;
 }

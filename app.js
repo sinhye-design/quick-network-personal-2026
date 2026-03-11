@@ -175,6 +175,9 @@ function buildRegStep() {
 
   if (step===1) {
     body.innerHTML=`
+      <div class="form-section preview-section" style="display:flex; justify-content:center; padding: 10px 0 20px;">
+        <div id="step1-preview"></div>
+      </div>
       <div class="form-section">
         <div class="form-section-title">아바타</div>
         <div class="avatar-row" id="av-row" style="margin-bottom:16px;"></div>
@@ -196,6 +199,7 @@ function buildRegStep() {
       <button class="btn btn-primary" onclick="regStep1Next()">다음 →</button>
     `;
     buildAvatarPicker();
+    updateStep1Preview();
   } else if (step===2) {
     body.innerHTML=`
       <div class="form-section">
@@ -259,10 +263,10 @@ function buildAvatarPicker() {
     d.className='avatar-opt'+(i===rAvatar?' selected':'');
     const bg = AV_COLORS[rColor % AV_COLORS.length];
     const svgBase64 = typeof SVG_DATA!=='undefined'&&SVG_DATA[name]?SVG_DATA[name]:`character/${name}.svg`;
-    d.innerHTML=`<div class="av-circle" style="width:48px;height:48px;background:#1F1F1F;">
+    d.innerHTML=`<div class="av-circle" style="width:100%;height:100%;background:#1F1F1F;">
       <div style="width:100%;height:100%;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/85%;mask:url('${svgBase64}') no-repeat center/85%;"></div>
     </div>`;
-    d.onclick=()=>{rAvatar=i;document.getElementById('av-row').querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');};
+    d.onclick=()=>{rAvatar=i;document.getElementById('av-row').querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');updateStep1Preview();};
     row.appendChild(d);
   });
   const crow=document.getElementById('color-row');
@@ -271,17 +275,24 @@ function buildAvatarPicker() {
   AV_COLORS.forEach((bg,i)=>{
     const d=document.createElement('div');
     d.className='avatar-opt'+(i===rColor?' selected':'');
-    d.style.cssText = `width:44px;height:44px;border-radius:50%;background:${bg};cursor:pointer;border:3px solid transparent;`;
+    d.style.cssText = `width:100%;height:100%;border-radius:50%;background:${bg};cursor:pointer;border:3px solid transparent;`;
     if(i===rColor) d.style.borderColor='var(--primary)';
     d.onclick=()=>{
       rColor=i;
       document.getElementById('color-row').querySelectorAll('.avatar-opt').forEach(x=>x.style.borderColor='transparent');
       d.style.borderColor='var(--primary)';
       buildAvatarPicker(); // 캐릭터 색상 즉시 업데이트
-      buildRegStep(); // 미리보기 카드 등 업데이트
+      updateStep1Preview(); // 미리보기 창 업데이트 (전체 폼 렌더링 X)
     };
     crow.appendChild(d);
   });
+}
+
+function updateStep1Preview() {
+  const preview = document.getElementById('step1-preview');
+  if (preview) {
+    preview.innerHTML = avDiv(rAvatar, rColor, 88);
+  }
 }
 
 function buildTagInput() {
