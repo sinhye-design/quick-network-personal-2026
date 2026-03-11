@@ -9,12 +9,13 @@ const AV_COLORS = [
   '#60a5fa', '#c084fc', '#f472b6', '#ffffff'
 ];
 
-function avDiv(charIdx, colorIdx, size) {
+function avDiv(charIdx, colorIdx, size = 48) {
   const name = AVATARS[charIdx % AVATARS.length];
   const bg = AV_COLORS[colorIdx % AV_COLORS.length];
   const svgBase64 = typeof SVG_DATA !== 'undefined' && SVG_DATA[name] ? SVG_DATA[name] : `characters/${name}.svg`;
-  return `<div class="av-circle" style="width:${size}px;height:${size}px;background:#1F1F1F;">
-    <div style="width:100%;height:100%;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/85%;mask:url('${svgBase64}') no-repeat center/85%;"></div>
+  const imgSize = size >= 48 ? 44 : Math.round(size * 0.85);
+  return `<div class="av-circle" style="width:${size}px;height:${size}px;background:#1F1F1F;display:flex;align-items:center;justify-content:center;">
+    <div style="width:${imgSize}px;height:${imgSize}px;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/contain;mask:url('${svgBase64}') no-repeat center/contain;"></div>
   </div>`;
 }
 
@@ -229,7 +230,7 @@ function buildRegStep() {
         <div class="p-card" style="margin-bottom:0">
           <div class="p-card-top" style="cursor:default">
             <div class="p-card-left">
-              ${avDiv(rAvatar, rColor, 40)}
+              ${avDiv(rAvatar, rColor, 48)}
               <div class="p-card-info">
                 <div class="p-card-name">${esc(S.regData.name||'닉네임')}</div>
               </div>
@@ -415,7 +416,7 @@ function renderHomeList() {
     card.innerHTML = `
       <div class="p-card-top" onclick="toggleCard('${p.id}')">
         <div class="p-card-left">
-          ${avDiv(avIdx, p.colIdx||0, 40)}
+          ${avDiv(avIdx, p.colIdx||0, 48)}
           <div class="p-card-info">
             <div class="p-card-name">${esc(p.name)}</div>
           </div>
@@ -447,7 +448,7 @@ function openProfilePopup(pid) {
   const purposeObj = PURPOSES_LIST.find(x => x.id === p.purpose);
 
   document.getElementById('profile-popup-header').innerHTML = `
-    <div class="pp-avatar">${avDiv(avIdx, p.colIdx||0, 52)}</div>
+    <div class="pp-avatar">${avDiv(avIdx, p.colIdx||0, 48)}</div>
     <div class="pp-info">
       <div class="pp-name">${esc(p.name)}</div>
       ${(p.role||p.career) ? `<div class="pp-meta">${[p.role,p.career].filter(Boolean).map(esc).join(' | ')}</div>` : ''}
