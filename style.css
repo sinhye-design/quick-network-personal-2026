@@ -227,7 +227,7 @@ body {
 }
 
 .nav-item.active {
-  color: #00AD6B;
+  color: #07CA7F;
 }
 
 .nav-item svg {
@@ -922,6 +922,7 @@ body {
 
 
 .p-card-tag-row {
+  height: 40px;
   display: flex;
   align-items: center;
   gap: 6px;
