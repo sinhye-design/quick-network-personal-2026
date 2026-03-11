@@ -162,6 +162,21 @@ body {
 }
 
 /* ── QR ICON BTN ── */
+.qr-icon-svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-color: var(--text);
+  -webkit-mask-image: url('icons/Brand/Qr%20Code%20ver.1.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-image: url('icons/Brand/Qr%20Code%20ver.1.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+
 .qr-icon-btn {
   width: 36px;
   height: 36px;
@@ -178,12 +193,15 @@ body {
 
 /* ── BOTTOM NAV (3 items) ── */
 .bottom-nav {
-  background: var(--card);
-  border-top: 1px solid var(--border);
+  background: #000000;
+  border-top: none;
+  border-radius: 16px 16px 0 0;
   display: flex;
-  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+  align-items: center;
+  height: 88px;
+  padding-bottom: env(safe-area-inset-bottom);
   flex-shrink: 0;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
@@ -195,25 +213,27 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   cursor: pointer;
   padding: 4px 0;
   background: none;
   border: none;
-  color: var(--sub);
+  color: #5C5C5C;
   font-family: inherit;
+  font-size: 10px;
+  font-weight: 500;
   transition: color .15s;
 }
 
 .nav-item.active {
-  color: var(--primary);
+  color: #00AD6B;
 }
 
 .nav-svg {
   display: block;
   width: 24px;
   height: 24px;
-  background-color: var(--sub);
+  background-color: #5C5C5C;
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
@@ -223,7 +243,7 @@ body {
   transition: background-color .15s;
 }
 
-.nav-item.active .nav-svg { background-color: var(--primary); }
+.nav-item.active .nav-svg { background-color: #00AD6B; }
 
 .nav-icon-wrap {
   position: relative;
@@ -486,20 +506,31 @@ body {
 
 /* ── PURPOSE TAG ── */
 .purpose-tag {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 5px;
-  background: var(--card2);
-  border-radius: 8px;
-  padding: 6px 10px;
-  font-size: 12px;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--sub);
+  color: var(--orange);
 }
 
-.purpose-tag .bm {
-  color: var(--orange);
-  font-size: 14px;
+.bm {
+  display: inline-block;
+  width: 12px;
+  height: 14px;
+  background-color: var(--orange-light);
+  -webkit-mask-image: url('icons/Icon_Bookmark_filled.svg');
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-image: url('icons/Icon_Bookmark_filled.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  flex-shrink: 0;
+  vertical-align: middle;
 }
 
 /* ── CARD ── */
@@ -694,6 +725,43 @@ body {
 /* ══════════════════════════════════════ */
 /* HOME - REDESIGNED                     */
 /* ══════════════════════════════════════ */
+
+.list-area {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  padding-bottom: 80px;
+}
+
+.networking-off-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+}
+
+.networking-off-overlay.hidden {
+  display: none;
+}
+
+.networking-off-msg {
+  text-align: center;
+  color: var(--text);
+}
+
+.networking-off-msg p {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
 .home-header {
   background: var(--card);
   border-bottom: 1px solid var(--border);
@@ -813,6 +881,10 @@ body {
   display: block;
 }
 
+#home-list {
+  padding: 0 20px;
+}
+
 /* Participant card */
 .p-card {
   background: var(--card);
@@ -820,6 +892,9 @@ body {
   border: 1px solid var(--border);
   margin-bottom: 10px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   transition: border-color .2s;
 }
 
@@ -833,10 +908,18 @@ body {
 
 .p-card-top {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  padding: 14px 14px 0 14px;
   cursor: pointer;
+}
+
+.p-card-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  flex: 1;
+  min-width: 0;
 }
 
 .p-card-info {
@@ -853,77 +936,82 @@ body {
   color: var(--sub);
   font-size: 18px;
   flex-shrink: 0;
+  margin-right: 14px;
   transition: transform .2s;
 }
 
-.p-card.expanded .p-card-arrow {
-  transform: rotate(90deg);
-}
 
 .p-card-tag-row {
-  padding: 8px 14px 12px 14px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-/* Expanded content */
-.p-card-expand {
-  display: none;
-  padding: 14px;
-  border-top: 1px solid var(--border);
-}
-
-.p-card.expanded .p-card-expand {
-  display: block;
-}
-
-.expand-header {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  margin-bottom: 12px;
-}
-
-.expand-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.expand-name {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.expand-meta {
-  font-size: 12px;
-  color: var(--sub);
-  line-height: 1.6;
-}
-
-.expand-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.expand-purpose {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  margin: 0 12px 12px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: #1F1F1F;
   font-size: 13px;
   font-weight: 600;
-  color: var(--orange-light);
-  margin-bottom: 14px;
-}
-
-.expand-purpose .bm {
   color: var(--orange);
 }
 
-.expand-bottom {
+/* ── PROFILE POPUP ── */
+.profile-popup-box {
+  background: var(--card2);
+  border-radius: 16px;
+  padding: 20px;
+  width: calc(100% - 48px);
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.profile-popup-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.pp-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  justify-content: center;
+}
+
+.pp-name {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.pp-meta {
+  font-size: 12px;
+  color: var(--sub);
+  line-height: 1.5;
+}
+
+.profile-popup-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.profile-popup-purpose {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--orange-light);
+}
+
+.profile-popup-purpose .bm {
+  background-color: var(--orange);
+}
+
+.profile-popup-footer {
   display: flex;
 }
 
@@ -962,7 +1050,8 @@ body {
   padding: 6px 14px;
   font-size: 12px;
   font-weight: 600;
-  margin-left: auto;
+  margin-right: 10px;
+  flex-shrink: 0;
   cursor: pointer;
   font-family: inherit;
 }

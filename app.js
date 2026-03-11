@@ -227,15 +227,16 @@ function buildRegStep() {
       <div class="form-section">
         <div class="form-section-title">카드 미리보기</div>
         <div class="p-card" style="margin-bottom:0">
-          <div class="p-card-top" style="cursor:default;padding-bottom:12px">
-            ${avDiv(rAvatar, rColor, 44)}
-            <div class="p-card-info">
-              <div class="p-card-name">${esc(S.regData.name||'닉네임')}</div>
+          <div class="p-card-top" style="cursor:default">
+            <div class="p-card-left">
+              ${avDiv(rAvatar, rColor, 40)}
+              <div class="p-card-info">
+                <div class="p-card-name">${esc(S.regData.name||'닉네임')}</div>
+              </div>
             </div>
+            <span class="p-card-arrow">›</span>
           </div>
-          <div class="p-card-tag-row" style="padding-top:0">
-            <span class="purpose-tag"><span class="bm">🔖</span>${PURPOSES_LIST.find(p=>p.id===rPurpose)?.label||'목적 미선택'}</span>
-          </div>
+          <div class="p-card-tag-row"><span class="bm"></span><span>${PURPOSES_LIST.find(p=>p.id===rPurpose)?.label||'목적 미선택'}</span></div>
         </div>
       </div>
       <div style="display:flex;gap:10px">
@@ -370,21 +371,13 @@ function submitReg() {
 // ═══════════════════════════════════
 function toggleNetworking() {
   S.networkingOn = !S.networkingOn;
-  const toggle = document.getElementById('main-toggle');
-  toggle.classList.toggle('on', S.networkingOn);
-  const listArea = document.getElementById('list-area');
-  const tip = document.getElementById('toggle-off-tip');
-  const qrBanner = document.getElementById('qr-banner');
-
+  document.getElementById('main-toggle').classList.toggle('on', S.networkingOn);
+  const overlay = document.getElementById('networking-off-overlay');
   if (S.networkingOn) {
-    listArea.classList.remove('blurred');
-    tip.style.display = 'none';
-    if (!S.qrBannerDismissed) qrBanner.style.display = 'block';
+    overlay.classList.add('hidden');
     toast('네트워킹 ON!');
   } else {
-    listArea.classList.add('blurred');
-    tip.style.display = 'block';
-    qrBanner.style.display = 'none';
+    overlay.classList.remove('hidden');
     toast('네트워킹을 종료했어요');
   }
 }
@@ -413,68 +406,75 @@ function renderHomeList() {
   list.forEach(p => {
     const purposeObj = PURPOSES_LIST.find(x=>x.id===p.purpose);
     const isRequested = S.requestedIds.has(p.id);
-    const isExpanded = S.expandedId === p.id;
     const avIdx = p.avIdx||0;
     const purposeShort = purposeObj ? purposeObj.label.replace(/ \(.+\)$/,'') : '';
 
     const card = document.createElement('div');
-    card.className = 'p-card'+(isExpanded?' expanded':'')+(isRequested?' requested':'');
+    card.className = 'p-card'+(isRequested?' requested':'');
     card.id = 'pcard-'+p.id;
     card.innerHTML = `
       <div class="p-card-top" onclick="toggleCard('${p.id}')">
-        ${avDiv(avIdx, p.colIdx||0, 44)}
-        <div class="p-card-info">
-          <div class="p-card-name">${esc(p.name)}</div>
+        <div class="p-card-left">
+          ${avDiv(avIdx, p.colIdx||0, 40)}
+          <div class="p-card-info">
+            <div class="p-card-name">${esc(p.name)}</div>
+          </div>
         </div>
         ${isRequested
           ? `<button class="net-cancel-pill" onclick="openCancelModal('${p.id}',event)">네트워킹 취소</button>`
           : `<span class="p-card-arrow">›</span>`
         }
       </div>
-      <div class="p-card-tag-row">
-        ${purposeObj ? `<span class="purpose-tag"><span class="bm">🔖</span>${esc(purposeShort)}</span>` : ''}
-      </div>
-      <div class="p-card-expand">
-        <div class="expand-header">
-          ${avDiv(avIdx, p.colIdx||0, 52)}
-          <div class="expand-info">
-            <div class="expand-name">${esc(p.name)}</div>
-            ${(p.role||p.career) ? `<div class="expand-meta">${[p.role,p.career].filter(Boolean).map(esc).join(' | ')}</div>` : ''}
-            ${p.company ? `<div class="expand-meta">${esc(p.company)}</div>` : ''}
-          </div>
-        </div>
-        ${(p.interests||p.tags||[]).length ? `
-        <div class="expand-chips">
-          ${(p.interests||p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}
-        </div>` : ''}
-        ${purposeObj ? `<div class="expand-purpose"><span class="bm">🔖</span>${esc(purposeObj.label)}</div>` : ''}
-        <div class="expand-bottom">
-          ${!isRequested
-            ? `<button class="net-request-btn" onclick="openNetModal('${p.id}',event)">네트워킹 신청</button>`
-            : `<button class="net-request-btn net-cancel-btn" onclick="openCancelModal('${p.id}',event)">네트워킹 취소</button>`
-          }
-        </div>
-      </div>
+      ${purposeObj ? `<div class="p-card-tag-row"><span class="bm"></span><span>${esc(purposeShort)}</span></div>` : ''}
     `;
     el.appendChild(card);
   });
 
-  // toggle off state
-  const listArea = document.getElementById('list-area');
-  const tip = document.getElementById('toggle-off-tip');
-  if (S.networkingOn) {
-    listArea.classList.remove('blurred');
-    tip.style.display = 'none';
-  } else {
-    listArea.classList.add('blurred');
-    tip.style.display = 'block';
-  }
+  const overlay = document.getElementById('networking-off-overlay');
+  if (overlay) overlay.classList.toggle('hidden', S.networkingOn);
 }
 
 function toggleCard(pid) {
   if (!S.networkingOn) { toast('스위치를 켜야 참여할 수 있어요'); return; }
-  S.expandedId = S.expandedId === pid ? null : pid;
-  renderHomeList();
+  openProfilePopup(pid);
+}
+
+function openProfilePopup(pid) {
+  const p = S.people.find(x => x.id === pid);
+  if (!p) return;
+  const isRequested = S.requestedIds.has(pid);
+  const avIdx = S.people.indexOf(p) % AVATARS.length;
+  const purposeObj = PURPOSES_LIST.find(x => x.id === p.purpose);
+
+  document.getElementById('profile-popup-header').innerHTML = `
+    <div class="pp-avatar">${avDiv(avIdx, p.colIdx||0, 52)}</div>
+    <div class="pp-info">
+      <div class="pp-name">${esc(p.name)}</div>
+      ${(p.role||p.career) ? `<div class="pp-meta">${[p.role,p.career].filter(Boolean).map(esc).join(' | ')}</div>` : ''}
+      ${p.company ? `<div class="pp-meta">${esc(p.company)}</div>` : ''}
+    </div>
+  `;
+
+  const chips = p.interests||p.tags||[];
+  document.getElementById('profile-popup-chips').innerHTML = chips.length
+    ? chips.map(t => `<span class="tag">${esc(t)}</span>`).join('')
+    : '';
+  document.getElementById('profile-popup-chips').style.display = chips.length ? 'flex' : 'none';
+
+  document.getElementById('profile-popup-purpose').innerHTML = purposeObj
+    ? `<span class="bm"></span><span>${esc(purposeObj.label)}</span>`
+    : '';
+  document.getElementById('profile-popup-purpose').style.display = purposeObj ? 'flex' : 'none';
+
+  document.getElementById('profile-popup-footer').innerHTML = !isRequested
+    ? `<button class="net-request-btn" onclick="closeProfilePopup();openNetModal('${pid}')">네트워킹 신청</button>`
+    : `<button class="net-request-btn net-cancel-btn" onclick="closeProfilePopup();openCancelModal('${pid}')">네트워킹 취소</button>`;
+
+  document.getElementById('profile-popup').classList.remove('hidden');
+}
+
+function closeProfilePopup() {
+  document.getElementById('profile-popup').classList.add('hidden');
 }
 
 function openNetModal(pid, e) {
@@ -830,7 +830,7 @@ function openDetail(id,from) {
     ${p.bio?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">소개</div><p style="font-size:14px;line-height:1.6">${esc(p.bio)}</p></div>`:''}
     ${p.tags?.length?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">관심사</div><div style="display:flex;flex-wrap:wrap;gap:6px">${p.tags.map(t=>`<span class="tag primary">${esc(t)}</span>`).join('')}</div></div>`:''}
     ${p.status?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">오늘의 상태</div><p style="font-size:15px;font-weight:600;color:var(--orange-light)">"${esc(p.status)}"</p></div>`:''}
-    ${pObj?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">참여 목적</div><span class="purpose-tag"><span class="bm">🔖</span>${esc(pObj.label)}</span></div>`:''}
+    ${pObj?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">참여 목적</div><span class="purpose-tag"><span class="bm"></span>${esc(pObj.label)}</span></div>`:''}
     ${(p.email||p.link||p.company)?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">연락처</div>${p.email?`<a href="mailto:${p.email}" style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);font-size:14px"><span>✉️</span><span style="flex:1">${esc(p.email)}</span><span style="color:var(--sub)">›</span></a>`:''}${p.company?`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:14px"><span>🏢</span><span>${esc(p.company)}</span></div>`:''}</div>`:''}
     ${!isMe?`<div style="display:flex;gap:10px">
       <button class="btn btn-outline" style="flex:1" onclick="openNetModal('${p.id}')">🤝 네트워킹 신청</button>

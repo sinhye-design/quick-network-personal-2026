@@ -55,7 +55,7 @@
       <div class="toggle-wrap">
         <div class="toggle-switch" id="main-toggle" onclick="toggleNetworking()"></div>
       </div>
-      <button class="qr-icon-btn" onclick="goQR()">⊡</button>
+      <button class="qr-icon-btn" onclick="goQR()"><img src="icons/Brand/Qr Code ver.1.svg" width="32" height="32" alt="QR" style="display:block;filter:brightness(0) invert(1)"></button>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between">
       <div class="tab-bar" style="flex:1;border-bottom:none;margin:0;padding:0">
@@ -70,32 +70,44 @@
     </div>
   </div>
 
-  <!-- QR banner -->
-  <div id="qr-banner" style="padding:8px 16px;display:none">
-    <div class="qr-banner">
-      <span style="flex:1">QR로 명함을 주고 받을 수 있어요!</span>
-      <span class="close" onclick="dismissQRBanner()">×</span>
-    </div>
-  </div>
-
   <!-- List area -->
   <div class="list-area" id="list-area">
-    <div class="toggle-off-tip" id="toggle-off-tip">
-      스위치를 on하면<br>네트워킹에 참여할 수 있어요!
+    <div class="networking-off-overlay" id="networking-off-overlay">
+      <div class="networking-off-msg">
+        <p>스위치를 켜면<br>네트워킹에 참여할 수 있어요</p>
+      </div>
     </div>
+    <div style="height:54px"></div>
     <div id="home-list"></div>
   </div>
 
   <nav class="bottom-nav">
-    <button class="nav-item active" onclick="switchMainTab('home')"><span class="nav-svg" style="mask-image:url('icons/home_filled.svg');-webkit-mask-image:url('icons/home_filled.svg')"></span></button>
+    <button class="nav-item active" onclick="switchMainTab('home')">
+      <span class="nav-svg" style="mask-image:url('icons/home_filled.svg');-webkit-mask-image:url('icons/home_filled.svg')"></span>
+      <span>홈</span>
+    </button>
     <button class="nav-item" onclick="switchMainTab('notif')">
       <span class="nav-icon-wrap">
         <span class="nav-svg" style="mask-image:url('icons/notification_filled.svg');-webkit-mask-image:url('icons/notification_filled.svg')"></span>
         <span class="nav-badge" id="notif-badge" style="display:none">1</span>
       </span>
+      <span>알림</span>
     </button>
-    <button class="nav-item" onclick="switchMainTab('mypage')"><span class="nav-svg" style="mask-image:url('icons/user_filled.svg');-webkit-mask-image:url('icons/user_filled.svg')"></span></button>
+    <button class="nav-item" onclick="switchMainTab('mypage')">
+      <span class="nav-svg" style="mask-image:url('icons/user_filled.svg');-webkit-mask-image:url('icons/user_filled.svg')"></span>
+      <span>마이페이지</span>
+    </button>
   </nav>
+
+  <!-- 프로필 팝업 -->
+  <div class="modal-overlay hidden" id="profile-popup" onclick="closeProfilePopup()">
+    <div class="profile-popup-box" onclick="event.stopPropagation()">
+      <div class="profile-popup-header" id="profile-popup-header"></div>
+      <div class="profile-popup-chips" id="profile-popup-chips"></div>
+      <div class="profile-popup-purpose" id="profile-popup-purpose"></div>
+      <div class="profile-popup-footer" id="profile-popup-footer"></div>
+    </div>
+  </div>
 
   <!-- 네트워킹 신청 모달 -->
   <div class="modal-overlay hidden" id="net-modal">
@@ -159,9 +171,18 @@
   </div>
   <div style="flex:1;overflow-y:auto;padding-bottom:80px" id="notif-body"></div>
   <nav class="bottom-nav">
-    <button class="nav-item" onclick="switchMainTab('home')"><span class="nav-svg" style="mask-image:url('icons/home_filled.svg');-webkit-mask-image:url('icons/home_filled.svg')"></span></button>
-    <button class="nav-item active" onclick="switchMainTab('notif')"><span class="nav-svg" style="mask-image:url('icons/notification_filled.svg');-webkit-mask-image:url('icons/notification_filled.svg')"></span></button>
-    <button class="nav-item" onclick="switchMainTab('mypage')"><span class="nav-svg" style="mask-image:url('icons/user_filled.svg');-webkit-mask-image:url('icons/user_filled.svg')"></span></button>
+    <button class="nav-item" onclick="switchMainTab('home')">
+      <span class="nav-svg" style="mask-image:url('icons/home_filled.svg');-webkit-mask-image:url('icons/home_filled.svg')"></span>
+      <span>홈</span>
+    </button>
+    <button class="nav-item active" onclick="switchMainTab('notif')">
+      <span class="nav-svg" style="mask-image:url('icons/notification_filled.svg');-webkit-mask-image:url('icons/notification_filled.svg')"></span>
+      <span>알림</span>
+    </button>
+    <button class="nav-item" onclick="switchMainTab('mypage')">
+      <span class="nav-svg" style="mask-image:url('icons/user_filled.svg');-webkit-mask-image:url('icons/user_filled.svg')"></span>
+      <span>마이페이지</span>
+    </button>
   </nav>
 </div>
 
@@ -174,9 +195,18 @@
   </div>
   <div class="mypage-body" id="mypage-body"></div>
   <nav class="bottom-nav">
-    <button class="nav-item" onclick="switchMainTab('home')"><span class="nav-svg" style="mask-image:url('icons/home_filled.svg');-webkit-mask-image:url('icons/home_filled.svg')"></span></button>
-    <button class="nav-item" onclick="switchMainTab('notif')"><span class="nav-svg" style="mask-image:url('icons/notification_filled.svg');-webkit-mask-image:url('icons/notification_filled.svg')"></span></button>
-    <button class="nav-item active" onclick="switchMainTab('mypage')"><span class="nav-svg" style="mask-image:url('icons/user_filled.svg');-webkit-mask-image:url('icons/user_filled.svg')"></span></button>
+    <button class="nav-item" onclick="switchMainTab('home')">
+      <span class="nav-svg" style="mask-image:url('icons/home_filled.svg');-webkit-mask-image:url('icons/home_filled.svg')"></span>
+      <span>홈</span>
+    </button>
+    <button class="nav-item" onclick="switchMainTab('notif')">
+      <span class="nav-svg" style="mask-image:url('icons/notification_filled.svg');-webkit-mask-image:url('icons/notification_filled.svg')"></span>
+      <span>알림</span>
+    </button>
+    <button class="nav-item active" onclick="switchMainTab('mypage')">
+      <span class="nav-svg" style="mask-image:url('icons/user_filled.svg');-webkit-mask-image:url('icons/user_filled.svg')"></span>
+      <span>마이페이지</span>
+    </button>
   </nav>
 </div>
 
