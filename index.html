@@ -57,16 +57,9 @@
       </div>
       <button class="qr-icon-btn" onclick="goQR()"><img src="icons/Brand/Qr Code ver.1.svg" width="32" height="32" alt="QR" style="display:block;filter:brightness(0) invert(1)"></button>
     </div>
-    <div style="display:flex;align-items:center;justify-content:space-between">
-      <div class="tab-bar" style="flex:1;border-bottom:none;margin:0;padding:0">
-        <button class="tab-item active" id="tab-1v1" onclick="switchHomeTab('1v1')">1:1</button>
-        <button class="tab-item" id="tab-group" onclick="switchHomeTab('group')">그룹</button>
-      </div>
-      <button class="filter-btn" id="filter-btn" onclick="openFilter()">
-        <span>필터</span>
-        <span style="font-size:14px">≡</span>
-        <span class="filter-count" id="filter-count" style="display:none">0</span>
-      </button>
+    <div class="tab-bar" style="border-bottom:none;margin:0;padding:0">
+      <button class="tab-item active" id="tab-1v1" onclick="switchHomeTab('1v1')">1:1</button>
+      <button class="tab-item" id="tab-group" onclick="switchHomeTab('group')">그룹</button>
     </div>
   </div>
 
@@ -77,7 +70,13 @@
         <p>스위치를 켜면<br>네트워킹에 참여할 수 있어요</p>
       </div>
     </div>
-    <div style="height:54px"></div>
+    <div style="height:54px;display:flex;align-items:center;justify-content:flex-end;padding:0 20px">
+      <button class="filter-btn" id="filter-btn" onclick="openFilter()">
+        <span>필터</span>
+        <span style="font-size:14px">≡</span>
+        <span class="filter-count" id="filter-count" style="display:none">0</span>
+      </button>
+    </div>
     <div id="home-list"></div>
   </div>
 

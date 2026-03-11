@@ -518,9 +518,9 @@ body {
 
 .bm {
   display: inline-block;
-  width: 12px;
-  height: 14px;
-  background-color: var(--orange-light);
+  width: 20px;
+  height: 20px;
+  background-color: #FF9257;
   -webkit-mask-image: url('icons/Icon_Bookmark_filled.svg');
   -webkit-mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -1008,7 +1008,7 @@ body {
 }
 
 .profile-popup-purpose .bm {
-  background-color: var(--orange);
+  background-color: #FF9257;
 }
 
 .profile-popup-footer {
@@ -1141,7 +1141,7 @@ body {
   z-index: 100;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .sheet-overlay.hidden {
