@@ -236,7 +236,7 @@ function buildRegStep() {
             </div>
             <span class="p-card-arrow">›</span>
           </div>
-          <div class="p-card-tag-row"><span class="bm"></span><span>${PURPOSES_LIST.find(p=>p.id===rPurpose)?.label||'목적 미선택'}</span></div>
+          <div class="p-card-tag-row"><img class="bm" src="icons/Icon_Bookmark_filled.svg"><span>${PURPOSES_LIST.find(p=>p.id===rPurpose)?.label||'목적 미선택'}</span></div>
         </div>
       </div>
       <div style="display:flex;gap:10px">
@@ -425,7 +425,7 @@ function renderHomeList() {
           : `<span class="p-card-arrow">›</span>`
         }
       </div>
-      ${purposeObj ? `<div class="p-card-tag-row"><span class="bm"></span><span>${esc(purposeShort)}</span></div>` : ''}
+      ${purposeObj ? `<div class="p-card-tag-row"><img class="bm" src="icons/Icon_Bookmark_filled.svg"><span>${esc(purposeShort)}</span></div>` : ''}
     `;
     el.appendChild(card);
   });
@@ -462,7 +462,7 @@ function openProfilePopup(pid) {
   document.getElementById('profile-popup-chips').style.display = chips.length ? 'flex' : 'none';
 
   document.getElementById('profile-popup-purpose').innerHTML = purposeObj
-    ? `<span class="bm"></span><span>${esc(purposeObj.label)}</span>`
+    ? `<img class="bm" src="icons/Icon_Bookmark_filled.svg"><span>${esc(purposeObj.label)}</span>`
     : '';
   document.getElementById('profile-popup-purpose').style.display = purposeObj ? 'flex' : 'none';
 
@@ -830,7 +830,7 @@ function openDetail(id,from) {
     ${p.bio?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">소개</div><p style="font-size:14px;line-height:1.6">${esc(p.bio)}</p></div>`:''}
     ${p.tags?.length?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">관심사</div><div style="display:flex;flex-wrap:wrap;gap:6px">${p.tags.map(t=>`<span class="tag primary">${esc(t)}</span>`).join('')}</div></div>`:''}
     ${p.status?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">오늘의 상태</div><p style="font-size:15px;font-weight:600;color:var(--orange-light)">"${esc(p.status)}"</p></div>`:''}
-    ${pObj?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">참여 목적</div><span class="purpose-tag"><span class="bm"></span>${esc(pObj.label)}</span></div>`:''}
+    ${pObj?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">참여 목적</div><span class="purpose-tag"><img class="bm" src="icons/Icon_Bookmark_filled.svg">${esc(pObj.label)}</span></div>`:''}
     ${(p.email||p.link||p.company)?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">연락처</div>${p.email?`<a href="mailto:${p.email}" style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);font-size:14px"><span>✉️</span><span style="flex:1">${esc(p.email)}</span><span style="color:var(--sub)">›</span></a>`:''}${p.company?`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:14px"><span>🏢</span><span>${esc(p.company)}</span></div>`:''}</div>`:''}
     ${!isMe?`<div style="display:flex;gap:10px">
       <button class="btn btn-outline" style="flex:1" onclick="openNetModal('${p.id}')">🤝 네트워킹 신청</button>

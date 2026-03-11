@@ -229,21 +229,10 @@ body {
   color: #00AD6B;
 }
 
-.nav-svg {
-  display: block;
-  width: 24px;
-  height: 24px;
-  background-color: #5C5C5C;
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  transition: background-color .15s;
+.nav-item svg {
+  flex-shrink: 0;
+  transition: color .15s;
 }
-
-.nav-item.active .nav-svg { background-color: #00AD6B; }
 
 .nav-icon-wrap {
   position: relative;
@@ -520,15 +509,7 @@ body {
   display: inline-block;
   width: 20px;
   height: 20px;
-  background-color: #FF9257;
-  -webkit-mask-image: url('icons/Icon_Bookmark_filled.svg');
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-image: url('icons/Icon_Bookmark_filled.svg');
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
+  margin-right: 8px;
   flex-shrink: 0;
   vertical-align: middle;
 }
@@ -798,7 +779,7 @@ body {
 
 .tab-item {
   padding: 10px 16px;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--sub);
   cursor: pointer;
@@ -831,9 +812,9 @@ body {
   gap: 5px;
   background: none;
   border: 1.5px solid var(--border);
-  border-radius: 20px;
+  /* border-radius: 20px; */
   padding: 6px 12px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--sub);
   cursor: pointer;
@@ -1007,9 +988,6 @@ body {
   color: var(--orange-light);
 }
 
-.profile-popup-purpose .bm {
-  background-color: #FF9257;
-}
 
 .profile-popup-footer {
   display: flex;
@@ -1141,7 +1119,7 @@ body {
   z-index: 100;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
 
 .sheet-overlay.hidden {
