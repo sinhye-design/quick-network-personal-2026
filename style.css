@@ -209,15 +209,21 @@ body {
   color: var(--primary);
 }
 
-.nav-icon {
-  font-size: 22px;
-  line-height: 1;
+.nav-svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-color: var(--sub);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  transition: background-color .15s;
 }
 
-.nav-label {
-  font-size: 10px;
-  font-weight: 600;
-}
+.nav-item.active .nav-svg { background-color: var(--primary); }
 
 .nav-icon-wrap {
   position: relative;
