@@ -268,10 +268,10 @@ body {
   position: relative;
   gap: 8px;
   width: 100%;
-  height: 50px;          /* size="full" */
-  border-radius: 10px;
-  font-size: 16px;       /* size="full": text-[16px] */
-  font-weight: 600;      /* font-semibold */
+  height: 40px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   border: none;
   font-family: inherit;
@@ -315,22 +315,22 @@ body {
   color: #fff;
 }
 
-/* size="sm" — py-[6px] px-[10px] text-[13px] */
+/* size="sm" */
 .btn-sm {
   width: auto;
   height: auto;
   padding: 6px 10px;
   font-size: 13px;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
-/* size="xs" (추가 유틸) */
+/* size="xs" */
 .btn-xs {
   width: auto;
   height: auto;
   padding: 5px 10px;
   font-size: 12px;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 /* ── FORMS ── */
@@ -1046,16 +1046,15 @@ body {
 
 .net-request-btn {
   flex: 1;
-  height: 50px;          /* size="full" */
-  border-radius: 10px;
-  background: #07ca7f;   /* variant="green" */
+  height: 40px;
+  border-radius: 8px;
+  background: #07ca7f;
   border: none;
-  font-size: 16px;       /* size="full": text-[16px] */
-  font-weight: 700;
-  color: #fefefe;        /* variant="green": text-[#fefefe] */
+  font-size: 14px;
+  font-weight: 600;
+  color: #fefefe;
   cursor: pointer;
   font-family: inherit;
-  letter-spacing: -0.2px;
   transition: opacity .15s, transform .1s;
 }
 
@@ -1076,7 +1075,7 @@ body {
   background: var(--danger);
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 6px 14px;
   font-size: 12px;
   font-weight: 600;
@@ -1131,11 +1130,11 @@ body {
 }
 
 .modal-indicator-row {
-  display: flex;
+  /* display: flex; */
   align-items: flex-start;
   gap: 10px;
   margin: 4px 0 24px;
-  text-align: left;
+  text-align: center;
 }
 
 
@@ -1152,13 +1151,13 @@ body {
 
 .modal-no {
   flex: 1;
-  height: 50px;          /* size="full" */
-  border-radius: 10px;
-  background: #374151;   /* variant="gray-700" */
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);  /* transparent/300 */
   border: none;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  color: #fff;
+  color: #9A9A9A;        /* text/subtle */
   cursor: pointer;
   font-family: inherit;
   transition: opacity .15s, transform .1s;
@@ -1171,11 +1170,11 @@ body {
 
 .modal-yes {
   flex: 1.5;
-  height: 50px;          /* size="full" */
-  border-radius: 10px;
-  background: #07ca7f;   /* variant="green" */
+  height: 40px;
+  border-radius: 8px;
+  background: #07ca7f;   /* fill/primary */
   border: none;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: #fefefe;
   cursor: pointer;
