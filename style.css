@@ -961,7 +961,7 @@ body {
   background: var(--card2);
   border-radius: 12px;
   padding: 0;
-  width: calc(100% - 40px);
+  width: 100%;
   max-width: 380px;
   display: flex;
   flex-direction: column;
@@ -1095,7 +1095,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* padding: 24px; */
+  padding: 24px;
 }
 
 .modal-overlay.hidden {
@@ -1128,6 +1128,21 @@ body {
   color: var(--sub);
   line-height: 1.6;
   margin-bottom: 24px;
+}
+
+.modal-indicator-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 4px 0 24px;
+  text-align: left;
+}
+
+
+.modal-indicator-desc {
+  font-size: 13px;
+  color: var(--sub);
+  line-height: 1.6;
 }
 
 .modal-actions {

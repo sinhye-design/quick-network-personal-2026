@@ -9,11 +9,11 @@ const AV_COLORS = [
   '#60a5fa', '#c084fc', '#f472b6', '#ffffff'
 ];
 
-function avDiv(charIdx, colorIdx, size = 48) {
+function avDiv(charIdx, colorIdx, size = 48, innerSize = null) {
   const name = AVATARS[charIdx % AVATARS.length];
   const bg = AV_COLORS[colorIdx % AV_COLORS.length];
   const svgBase64 = typeof SVG_DATA !== 'undefined' && SVG_DATA[name] ? SVG_DATA[name] : `characters/${name}.svg`;
-  const imgSize = size >= 48 ? Math.round(size * 0.78) : Math.round(size * 0.85);
+  const imgSize = innerSize ?? (size >= 48 ? Math.round(size * 0.78) : Math.round(size * 0.85));
   return `<div class="av-circle" style="width:${size}px;height:${size}px;background:#1F1F1F;display:flex;align-items:center;justify-content:center;">
     <div style="width:${imgSize}px;height:${imgSize}px;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/contain;mask:url('${svgBase64}') no-repeat center/contain;"></div>
   </div>`;
@@ -457,7 +457,7 @@ function openProfilePopup(pid) {
   const purposeObj = PURPOSES_LIST.find(x => x.id === p.purpose);
 
   document.getElementById('profile-popup-header').innerHTML = `
-    <div class="pp-avatar">${avDiv(avIdx, p.colIdx||0, 56)}</div>
+    <div class="pp-avatar">${avDiv(avIdx, p.colIdx||0, 64, 60)}</div>
     <div class="pp-info">
       <div class="pp-name">${esc(p.name)}</div>
       ${(p.role||p.career) ? `<div class="pp-meta">${[p.role,p.career].filter(Boolean).map(esc).join(' | ')}</div>` : ''}
