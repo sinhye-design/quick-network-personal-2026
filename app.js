@@ -75,6 +75,13 @@ const MOCK_NOTIFS = [
   {id:'n2',text:'오늘 네트워킹 세션에 5명이 참여했어요',time:'1시간 전',read:true,chatId:null},
 ];
 
+// 나에게 온 네트워킹 요청 (받은 요청)
+const MOCK_INCOMING = [
+  {id:'r1', fromId:'d3', time:'방금 전'},
+  {id:'r2', fromId:'d6', time:'2분 전'},
+  {id:'r3', fromId:'d8', time:'5분 전'},
+];
+
 let S = {
   myId: null,
   sessionCode: 'DEMO',
@@ -93,6 +100,9 @@ let S = {
   regData: {},
   editingId: null,
   filterActive: {jobs:[], interests:[], careerMin:0, careerMax:4, purposes:[]},
+  notifEnabled: false,
+  incomingRequests: [...MOCK_INCOMING],
+  notifTab: '1v1',
 };
 
 let rAvatar = 0;
@@ -512,8 +522,29 @@ function confirmNetRequest() {
   save();
   closeModal();
   renderHomeList();
+  openSentModal(pid);
+}
+
+function openSentModal(pid) {
+  const descEl = document.getElementById('sent-modal-desc');
+  const actionsEl = document.getElementById('sent-modal-actions');
+
+  if (S.notifEnabled) {
+    // HO02_M03 — 알림 켜져있는 경우
+    descEl.textContent = '요청 수락 시 알림으로 알려드릴게요.';
+    actionsEl.innerHTML = `<button class="modal-yes" style="flex:1" onclick="closeSentModal()">확인</button>`;
+  } else {
+    // HO02_M04 — 알림 꺼져있는 경우
+    descEl.textContent = '요청이 수락되면 알림으로 알려드릴게요.';
+    actionsEl.innerHTML = `
+      <button class="modal-no" onclick="closeSentModal()">괜찮아요</button>
+      <button class="modal-yes" onclick="enableNotif()">알림받기</button>
+    `;
+  }
+
   document.getElementById('net-sent-modal').classList.remove('hidden');
-  // simulate accept after 4s
+
+  // 4초 후 자동 매칭 시뮬레이션
   setTimeout(() => {
     createChatIfNeeded(pid);
     document.getElementById('net-sent-modal').classList.add('hidden');
@@ -528,6 +559,7 @@ function closeSentModal() {
 }
 
 function enableNotif() {
+  S.notifEnabled = true;
   closeSentModal();
   toast('알림이 설정됐어요 🔔');
 }
@@ -685,25 +717,171 @@ function renderQR() {
 // ═══════════════════════════════════
 // NOTIFICATION
 // ═══════════════════════════════════
+function switchNotifTab(tab) {
+  S.notifTab = tab;
+  document.getElementById('notif-tab-1v1').classList.toggle('active', tab==='1v1');
+  document.getElementById('notif-tab-group').classList.toggle('active', tab==='group');
+  renderNotif();
+}
+
+function toggleNotif() {
+  S.notifEnabled = !S.notifEnabled;
+  renderNotif();
+}
+
 function renderNotif() {
-  document.getElementById('notif-badge').style.display='none';
-  const body=document.getElementById('notif-body');
-  if(!MOCK_NOTIFS.length){body.innerHTML=`<div class="empty-state"><div class="ei">🔔</div><p>아직 알림이 없어요</p></div>`;return;}
-  body.innerHTML='';
-  MOCK_NOTIFS.forEach(n=>{
-    const item=document.createElement('div');
-    item.className='notif-item';
-    item.innerHTML=`
-      <div class="notif-dot${n.read?' read':''}"></div>
-      <div style="flex:1">
-        <div class="notif-text">${esc(n.text)}</div>
-        <div class="notif-time">${n.time}</div>
+  document.getElementById('notif-badge').style.display = 'none';
+  const body = document.getElementById('notif-body');
+  const incoming = S.incomingRequests || [];
+  body.innerHTML = '';
+
+  // ── 토글 카드 ──
+  const toggleCard = document.createElement('div');
+  toggleCard.className = 'notif-toggle-card';
+  toggleCard.innerHTML = `
+    <div class="notif-toggle-info">
+      <div class="notif-toggle-title">${S.notifEnabled ? '알림 ON' : '알림 OFF'}</div>
+      <div class="notif-toggle-desc">네트워킹 요청을 확인하려면 알림을 켜야해요!</div>
+    </div>
+    <div class="toggle-switch${S.notifEnabled ? ' on notif-on' : ''}" onclick="toggleNotif()"></div>
+  `;
+  body.appendChild(toggleCard);
+
+  if (S.notifTab === 'group') {
+    body.insertAdjacentHTML('beforeend', `<div class="empty-state"><p>그룹 알림이 없어요</p></div>`);
+    return;
+  }
+
+  // ── 알림 ON + 받은 요청 있을 때: 그룹 카드 ──
+  if (S.notifEnabled && incoming.length > 0) {
+    const firstReq = incoming[0];
+    const fp = S.people.find(p => p.id === firstReq.fromId);
+    const groupCard = document.createElement('div');
+    groupCard.className = 'notif-req-group';
+    groupCard.onclick = () => openRequestDetail(firstReq.id);
+    groupCard.innerHTML = `
+      <div class="notif-req-header">
+        <span class="notif-req-badge">${incoming.length}</span>
+        <span class="notif-req-label">네트워킹요청</span>
+        <span class="notif-req-count">${incoming.length}:${firstReq.time}</span>
+        <span class="notif-req-arrow">›</span>
       </div>
-      ${n.chatId?`<button class="btn btn-primary btn-xs" onclick="openChatRoom('${n.chatId}')">채팅 열기</button>`:''}
+      <div class="notif-req-item">
+        ${fp ? avDiv(fp.avIdx||0, fp.colIdx||0, 40) : ''}
+        <div class="notif-req-content">
+          <div class="notif-req-msg"><b>${esc(fp?.name||'?')}님</b>이 네트워킹을 신청했습니다!</div>
+          <div class="notif-req-sub">3분 내 응답하지 않으면 자동 취소됩니다.</div>
+          <div class="notif-req-time">${firstReq.time}</div>
+        </div>
+      </div>
     `;
-    body.appendChild(item);
-    n.read=true;
+    body.appendChild(groupCard);
+  }
+
+  // ── 일반 알림 항목 (알림 OFF일 때도 표시) ──
+  const allItems = [
+    ...( (!S.notifEnabled && incoming.length > 0) ? incoming.map(r => {
+      const p = S.people.find(x => x.id === r.fromId);
+      return { id: r.id, isIncoming: true, fromId: r.fromId, name: p?.name||'?', time: r.time };
+    }) : []),
+    ...MOCK_NOTIFS.map(n => ({...n, isIncoming: false}))
+  ];
+
+  if (allItems.length === 0) {
+    body.insertAdjacentHTML('beforeend', `<div class="empty-state"><p>받은 알림이 없어요. 네트워킹을 시작해보세요!</p></div>`);
+    return;
+  }
+
+  allItems.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'notif-item';
+    if (item.isIncoming) {
+      el.onclick = () => openRequestDetail(item.id);
+      el.innerHTML = `
+        <div class="notif-item-body">
+          <div class="notif-text"><b>${esc(item.name)}님</b>이 네트워킹을 신청했습니다!</div>
+          <div class="notif-text" style="color:var(--sub);font-size:12px;margin-top:2px">3분 내 응답하지 않으면 자동 취소됩니다.</div>
+          <div class="notif-time">${item.time}</div>
+        </div>
+      `;
+    } else {
+      if (item.chatId) el.onclick = () => openChatRoom(item.chatId);
+      el.innerHTML = `
+        <div class="notif-dot${item.read?' read':''}"></div>
+        <div class="notif-item-body">
+          <div class="notif-text">${esc(item.text)}</div>
+          <div class="notif-time">${item.time}</div>
+        </div>
+      `;
+      item.read = true;
+    }
+    body.appendChild(el);
   });
+}
+
+function openRequestDetail(rid) {
+  const req = S.incomingRequests.find(r => r.id === rid);
+  if (!req) return;
+  const p = S.people.find(x => x.id === req.fromId);
+  if (!p) return;
+
+  const purposeObj = PURPOSES_LIST.find(x => x.id === p.purpose);
+  const interests = p.interests || p.tags || [];
+
+  document.getElementById('req-detail-body').innerHTML = `
+    <div class="req-detail-profile">
+      <div class="req-detail-avatar">${avDiv(p.avIdx||0, p.colIdx||0, 64, 50)}</div>
+      <div class="req-detail-name">${esc(p.name)}</div>
+      <div class="req-detail-role">${[p.role, p.career].filter(Boolean).map(esc).join('(') + (p.career ? ')' : '')}</div>
+      <div class="req-detail-badge-row">
+        <span class="req-badge-dot">1</span>
+        <span class="req-detail-badge">네트워킹요청 ${S.incomingRequests.length}:${req.time}</span>
+      </div>
+    </div>
+    ${purposeObj ? `
+    <div class="req-detail-section">
+      <div class="req-detail-section-title">참여목적</div>
+      <div class="req-detail-section-body">${esc(purposeObj.label)}</div>
+    </div>` : ''}
+    ${interests.length ? `
+    <div class="req-detail-section">
+      <div class="req-detail-section-title">관심사</div>
+      <div class="req-detail-chips">${interests.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
+    </div>` : ''}
+  `;
+
+  document.getElementById('req-action-panel').innerHTML = `
+    <div class="req-action-inner">
+      <div class="req-action-header">
+        <span class="req-badge-dot">2</span>
+        <span class="req-action-title">요청을 수락해 네트워킹 진행하시겠어요?</span>
+      </div>
+      <div class="req-action-desc">거절하면 네트워킹을 진행하지 않아요</div>
+      <div class="modal-actions">
+        <button class="modal-no" onclick="rejectRequest('${rid}')">거절</button>
+        <button class="modal-yes" onclick="acceptRequest('${rid}')">수락</button>
+      </div>
+    </div>
+  `;
+
+  showScreen('req-detail');
+}
+
+function acceptRequest(rid) {
+  const req = S.incomingRequests.find(r => r.id === rid);
+  if (!req) return;
+  S.incomingRequests = S.incomingRequests.filter(r => r.id !== rid);
+  createChatIfNeeded(req.fromId);
+  showScreen('notif');
+  renderNotif();
+  toast('네트워킹이 수락됐어요! 채팅을 시작해 보세요 🎉');
+}
+
+function rejectRequest(rid) {
+  S.incomingRequests = S.incomingRequests.filter(r => r.id !== rid);
+  showScreen('notif');
+  renderNotif();
+  toast('요청을 거절했어요');
 }
 
 // ═══════════════════════════════════

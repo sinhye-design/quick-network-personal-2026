@@ -125,13 +125,9 @@
   <!-- 네트워킹 신청 완료 모달 -->
   <div class="modal-overlay hidden" id="net-sent-modal">
     <div class="modal-box">
-      <div class="modal-sent-icon">🎉</div>
       <div class="modal-title">네트워킹이 신청되었어요!</div>
-      <div class="modal-desc" id="sent-modal-desc">요청 수락 시 알림으로 알려드릴게요.</div>
-      <div class="modal-actions">
-        <button class="modal-no" onclick="closeSentModal()">괜찮아요</button>
-        <button class="modal-yes" onclick="enableNotif()">알림받기</button>
-      </div>
+      <div class="modal-desc" id="sent-modal-desc"></div>
+      <div class="modal-actions" id="sent-modal-actions"></div>
     </div>
   </div>
 
@@ -165,10 +161,12 @@
 
 <!-- ═══════════ NOTIFICATION ═══════════ -->
 <div class="screen" id="screen-notif">
-  <div class="topbar">
-    <div style="width:32px"></div>
-    <span class="topbar-title">알림</span>
-    <div style="width:32px"></div>
+  <div class="notif-header">
+    <span class="notif-header-title">알림</span>
+  </div>
+  <div class="tab-row" style="padding:0 16px">
+    <button class="tab-item active" id="notif-tab-1v1" onclick="switchNotifTab('1v1')">1:1</button>
+    <button class="tab-item" id="notif-tab-group" onclick="switchNotifTab('group')">그룹</button>
   </div>
   <div style="flex:1;overflow-y:auto;padding-bottom:80px" id="notif-body"></div>
   <nav class="bottom-nav">
@@ -185,6 +183,17 @@
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M15 2H9V3.99994H7.00024V9.99994H9V10V12H15V10V4V2ZM17.0002 3.99994H15.0002V9.99994H17.0002V3.99994ZM5 16H3V22H4H5H19H20H21V16H19V14H5V16Z" fill="currentColor"/></svg>
     </button>
   </nav>
+</div>
+
+<!-- ═══════════ REQUEST DETAIL (AL02) ═══════════ -->
+<div class="screen" id="screen-req-detail">
+  <div class="topbar">
+    <button class="back-btn" onclick="showScreen('notif');renderNotif()">←</button>
+    <span class="topbar-title">사용자 프로필</span>
+    <div style="width:32px"></div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding-bottom:120px" id="req-detail-body"></div>
+  <div class="req-action-panel" id="req-action-panel"></div>
 </div>
 
 <!-- ═══════════ MYPAGE ═══════════ -->
