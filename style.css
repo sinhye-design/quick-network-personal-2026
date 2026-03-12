@@ -1153,11 +1153,11 @@ body {
   flex: 1;
   height: 40px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);  /* transparent/300 */
+  background: rgba(0, 0, 0, 0.5);  /* transparent/300 */
   border: none;
   font-size: 14px;
   font-weight: 600;
-  color: #9A9A9A;        /* text/subtle */
+  color: #dedede;        /* text/subtle */
   cursor: pointer;
   font-family: inherit;
   transition: opacity .15s, transform .1s;
