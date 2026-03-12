@@ -971,8 +971,8 @@ body {
 .profile-popup-header {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 20px 16px;
+  gap: 12px;
+  padding: 20px 20px 0;
 }
 
 .pp-avatar {
@@ -1028,8 +1028,6 @@ body {
   height: 40px;
   margin: 0 20px 16px;
   padding: 0 14px;
-  border-radius: 8px;
-  background: #1F1F1F;
   font-size: 13px;
   font-weight: 600;
   color: var(--orange);
