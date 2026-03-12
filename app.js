@@ -13,7 +13,7 @@ function avDiv(charIdx, colorIdx, size = 48) {
   const name = AVATARS[charIdx % AVATARS.length];
   const bg = AV_COLORS[colorIdx % AV_COLORS.length];
   const svgBase64 = typeof SVG_DATA !== 'undefined' && SVG_DATA[name] ? SVG_DATA[name] : `characters/${name}.svg`;
-  const imgSize = size >= 48 ? 44 : Math.round(size * 0.85);
+  const imgSize = size >= 48 ? Math.round(size * 0.78) : Math.round(size * 0.85);
   return `<div class="av-circle" style="width:${size}px;height:${size}px;background:#1F1F1F;display:flex;align-items:center;justify-content:center;">
     <div style="width:${imgSize}px;height:${imgSize}px;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/contain;mask:url('${svgBase64}') no-repeat center/contain;"></div>
   </div>`;
@@ -46,11 +46,20 @@ const JOB_CATEGORIES = [
 const INTEREST_LIST = ['소프트웨어 개발','데이터 & AI','클라우드 & 인프라','보안 & 블록체인','핀테크 & 금융','헬스케어 & 바이오','이커머스 & 마케팅','엔터테인먼트 & 미디어','스타트업 & 창업'];
 
 const DUMMY = [
-  {id:'d1',name:'닉네임글자수_123',role:'프론트엔드 개발자',career:'주니어',company:'스타트업',bio:'웹 개발 3년차입니다. 새로운 사람들과 교류하고 싶어요.',tags:['프론트엔드','풀스택'],interests:['소프트웨어 개발','스타트업 & 창업'],purpose:'collab',status:'협업 파트너 찾아요'},
-  {id:'d2',name:'닉네임글자수_456',role:'프로덕트 매니저',career:'미드레벨',company:'카카오',bio:'PM 5년차. 좋은 프로덕트를 만드는 법을 공유하고 싶어요.',tags:['서비스 기획','PM'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'info',status:'정보 교류 환영'},
-  {id:'d3',name:'닉네임글자수_789',role:'UX 디자이너',career:'시니어',company:'토스',bio:'핀테크 UX 경력 7년. 멘토링 해드릴 수 있어요.',tags:['UI/UX 디자인'],interests:['핀테크 & 금융','이커머스 & 마케팅'],purpose:'mentor',status:'멘토링 신청 받아요'},
-  {id:'d4',name:'닉네임글자수_012',role:'AI 엔지니어',career:'미드레벨',company:'KAIST',bio:'자연어처리 연구 중. 산업계 분들과 얘기 나누고 싶어요.',tags:['AI 엔지니어','데이터 엔지니어'],interests:['데이터 & AI','소프트웨어 개발'],purpose:'info',status:'AI 협업 관심'},
-  {id:'d5',name:'닉네임글자수_345',role:'스타트업 창업자',career:'시니어',company:'핀업',bio:'B2B SaaS 창업 2년차. 투자자분들 찾고 있어요.',tags:['창업 & 경영'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'invest',status:'Series A 준비 중'},
+  {id:'d1', avIdx:0, colIdx:0, name:'그린버드',role:'프론트엔드 개발자',career:'주니어',company:'스타트업',bio:'웹 개발 3년차입니다. 새로운 사람들과 교류하고 싶어요.',tags:['프론트엔드','풀스택'],interests:['소프트웨어 개발','스타트업 & 창업'],purpose:'collab',status:'협업 파트너 찾아요'},
+  {id:'d2', avIdx:1, colIdx:1, name:'오렌지캣',role:'프로덕트 매니저',career:'미드레벨',company:'카카오',bio:'PM 5년차. 좋은 프로덕트를 만드는 법을 공유하고 싶어요.',tags:['서비스 기획','PM'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'info',status:'정보 교류 환영'},
+  {id:'d3', avIdx:2, colIdx:2, name:'레드독',role:'UX 디자이너',career:'시니어',company:'토스',bio:'핀테크 UX 경력 7년. 멘토링 해드릴 수 있어요.',tags:['UI/UX 디자인'],interests:['핀테크 & 금융','이커머스 & 마케팅'],purpose:'mentor',status:'멘토링 신청 받아요'},
+  {id:'d4', avIdx:3, colIdx:3, name:'옐로우젤리',role:'AI 엔지니어',career:'미드레벨',company:'KAIST',bio:'자연어처리 연구 중. 산업계 분들과 얘기 나누고 싶어요.',tags:['AI 엔지니어','데이터 엔지니어'],interests:['데이터 & AI','소프트웨어 개발'],purpose:'info',status:'AI 협업 관심'},
+  {id:'d5', avIdx:4, colIdx:4, name:'블루코알라',role:'스타트업 창업자',career:'시니어',company:'핀업',bio:'B2B SaaS 창업 2년차. 투자자분들 찾고 있어요.',tags:['창업 & 경영'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'invest',status:'Series A 준비 중'},
+  {id:'d6', avIdx:5, colIdx:5, name:'퍼플멍키',role:'백엔드 개발자',career:'시니어',company:'네이버',bio:'Java·Spring 8년차. 대용량 트래픽 경험 공유해 드려요.',tags:['백엔드','시스템 아키텍처'],interests:['소프트웨어 개발','클라우드 & 인프라'],purpose:'mentor',status:'백엔드 멘토링 가능'},
+  {id:'d7', avIdx:6, colIdx:6, name:'핑크오터',role:'데이터 분석가',career:'미드레벨',company:'쿠팡',bio:'커머스 데이터 분석 4년차. SQL·Python 잘해요.',tags:['데이터 분석','ML 엔지니어'],interests:['데이터 & AI','이커머스 & 마케팅'],purpose:'info',status:'데이터 인사이트 나눠요'},
+  {id:'d8', avIdx:7, colIdx:7, name:'화이트쿼카',role:'그로스 마케터',career:'미드레벨',company:'버킷플레이스',bio:'퍼포먼스 마케팅 5년차. 그로스 전략 공유하고 싶어요.',tags:['그로스','콘텐츠'],interests:['이커머스 & 마케팅','스타트업 & 창업'],purpose:'network',status:'마케터 분들 연결해요'},
+  {id:'d9', avIdx:8, colIdx:1, name:'오렌지래빗',role:'클라우드 엔지니어',career:'시니어',company:'AWS',bio:'클라우드 인프라 전문가. 아키텍처 고민 같이 해요.',tags:['클라우드 엔지니어','네트워크 엔지니어링'],interests:['클라우드 & 인프라','소프트웨어 개발'],purpose:'collab',status:'클라우드 프로젝트 모집 중'},
+  {id:'d10', avIdx:9, colIdx:2, name:'레드스네일',role:'VC 심사역',career:'시니어',company:'본엔젤스',bio:'시드~시리즈A 스타트업 투자 전문. IR 피드백 드려요.',tags:['VC','엔젤 투자'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'invest',status:'투자 미팅 오픈'},
+  {id:'d11', avIdx:10, colIdx:4, name:'블루스노맨',role:'iOS 개발자',career:'미드레벨',company:'당근마켓',bio:'SwiftUI 3년차. 모바일 개발자 분들과 교류하고 싶어요.',tags:['모바일','프론트엔드'],interests:['소프트웨어 개발','스타트업 & 창업'],purpose:'network',status:'모바일 개발자 모임'},
+  {id:'d12', avIdx:11, colIdx:6, name:'핑크웨일',role:'브랜드 디자이너',career:'주니어',company:'무신사',bio:'패션·라이프스타일 브랜딩 전문. 감각 있는 분과 협업 원해요.',tags:['브랜드 디자인','UI/UX 디자인'],interests:['이커머스 & 마케팅','엔터테인먼트 & 미디어'],purpose:'collab',status:'브랜딩 협업 찾아요'},
+  {id:'d13', avIdx:0, colIdx:3, name:'옐로우버드',role:'보안 엔지니어',career:'미드레벨',company:'카카오페이',bio:'핀테크 보안 전문가. 보안 이슈 같이 얘기해요.',tags:['네트워크 엔지니어링','백엔드'],interests:['보안 & 블록체인','핀테크 & 금융'],purpose:'info',status:'보안 스터디 모집'},
+  {id:'d14', avIdx:2, colIdx:5, name:'퍼플독',role:'헬스케어 기획자',career:'주니어',company:'눔',bio:'디지털 헬스케어 서비스 기획 2년차. 임팩트 있는 서비스 만들고 싶어요.',tags:['서비스 기획','PO'],interests:['헬스케어 & 바이오','스타트업 & 창업'],purpose:'collab',status:'헬스케어 팀 찾아요'},
 ];
 
 const MOCK_CHATS = {
@@ -105,9 +114,9 @@ function load() {
     }
   } catch(e){}
   if (!S.people.length) S.people = DUMMY.map(d=>({
-    ...d,
     avIdx: Math.floor(Math.random() * AVATARS.length),
-    colIdx: Math.floor(Math.random() * AV_COLORS.length)
+    colIdx: Math.floor(Math.random() * AV_COLORS.length),
+    ...d,
   }));
   if (!Object.keys(S.chats).length) S.chats = JSON.parse(JSON.stringify(MOCK_CHATS));
 }
@@ -444,11 +453,11 @@ function openProfilePopup(pid) {
   const p = S.people.find(x => x.id === pid);
   if (!p) return;
   const isRequested = S.requestedIds.has(pid);
-  const avIdx = S.people.indexOf(p) % AVATARS.length;
+  const avIdx = p.avIdx||0;
   const purposeObj = PURPOSES_LIST.find(x => x.id === p.purpose);
 
   document.getElementById('profile-popup-header').innerHTML = `
-    <div class="pp-avatar">${avDiv(avIdx, p.colIdx||0, 48)}</div>
+    <div class="pp-avatar">${avDiv(avIdx, p.colIdx||0, 56)}</div>
     <div class="pp-info">
       <div class="pp-name">${esc(p.name)}</div>
       ${(p.role||p.career) ? `<div class="pp-meta">${[p.role,p.career].filter(Boolean).map(esc).join(' | ')}</div>` : ''}
@@ -457,15 +466,19 @@ function openProfilePopup(pid) {
   `;
 
   const chips = p.interests||p.tags||[];
-  document.getElementById('profile-popup-chips').innerHTML = chips.length
+  const chipsEl = document.getElementById('profile-popup-chips');
+  chipsEl.innerHTML = chips.length
     ? chips.map(t => `<span class="tag">${esc(t)}</span>`).join('')
     : '';
-  document.getElementById('profile-popup-chips').style.display = chips.length ? 'flex' : 'none';
+  chipsEl.style.display = chips.length ? 'flex' : 'none';
 
-  document.getElementById('profile-popup-purpose').innerHTML = purposeObj
-    ? `<img class="bm" src="icons/Icon_Bookmark_filled.svg"><span>${esc(purposeObj.label)}</span>`
+  const purposeEl = document.getElementById('profile-popup-purpose');
+  const purposeShortLabel = purposeObj ? purposeObj.label.replace(/ \(.+\)$/, '') : '';
+  purposeEl.innerHTML = purposeObj
+    ? `<img class="bm" src="icons/Icon_Bookmark_filled.svg"><span>${esc(purposeShortLabel)}</span>`
     : '';
-  document.getElementById('profile-popup-purpose').style.display = purposeObj ? 'flex' : 'none';
+  purposeEl.style.display = purposeObj ? 'flex' : 'none';
+  purposeEl.style.marginTop = chips.length ? '0' : '16px';
 
   document.getElementById('profile-popup-footer').innerHTML = !isRequested
     ? `<button class="net-request-btn" onclick="closeProfilePopup();openNetModal('${pid}')">네트워킹 신청</button>`
