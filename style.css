@@ -258,60 +258,79 @@ body {
 }
 
 /* ── BUTTONS ── */
+/* ── BUTTONS (Button component variant/size 체계 적용) ── */
+
+/* base — CVA base와 동일: flex center, relative, semibold, disabled 처리 */
 .btn {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   gap: 8px;
   width: 100%;
-  padding: 15px;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
+  height: 50px;          /* size="full" */
+  border-radius: 10px;
+  font-size: 16px;       /* size="full": text-[16px] */
+  font-weight: 600;      /* font-semibold */
   cursor: pointer;
   border: none;
   font-family: inherit;
   transition: opacity .15s, transform .1s;
 }
 
-.btn:active {
+.btn:active:not(:disabled) {
   transform: scale(.98);
   opacity: .85;
 }
 
-.btn-primary {
-  background: var(--primary);
+.btn:disabled {
+  background: #a3a3a3;   /* neutral-400 */
   color: #fff;
+  cursor: not-allowed;
+  opacity: 1;
 }
 
+/* variant="green" — bg-[#07ca7f] text-[#fefefe] */
+.btn-primary {
+  background: #07ca7f;
+  color: #fefefe;
+}
+
+/* variant="orange" */
 .btn-orange {
   background: var(--orange);
   color: #fff;
 }
 
+/* variant="black-transparent" — bg-black/50 text-[#dedede] */
 .btn-outline {
-  background: none;
+  background: rgba(0, 0, 0, .5);
   border: 1.5px solid var(--border);
-  color: var(--text);
+  color: #dedede;
 }
 
+/* variant="red" — bg-red-500 */
 .btn-danger {
-  background: var(--danger);
+  background: #ef4444;
   color: #fff;
 }
 
+/* size="sm" — py-[6px] px-[10px] text-[13px] */
 .btn-sm {
   width: auto;
-  padding: 9px 18px;
-  font-size: 14px;
-  border-radius: 20px;
+  height: auto;
+  padding: 6px 10px;
+  font-size: 13px;
+  border-radius: 10px;
 }
 
+/* size="xs" (추가 유틸) */
 .btn-xs {
   width: auto;
-  padding: 6px 12px;
-  font-size: 13px;
-  border-radius: 20px;
+  height: auto;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 10px;
 }
 
 /* ── FORMS ── */
@@ -940,7 +959,7 @@ body {
 /* ── PROFILE POPUP ── */
 .profile-popup-box {
   background: var(--card2);
-  border-radius: 20px;
+  border-radius: 12px;
   padding: 0;
   width: calc(100% - 40px);
   max-width: 380px;
@@ -953,7 +972,7 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 20px 20px 18px;
+  padding: 20px 16px;
 }
 
 .pp-avatar {
@@ -973,6 +992,7 @@ body {
   font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.2px;
+  padding-bottom: 8px;
 }
 
 .pp-meta {
@@ -986,7 +1006,19 @@ body {
   flex-wrap: wrap;
   gap: 6px;
   padding: 14px 20px;
-  border-top: 1px solid var(--border);
+}
+
+/* ProfileCard/Badge — Figma 스펙: padding 4/8, radius 4, gray warm/700, text/subtle */
+.profile-popup-chips .tag {
+  background: #3d3d3a;
+  color: #9A9A9A;
+  border-radius: 4px;
+  padding: 4px 8px;
+  height: 24px;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
 }
 
 .profile-popup-purpose {
@@ -1004,8 +1036,8 @@ body {
 }
 
 .profile-popup-purpose .bm {
-  width: 14px;
-  height: 14px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
 }
 
@@ -1016,13 +1048,13 @@ body {
 
 .net-request-btn {
   flex: 1;
-  padding: 15px;
-  border-radius: 14px;
-  background: var(--primary);
+  height: 50px;          /* size="full" */
+  border-radius: 10px;
+  background: #07ca7f;   /* variant="green" */
   border: none;
-  font-size: 15px;
+  font-size: 16px;       /* size="full": text-[16px] */
   font-weight: 700;
-  color: #111;
+  color: #fefefe;        /* variant="green": text-[#fefefe] */
   cursor: pointer;
   font-family: inherit;
   letter-spacing: -0.2px;
@@ -1035,7 +1067,7 @@ body {
 }
 
 .net-cancel-btn {
-  background: var(--danger) !important;
+  background: #ef4444 !important;  /* variant="red" */
   color: #fff !important;
   border: none;
 }
@@ -1046,7 +1078,7 @@ body {
   background: var(--danger);
   color: #fff;
   border: none;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 6px 14px;
   font-size: 12px;
   font-weight: 600;
@@ -1074,7 +1106,7 @@ body {
 
 .modal-box {
   background: var(--card2);
-  border-radius: 20px;
+  border-radius: 12px;
   padding: 28px 24px;
   width: 100%;
   text-align: center;
@@ -1107,28 +1139,40 @@ body {
 
 .modal-no {
   flex: 1;
-  padding: 14px;
-  border-radius: 12px;
-  background: var(--card3);
-  border: none;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-  cursor: pointer;
-  font-family: inherit;
-}
-
-.modal-yes {
-  flex: 1.5;
-  padding: 14px;
-  border-radius: 12px;
-  background: var(--primary);
+  height: 50px;          /* size="full" */
+  border-radius: 10px;
+  background: #374151;   /* variant="gray-700" */
   border: none;
   font-size: 15px;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
   font-family: inherit;
+  transition: opacity .15s, transform .1s;
+}
+
+.modal-no:active {
+  transform: scale(.98);
+  opacity: .85;
+}
+
+.modal-yes {
+  flex: 1.5;
+  height: 50px;          /* size="full" */
+  border-radius: 10px;
+  background: #07ca7f;   /* variant="green" */
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fefefe;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity .15s, transform .1s;
+}
+
+.modal-yes:active {
+  transform: scale(.98);
+  opacity: .85;
 }
 
 /* ══════════════════════════════════════ */
