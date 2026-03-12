@@ -1024,10 +1024,10 @@ body {
 .profile-popup-purpose {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   height: 40px;
   margin: 0 20px 16px;
-  padding: 0 14px;
+  padding: 0 20px 0 4px;
   font-size: 13px;
   font-weight: 600;
   color: var(--orange);
@@ -1041,7 +1041,7 @@ body {
 
 .profile-popup-footer {
   display: flex;
-  padding: 0 20px 20px;
+  padding: 0 20px 16px;
 }
 
 .net-request-btn {
