@@ -254,7 +254,7 @@ function buildRegStep() {
                 <div class="p-card-name">${esc(S.regData.name||'닉네임')}</div>
               </div>
             </div>
-            <span class="p-card-arrow">›</span>
+            <img src="icons/Arrow/Arrow Right 11.svg" width="24" height="24" class="p-card-arrow">
           </div>
           <div class="p-card-tag-row"><img class="bm" src="icons/Icon_Bookmark_filled.svg"><span>${PURPOSES_LIST.find(p=>p.id===rPurpose)?.label||'목적 미선택'}</span></div>
         </div>
@@ -437,12 +437,15 @@ function renderHomeList() {
         <div class="p-card-left">
           ${avDiv(avIdx, p.colIdx||0, 48)}
           <div class="p-card-info">
-            <div class="p-card-name">${esc(p.name)}</div>
+            <div class="p-card-name-row">
+              <div class="p-card-name">${esc(p.name)}</div>
+              ${isRequested ? '' : `<img src="icons/Arrow/Arrow Right 11.svg" width="24" height="24" class="p-card-arrow">`}
+            </div>
           </div>
         </div>
         ${isRequested
           ? `<button class="net-cancel-pill" onclick="openCancelModal('${p.id}',event)">네트워킹 취소</button>`
-          : `<span class="p-card-arrow">›</span>`
+          : ''
         }
       </div>
       ${purposeObj ? `<div class="p-card-tag-row"><img class="bm" src="icons/Icon_Bookmark_filled.svg"><span>${esc(purposeShort)}</span></div>` : ''}
@@ -549,8 +552,7 @@ function openSentModal(pid) {
     createChatIfNeeded(pid);
     document.getElementById('net-sent-modal').classList.add('hidden');
     toast('매칭됐어요! 채팅을 시작해 보세요 🎉');
-    document.getElementById('notif-badge').style.display = 'flex';
-    document.getElementById('notif-badge').textContent = '1';
+    const nb2 = document.getElementById('notif-badge'); if (nb2) { nb2.style.display = 'flex'; nb2.textContent = '1'; }
   }, 4000);
 }
 
@@ -730,7 +732,7 @@ function toggleNotif() {
 }
 
 function renderNotif() {
-  document.getElementById('notif-badge').style.display = 'none';
+  const nb = document.getElementById('notif-badge'); if (nb) nb.style.display = 'none';
   const body = document.getElementById('notif-body');
   const incoming = S.incomingRequests || [];
   body.innerHTML = '';
@@ -761,9 +763,7 @@ function renderNotif() {
     groupCard.onclick = () => openRequestDetail(firstReq.id);
     groupCard.innerHTML = `
       <div class="notif-req-header">
-        <span class="notif-req-badge">${incoming.length}</span>
         <span class="notif-req-label">네트워킹요청</span>
-        <span class="notif-req-count">${incoming.length}:${firstReq.time}</span>
         <span class="notif-req-arrow">›</span>
       </div>
       <div class="notif-req-item">
@@ -834,7 +834,6 @@ function openRequestDetail(rid) {
       <div class="req-detail-name">${esc(p.name)}</div>
       <div class="req-detail-role">${[p.role, p.career].filter(Boolean).map(esc).join('(') + (p.career ? ')' : '')}</div>
       <div class="req-detail-badge-row">
-        <span class="req-badge-dot">1</span>
         <span class="req-detail-badge">네트워킹요청 ${S.incomingRequests.length}:${req.time}</span>
       </div>
     </div>
@@ -853,7 +852,6 @@ function openRequestDetail(rid) {
   document.getElementById('req-action-panel').innerHTML = `
     <div class="req-action-inner">
       <div class="req-action-header">
-        <span class="req-badge-dot">2</span>
         <span class="req-action-title">요청을 수락해 네트워킹 진행하시겠어요?</span>
       </div>
       <div class="req-action-desc">거절하면 네트워킹을 진행하지 않아요</div>

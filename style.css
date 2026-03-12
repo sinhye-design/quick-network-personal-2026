@@ -28,6 +28,7 @@
   --border: rgba(255, 255, 255, 0.08);
   --radius: 14px;
   --danger: #FF4C4C;
+  --negative: #FF5050;
 }
 
 body {
@@ -907,6 +908,7 @@ body {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  padding: 0 20px 0 0 ;
 }
 
 .p-card-left {
@@ -923,16 +925,19 @@ body {
   min-width: 0;
 }
 
+.p-card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 .p-card-name {
   font-size: 15px;
   font-weight: 600;
 }
 
 .p-card-arrow {
-  color: var(--sub);
-  font-size: 18px;
   flex-shrink: 0;
-  margin-right: 14px;
+  display: block;
   transition: transform .2s;
 }
 
@@ -1067,17 +1072,17 @@ body {
 .net-cancel-pill {
   display: inline-flex;
   align-items: center;
-  background: var(--danger);
-  color: #fff;
+  background: var(--negative);
+  color: #fefefe;
   border: none;
-  border-radius: 8px;
-  padding: 6px 14px;
-  font-size: 12px;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
   font-weight: 600;
-  margin-right: 10px;
   flex-shrink: 0;
   cursor: pointer;
   font-family: inherit;
+  white-space: nowrap;
 }
 
 /* ── NETWORKING REQUEST MODAL ── */
