@@ -32,6 +32,52 @@
   </div>
 </div>
 
+<!-- ═══════════ REG TYPE ═══════════ -->
+<div class="screen" id="screen-reg-type">
+  <div class="landing-body" style="justify-content:flex-start;padding-top:60px">
+    <div style="text-align:center;width:100%">
+      <span class="logo-mark">퀵네트워크</span>
+      <p class="logo-sub">참여 유형을 선택해 주세요</p>
+    </div>
+    <div class="reg-type-card" onclick="selectRegType('pre')">
+      <div class="reg-type-icon">🔖</div>
+      <div>
+        <div class="reg-type-title">사전 등록자</div>
+        <div class="reg-type-desc">이미 사전 등록을 완료한 분이에요</div>
+      </div>
+      <div class="reg-type-arrow">›</div>
+    </div>
+    <div class="reg-type-card" onclick="selectRegType('onsite')">
+      <div class="reg-type-icon">✏️</div>
+      <div>
+        <div class="reg-type-title">현장 등록자</div>
+        <div class="reg-type-desc">지금 처음 참여하는 분이에요</div>
+      </div>
+      <div class="reg-type-arrow">›</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ LOGIN ═══════════ -->
+<div class="screen" id="screen-login">
+  <div class="topbar">
+    <button class="back-btn" onclick="showScreen('reg-type')">←</button>
+    <span class="topbar-title">로그인</span>
+    <div style="width:32px"></div>
+  </div>
+  <div class="scroll-body" id="login-body"></div>
+</div>
+
+<!-- ═══════════ ZONE ENTRY ═══════════ -->
+<div class="screen" id="screen-zone-entry">
+  <div class="topbar">
+    <span class="topbar-logo">퀵네트워크</span>
+    <span class="topbar-title">입장 확인</span>
+    <div style="width:32px"></div>
+  </div>
+  <div class="scroll-body" id="zone-entry-body"></div>
+</div>
+
 <!-- ═══════════ REGISTER ═══════════ -->
 <div class="screen" id="screen-register">
   <div class="topbar">

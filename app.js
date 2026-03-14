@@ -166,7 +166,92 @@ function joinCode() {
 }
 function afterLanding() {
   if (S.myId) { showScreen('home'); renderHomeList(); }
-  else startReg();
+  else showScreen('reg-type');
+}
+
+// ═══════════════════════════════════
+// REG TYPE
+// ═══════════════════════════════════
+function selectRegType(type) {
+  if (type === 'pre') {
+    renderLoginScreen();
+    showScreen('login');
+  } else {
+    startReg();
+  }
+}
+
+// ═══════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════
+function renderLoginScreen() {
+  const body = document.getElementById('login-body');
+  body.innerHTML = `
+    <div style="text-align:center;padding:32px 20px 8px">
+      <div style="font-size:40px;margin-bottom:12px">👋</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:6px">다시 만나서 반가워요!</div>
+      <div style="font-size:13px;color:var(--sub)">사전 등록 정보로 로그인하세요</div>
+    </div>
+    <div class="form-section" style="margin-top:8px">
+      <div class="field"><label>이름 / 닉네임 *</label><input id="login-name" type="text" placeholder="닉네임글자수_123"></div>
+      <div class="field"><label>등록 코드</label><input id="login-code" type="text" placeholder="이메일로 받은 코드를 입력하세요"></div>
+    </div>
+    <button class="btn btn-primary" onclick="submitLogin()">로그인</button>
+  `;
+}
+
+function submitLogin() {
+  const name = document.getElementById('login-name').value.trim();
+  if (!name) { toast('이름을 입력해 주세요'); return; }
+  const person = {
+    id: 'u'+Date.now(),
+    avIdx: Math.floor(Math.random()*AVATARS.length),
+    colIdx: Math.floor(Math.random()*AV_COLORS.length),
+    name, role: '', company: '', bio: '',
+    tags: [], purpose: null, status: ''
+  };
+  S.people.push(person);
+  S.myId = person.id;
+  save();
+  renderZoneEntry();
+  showScreen('zone-entry');
+}
+
+// ═══════════════════════════════════
+// ZONE ENTRY
+// ═══════════════════════════════════
+function renderZoneEntry() {
+  const me = S.people.find(p => p.id === S.myId);
+  if (!me) return;
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const body = document.getElementById('zone-entry-body');
+  body.innerHTML = `
+    <div style="padding:20px 20px 32px">
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="font-size:14px;color:var(--sub)">개인 QR코드가 생성됐어요</div>
+        <div style="font-size:17px;font-weight:700;margin-top:4px">스태프에게 보여주세요</div>
+      </div>
+      <div class="qr-card">
+        <div class="qr-code-box">${avDiv(me.avIdx||0, me.colIdx||0, 100)}</div>
+        <div class="qr-name">${esc(me.name)}</div>
+        ${me.role ? `<div class="qr-role">${esc(me.role)}</div>` : ''}
+        ${me.status ? `<div class="qr-status">"${esc(me.status)}"</div>` : ''}
+      </div>
+      ${isIOS ? `
+      <div class="add-home-tip">
+        <div class="add-home-tip-title">📲 홈 화면에 바로가기 추가</div>
+        <div class="add-home-tip-desc">Safari 하단 <strong>공유 버튼</strong>을 누른 뒤 <strong>"홈 화면에 추가"</strong>를 눌러 앱처럼 사용하세요!</div>
+      </div>
+      ` : ''}
+      <button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="enterHome()">네트워킹 존 입장하기 →</button>
+    </div>
+  `;
+}
+
+function enterHome() {
+  showScreen('home');
+  renderHomeList();
+  toast('네트워킹 존에 입장했어요! 🎉');
 }
 
 // ═══════════════════════════════════
@@ -382,8 +467,10 @@ function submitReg() {
     S.people.push(person);S.myId=person.id;
     toast('등록 완료! 환영해요 🎉');
   }
+  const wasEditing = !!S.editingId;
   S.editingId=null;save();
-  showScreen('home');renderHomeList();
+  if(wasEditing) { showScreen('home');renderHomeList(); }
+  else { renderZoneEntry(); showScreen('zone-entry'); }
 }
 
 // ═══════════════════════════════════
