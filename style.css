@@ -2117,7 +2117,7 @@ body {
 .notif-toggle-title {
   font-size: 18px;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .notif-toggle-desc {
@@ -2201,7 +2201,7 @@ body {
   padding: 14px 16px;
   background: var(--semantic-bg-subtle);
   border-radius: var(--radius);
-  margin: 0 16px;
+  margin: 0 20px 8px;
   cursor: pointer;
 }
 
