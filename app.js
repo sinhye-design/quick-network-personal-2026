@@ -213,7 +213,7 @@ function renderLoginScreen() {
     <div style="text-align:center;padding:32px 20px 8px">
       <div style="font-size:40px;margin-bottom:12px">👋</div>
       <div style="font-size:18px;font-weight:700;margin-bottom:6px">다시 만나서 반가워요!</div>
-      <div style="font-size:13px;color:var(--sub)">사전 등록 정보로 로그인하세요</div>
+      <div style="font-size:13px;color:var(--semantic-text-assistive)">사전 등록 정보로 로그인하세요</div>
     </div>
     <div class="form-section" style="margin-top:8px">
       <div class="field"><label>이름 / 닉네임 *</label><input id="login-name" type="text" placeholder="닉네임글자수_123"></div>
@@ -251,7 +251,7 @@ function renderZoneEntry() {
   body.innerHTML = `
     <div style="padding:20px 20px 32px">
       <div style="text-align:center;margin-bottom:20px">
-        <div style="font-size:14px;color:var(--sub)">개인 QR코드가 생성됐어요</div>
+        <div style="font-size:14px;color:var(--semantic-text-assistive)">개인 QR코드가 생성됐어요</div>
         <div style="font-size:17px;font-weight:700;margin-top:4px">스태프에게 보여주세요</div>
       </div>
       <div class="qr-card">
@@ -331,7 +331,7 @@ function buildRegStep() {
   } else if (step===2) {
     body.innerHTML=`
       <div class="form-section">
-        <div class="form-section-title">관심사 태그 <span style="color:var(--sub);font-weight:400;font-size:11px">(입력 후 Enter)</span></div>
+        <div class="form-section-title">관심사 태그 <span style="color:var(--semantic-text-assistive);font-weight:400;font-size:11px">(입력 후 Enter)</span></div>
         <div class="tag-input-wrap" id="tag-wrap"><input id="tag-in" type="text" placeholder="React, AI, 스타트업…"></div>
       </div>
       <div class="form-section">
@@ -348,7 +348,7 @@ function buildRegStep() {
     body.innerHTML=`
       <div class="form-section">
         <div class="form-section-title">오늘의 상태 메시지</div>
-        <p style="font-size:13px;color:var(--sub);margin-bottom:14px;line-height:1.6">지금 무엇을 찾고 있나요? 다른 참여자에게 표시돼요.</p>
+        <p style="font-size:13px;color:var(--semantic-text-assistive);margin-bottom:14px;line-height:1.6">지금 무엇을 찾고 있나요? 다른 참여자에게 표시돼요.</p>
         <div class="field"><input id="r-status" type="text" placeholder="예: CTO 찾고 있어요" value="${esc(S.regData.status||'')}" maxlength="30"></div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px" id="status-sugg"></div>
       </div>
@@ -405,11 +405,11 @@ function buildAvatarPicker() {
     const d=document.createElement('div');
     d.className='avatar-opt'+(i===rColor?' selected':'');
     d.style.cssText = `width:100%;height:100%;border-radius:50%;background:${bg};cursor:pointer;border:3px solid transparent;`;
-    if(i===rColor) d.style.borderColor='var(--primary)';
+    if(i===rColor) d.style.borderColor='var(--semantic-fill-primary)';
     d.onclick=()=>{
       rColor=i;
       document.getElementById('color-row').querySelectorAll('.avatar-opt').forEach(x=>x.style.borderColor='transparent');
-      d.style.borderColor='var(--primary)';
+      d.style.borderColor='var(--semantic-fill-primary)';
       buildAvatarPicker(); // 캐릭터 색상 즉시 업데이트
       updateStep1Preview(); // 미리보기 창 업데이트 (전체 폼 렌더링 X)
     };
@@ -1162,36 +1162,12 @@ function renderNotif() {
     return;
   }
 
-  // ── 알림 ON + 받은 요청 있을 때: 그룹 카드 ──
-  if (S.notifEnabled && incoming.length > 0) {
-    const firstReq = incoming[0];
-    const fp = S.people.find(p => p.id === firstReq.fromId);
-    const groupCard = document.createElement('div');
-    groupCard.className = 'notif-req-group';
-    groupCard.onclick = () => openRequestDetail(firstReq.id);
-    groupCard.innerHTML = `
-      <div class="notif-req-header">
-        <span class="notif-req-label">네트워킹요청</span>
-        <span class="notif-req-arrow">›</span>
-      </div>
-      <div class="notif-req-item">
-        ${fp ? avDiv(fp.avIdx||0, fp.colIdx||0, 40) : ''}
-        <div class="notif-req-content">
-          <div class="notif-req-msg"><b>${esc(fp?.name||'?')}님</b>이 네트워킹을 신청했습니다!</div>
-          <div class="notif-req-sub">3분 내 응답하지 않으면 자동 취소됩니다.</div>
-          <div class="notif-req-time">${firstReq.time}</div>
-        </div>
-      </div>
-    `;
-    body.appendChild(groupCard);
-  }
-
-  // ── 일반 알림 항목 (알림 OFF일 때도 표시) ──
+  // ── 일반 알림 항목 ──
   const allItems = [
-    ...( (!S.notifEnabled && incoming.length > 0) ? incoming.map(r => {
+    ...incoming.map(r => {
       const p = S.people.find(x => x.id === r.fromId);
       return { id: r.id, isIncoming: true, fromId: r.fromId, name: p?.name||'?', time: r.time };
-    }) : []),
+    }),
     ...MOCK_NOTIFS.map(n => ({...n, isIncoming: false}))
   ];
 
@@ -1200,7 +1176,7 @@ function renderNotif() {
     return;
   }
 
-  allItems.forEach(item => {
+  allItems.forEach((item, idx) => {
     const el = document.createElement('div');
     el.className = 'notif-item';
     if (item.isIncoming) {
@@ -1208,7 +1184,7 @@ function renderNotif() {
       el.innerHTML = `
         <div class="notif-item-body">
           <div class="notif-text"><b>${esc(item.name)}님</b>이 네트워킹을 신청했습니다!</div>
-          <div class="notif-text" style="color:var(--sub);font-size:12px;margin-top:2px">3분 내 응답하지 않으면 자동 취소됩니다.</div>
+          <div class="notif-text" style="color:var(--semantic-text-assistive);font-size:12px;margin-top:2px">3분 내 응답하지 않으면 자동 취소됩니다.</div>
           <div class="notif-time">${item.time}</div>
         </div>
       `;
@@ -1463,11 +1439,11 @@ function openDetail(id,from) {
   const db=document.getElementById('d-body');
   const pObj=PURPOSES_LIST.find(x=>x.id===p.purpose);
   db.innerHTML=`
-    ${p.bio?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">소개</div><p style="font-size:14px;line-height:1.6">${esc(p.bio)}</p></div>`:''}
-    ${p.tags?.length?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">관심사</div><div style="display:flex;flex-wrap:wrap;gap:6px">${p.tags.map(t=>`<span class="tag primary">${esc(t)}</span>`).join('')}</div></div>`:''}
-    ${p.status?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">오늘의 상태</div><p style="font-size:15px;font-weight:600;color:var(--orange-light)">"${esc(p.status)}"</p></div>`:''}
-    ${pObj?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">참여 목적</div><span class="purpose-tag"><img class="bm" src="icons/Icon_Bookmark_filled.svg">${esc(pObj.label)}</span></div>`:''}
-    ${(p.email||p.link||p.company)?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">연락처</div>${p.email?`<a href="mailto:${p.email}" style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);font-size:14px"><span>✉️</span><span style="flex:1">${esc(p.email)}</span><span style="color:var(--sub)">›</span></a>`:''}${p.company?`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:14px"><span>🏢</span><span>${esc(p.company)}</span></div>`:''}</div>`:''}
+    ${p.bio?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--semantic-text-assistive);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">소개</div><p style="font-size:14px;line-height:1.6">${esc(p.bio)}</p></div>`:''}
+    ${p.tags?.length?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--semantic-text-assistive);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">관심사</div><div style="display:flex;flex-wrap:wrap;gap:6px">${p.tags.map(t=>`<span class="tag primary">${esc(t)}</span>`).join('')}</div></div>`:''}
+    ${p.status?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--semantic-text-assistive);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">오늘의 상태</div><p style="font-size:15px;font-weight:600;color:var(--semantic-graphic-orange)">"${esc(p.status)}"</p></div>`:''}
+    ${pObj?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--semantic-text-assistive);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">참여 목적</div><span class="purpose-tag"><img class="bm" src="icons/Icon_Bookmark_filled.svg">${esc(pObj.label)}</span></div>`:''}
+    ${(p.email||p.link||p.company)?`<div class="info-card" style="padding:16px"><div style="font-size:11px;font-weight:700;color:var(--semantic-text-assistive);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">연락처</div>${p.email?`<a href="mailto:${p.email}" style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--semantic-line-normal);text-decoration:none;color:var(--semantic-text-normal);font-size:14px"><span>✉️</span><span style="flex:1">${esc(p.email)}</span><span style="color:var(--semantic-text-assistive)">›</span></a>`:''}${p.company?`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;font-size:14px"><span>🏢</span><span>${esc(p.company)}</span></div>`:''}</div>`:''}
     ${!isMe?`<div style="display:flex;gap:10px">
       <button class="btn btn-outline" style="flex:1" onclick="openNetModal('${p.id}')">🤝 네트워킹 신청</button>
       <button class="btn btn-primary" style="flex:1" onclick="chatFromDetail('${p.id}')">💬 채팅</button>
