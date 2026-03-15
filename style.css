@@ -2231,11 +2231,11 @@ body {
 /* ══════════════════════════════════════ */
 
 .req-detail-card {
-  margin: 16px;
+  margin: 0 16px;
   background: var(--semantic-bg-subtle);
   border-radius: 12px;
   overflow: hidden;
-  padding-bottom: 20px;
+  padding-bottom: 8px;
 }
 
 .req-detail-profile {
@@ -2243,7 +2243,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 28px 20px 20px;
-  gap: 6px;
+  gap: 20px;
 }
 
 .req-detail-avatar { margin-bottom: 4px; }
@@ -2266,7 +2266,7 @@ body {
 }
 
 .req-detail-badge {
-  height: 24px;
+  /* height: 24px; */
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -2274,7 +2274,7 @@ body {
   color: var(--text);
   font-size: 13px;
   font-weight: 600;
-  padding: 0 12px;
+  padding: 6px 12px;
   border-radius: 20px;
 }
 
