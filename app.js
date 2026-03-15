@@ -1246,8 +1246,10 @@ function openRequestDetail(rid) {
     <div class="req-detail-card">
       <div class="req-detail-profile">
         <div class="req-detail-avatar">${avDiv(p.avIdx||0, p.colIdx||0, 72, 68)}</div>
-        <div class="req-detail-name">${esc(p.name)}</div>
-        <div class="req-detail-role">${[p.role, p.career].filter(Boolean).map(esc).join('(') + (p.career ? ')' : '')}</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+          <div class="req-detail-name">${esc(p.name)}</div>
+          <div class="req-detail-role">${[p.role, p.career].filter(Boolean).map(esc).join('(') + (p.career ? ')' : '')}</div>
+        </div>
         <div class="req-detail-badge-row">
           <span class="req-detail-badge">네트워킹요청 <span class="req-badge-timer" id="req-timer">3:00</span></span>
         </div>
