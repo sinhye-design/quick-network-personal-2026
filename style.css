@@ -2231,7 +2231,7 @@ body {
 /* ══════════════════════════════════════ */
 
 .req-detail-card {
-  margin: 0 16px;
+  margin: 0 20px;
   background: var(--semantic-bg-subtle);
   border-radius: 12px;
   overflow: hidden;
@@ -2321,7 +2321,7 @@ body {
 /* 하단 수락/거절 모달 팝업 */
 .req-action-panel {
   position: absolute;
-  bottom: 80px;
+  bottom: 96px;
   left: 16px;
   right: 16px;
   background: var(--card2);
