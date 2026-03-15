@@ -9,6 +9,13 @@ const AV_COLORS = [
   '#60a5fa', '#c084fc', '#f472b6', '#ffffff'
 ];
 
+function iconImg(name, size = 24, style = '') {
+  const src = (typeof ICON_DATA !== 'undefined' && ICON_DATA[name])
+    ? ICON_DATA[name]
+    : `icons/Arrow/${name}.svg`;
+  return `<img src="${src}" width="${size}" height="${size}"${style ? ` style="${style}"` : ''} alt="${name}">`;
+}
+
 function avDiv(charIdx, colorIdx, size = 48, innerSize = null) {
   const name = AVATARS[charIdx % AVATARS.length];
   const bg = AV_COLORS[colorIdx % AV_COLORS.length];
@@ -1230,24 +1237,26 @@ function openRequestDetail(rid) {
   const interests = p.interests || p.tags || [];
 
   document.getElementById('req-detail-body').innerHTML = `
-    <div class="req-detail-profile">
-      <div class="req-detail-avatar">${avDiv(p.avIdx||0, p.colIdx||0, 64, 50)}</div>
-      <div class="req-detail-name">${esc(p.name)}</div>
-      <div class="req-detail-role">${[p.role, p.career].filter(Boolean).map(esc).join('(') + (p.career ? ')' : '')}</div>
-      <div class="req-detail-badge-row">
-        <span class="req-detail-badge">네트워킹요청 ${S.incomingRequests.length}:${req.time}</span>
+    <div class="req-detail-card">
+      <div class="req-detail-profile">
+        <div class="req-detail-avatar">${avDiv(p.avIdx||0, p.colIdx||0, 64, 50)}</div>
+        <div class="req-detail-name">${esc(p.name)}</div>
+        <div class="req-detail-role">${[p.role, p.career].filter(Boolean).map(esc).join('(') + (p.career ? ')' : '')}</div>
+        <div class="req-detail-badge-row">
+          <span class="req-detail-badge">네트워킹요청 ${S.incomingRequests.length}:${req.time}</span>
+        </div>
       </div>
+      ${purposeObj ? `
+      <div class="req-detail-section">
+        <div class="req-detail-section-title">참여목적</div>
+        <div class="req-detail-section-body">${esc(purposeObj.label)}</div>
+      </div>` : ''}
+      ${interests.length ? `
+      <div class="req-detail-section">
+        <div class="req-detail-section-title">관심사</div>
+        <div class="req-detail-chips">${interests.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
+      </div>` : ''}
     </div>
-    ${purposeObj ? `
-    <div class="req-detail-section">
-      <div class="req-detail-section-title">참여목적</div>
-      <div class="req-detail-section-body">${esc(purposeObj.label)}</div>
-    </div>` : ''}
-    ${interests.length ? `
-    <div class="req-detail-section">
-      <div class="req-detail-section-title">관심사</div>
-      <div class="req-detail-chips">${interests.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
-    </div>` : ''}
   `;
 
   document.getElementById('req-action-panel').innerHTML = `
