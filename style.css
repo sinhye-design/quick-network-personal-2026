@@ -2109,7 +2109,7 @@ body {
   border-radius: var(--radius);
   padding: 16px;
   margin: 12px 20px;
-  gap: 12px;
+  gap: 10px;
 }
 
 .notif-toggle-info { flex: 1; min-width: 0; }
@@ -2117,7 +2117,7 @@ body {
 .notif-toggle-title {
   font-size: 18px;
   font-weight: 600;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 
 .notif-toggle-desc {
