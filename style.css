@@ -2281,7 +2281,7 @@ body {
 }
 
 .req-detail-section-title {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--sub);
   margin-bottom: 8px;
 }
@@ -2295,7 +2295,19 @@ body {
 .req-detail-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 2px;
+}
+
+.req-detail-chips .tag {
+  height: 24px;
+  padding: 0 8px;
+  background: var(--card3);
+  color: var(--sub);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
 }
 
 /* 하단 수락/거절 모달 팝업 */
