@@ -45,6 +45,18 @@ const JOB_CATEGORIES = [
 
 const INTEREST_LIST = ['소프트웨어 개발','데이터 & AI','클라우드 & 인프라','보안 & 블록체인','핀테크 & 금융','헬스케어 & 바이오','이커머스 & 마케팅','엔터테인먼트 & 미디어','스타트업 & 창업'];
 
+const GROUP_JOB_OPTIONS = ['상관없음','소프트웨어 개발','데이터&AI','클라우드&인프라','기획','세일즈&비즈니스','투자&VC','운영','UI/UX 디자인','그래픽 디자인','마케팅','창업&경영','연구&교육'];
+const GROUP_INTEREST_OPTIONS = ['상관없음','소프트웨어 개발','핀테크&금융','클라우드&인프라','엔터테인먼트&미디어','보안&블록체인','데이터&AI','스타트업&창업','헬스케어&바이오','이커머스 & 마케팅'];
+const GROUP_PURPOSE_OPTIONS = ['상관없음','멘토링/조언 받기','정보 교류','협업/프로젝트 팀원 찾기','취업/이직','채용','투자/비즈니스 파트너 찾기','네트워킹/인맥 확장'];
+const CAREER_LABELS_SHORT = ['학생','신입','주니어','미드레벨','시니어'];
+
+const GROUP_DUMMY = [
+  {id:'g1', members:[{avIdx:5,colIdx:2},{avIdx:1,colIdx:3},{avIdx:8,colIdx:0}], maxMembers:4, status:'joined', job:'디자이너', career:'상관없음', interest:'엔터테인먼트&미디어', purpose:'상관없음'},
+  {id:'g2', members:[{avIdx:2,colIdx:4},{avIdx:7,colIdx:1}], maxMembers:4, status:'open', job:'상관없음', career:'상관없음', interest:'상관없음', purpose:'멘토링 & 커리어 성장'},
+  {id:'g3', members:[{avIdx:0,colIdx:6},{avIdx:3,colIdx:2},{avIdx:9,colIdx:5}], maxMembers:3, status:'networking', job:'개발자 & 엔지니어', career:'미드레벨(4~7년)', interest:'상관없음', purpose:'채용 & 구인'},
+  {id:'g4', members:[{avIdx:4,colIdx:7},{avIdx:6,colIdx:1},{avIdx:11,colIdx:3}], maxMembers:4, status:'open', job:'개발자 & 엔지니어', career:'미드레벨(4~7년)', interest:'상관없음', purpose:'채용 & 구인'},
+];
+
 const DUMMY = [
   {id:'d1', avIdx:0, colIdx:0, name:'그린버드',role:'프론트엔드 개발자',career:'주니어',company:'스타트업',bio:'웹 개발 3년차입니다. 새로운 사람들과 교류하고 싶어요.',tags:['프론트엔드','풀스택'],interests:['소프트웨어 개발','스타트업 & 창업'],purpose:'collab',status:'협업 파트너 찾아요'},
   {id:'d2', avIdx:1, colIdx:1, name:'오렌지캣',role:'프로덕트 매니저',career:'미드레벨',company:'카카오',bio:'PM 5년차. 좋은 프로덕트를 만드는 법을 공유하고 싶어요.',tags:['서비스 기획','PM'],interests:['스타트업 & 창업','핀테크 & 금융'],purpose:'info',status:'정보 교류 환영'},
@@ -103,6 +115,9 @@ let S = {
   notifEnabled: false,
   incomingRequests: [...MOCK_INCOMING],
   notifTab: '1v1',
+  groups: [],
+  joinedGroupIds: new Set(),
+  groupFilter: {jobs:[], interests:[], purposes:[], careerMin:0, careerMax:4},
 };
 
 let rAvatar = 0;
@@ -129,6 +144,7 @@ function load() {
     ...d,
   }));
   if (!Object.keys(S.chats).length) S.chats = JSON.parse(JSON.stringify(MOCK_CHATS));
+  if (!S.groups.length) S.groups = GROUP_DUMMY.map(g=>({...g, members:[...g.members]}));
 }
 
 function save() {
@@ -498,10 +514,15 @@ function switchHomeTab(tab) {
   S.homeTab = tab;
   document.getElementById('tab-1v1').classList.toggle('active', tab==='1v1');
   document.getElementById('tab-group').classList.toggle('active', tab==='group');
+  const gcf = document.getElementById('group-create-footer');
+  if (gcf) gcf.style.display = tab==='group' ? 'block' : 'none';
+  const filterBtn = document.getElementById('filter-btn');
+  if (filterBtn) filterBtn.onclick = tab==='group' ? openGroupFilter : openFilter;
   renderHomeList();
 }
 
 function renderHomeList() {
+  if (S.homeTab === 'group') { renderGroupList(); return; }
   const el = document.getElementById('home-list');
   if (!el) return;
   const list = S.people.filter(p => p.id !== S.myId);
@@ -675,13 +696,306 @@ function confirmCancelRequest() {
 }
 
 // ═══════════════════════════════════
+// GROUP LIST
+// ═══════════════════════════════════
+function renderGroupList() {
+  const el = document.getElementById('home-list');
+  if (!el) return;
+  const f = S.groupFilter;
+  const list = S.groups.filter(g => {
+    if (f.jobs.length && !f.jobs.includes('상관없음') && !f.jobs.some(j => g.job.includes(j))) return false;
+    if (f.interests.length && !f.interests.includes('상관없음') && !f.interests.some(i => g.interest.includes(i))) return false;
+    if (f.purposes.length && !f.purposes.includes('상관없음') && !f.purposes.some(p => g.purpose.includes(p))) return false;
+    return true;
+  });
+
+  el.innerHTML = '';
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-state"><div class="ei">👥</div><p>조건에 맞는 그룹이 없어요.<br>필터를 바꾸거나 새 그룹을 만들어보세요!</p></div>`;
+    return;
+  }
+  list.forEach(g => {
+    const stMap = {
+      joined:     {label:'참여중',         cls:'grp-st-joined'},
+      open:       {label:'참여 가능',       cls:'grp-st-open'},
+      networking: {label:'네트워킹 진행중', cls:'grp-st-net'},
+      full:       {label:'인원 마감',       cls:'grp-st-full'},
+    };
+    const st = stMap[g.status] || stMap.open;
+    const isJoined = S.joinedGroupIds.has(g.id);
+    const canJoin  = g.status === 'open' && !isJoined;
+
+    const avatarsHtml = g.members.map(m => avDiv(m.avIdx, m.colIdx, 30, 22)).join('');
+
+    const card = document.createElement('div');
+    card.className = 'group-card';
+    card.innerHTML = `
+      <div class="grp-card-top">
+        <div class="grp-status-badge ${st.cls}"><span class="grp-dot"></span>${st.label}</div>
+        <div class="grp-av-row">
+          ${avatarsHtml}
+          ${canJoin ? `<button class="grp-join-btn" onclick="joinGroup('${g.id}',event)">+</button>` : ''}
+        </div>
+      </div>
+      <div class="grp-info-rows">
+        <div class="grp-info-row"><span class="gi gi-job"></span><span class="gi-lbl">직무</span><span class="gi-val">${esc(g.job)}</span></div>
+        <div class="grp-info-row"><span class="gi gi-career"></span><span class="gi-lbl">경력</span><span class="gi-val">${esc(g.career)}</span></div>
+        <div class="grp-info-row"><span class="gi gi-interest"></span><span class="gi-lbl">관심분야</span><span class="gi-val">${esc(g.interest)}</span></div>
+        <div class="grp-info-row"><span class="gi gi-purpose"></span><span class="gi-lbl">참여목적</span><span class="gi-val">${esc(g.purpose)}</span></div>
+      </div>
+    `;
+    el.appendChild(card);
+  });
+}
+
+function joinGroup(id, e) {
+  if (e) e.stopPropagation();
+  if (!S.networkingOn) { toast('네트워킹 스위치를 ON해야 참여할 수 있어요'); return; }
+  const g = S.groups.find(x => x.id === id);
+  if (!g || g.status !== 'open') return;
+  const me = S.people.find(p => p.id === S.myId);
+  g.members.push({avIdx: me ? me.avIdx||0 : 0, colIdx: me ? me.colIdx||0 : 0});
+  S.joinedGroupIds.add(id);
+  g.status = g.members.length >= g.maxMembers ? 'full' : 'joined';
+  renderGroupList();
+  toast('그룹에 참여했어요! 🎉');
+}
+
+// ═══════════════════════════════════
+// GROUP CREATE
+// ═══════════════════════════════════
+let gcJobs = [], gcInterests = [], gcPurposes = [], gcCareerMin = 0, gcCareerMax = 4;
+
+function openGroupCreate() {
+  gcJobs = []; gcInterests = []; gcPurposes = []; gcCareerMin = 0; gcCareerMax = 4;
+  buildGroupCreateForm();
+  showScreen('group-create');
+}
+
+function buildGroupCreateForm() {
+  const body = document.getElementById('group-create-body');
+  body.innerHTML = `
+    <div style="padding:24px 20px 120px">
+      <h2 style="font-size:20px;font-weight:800;margin-bottom:8px">이런 멤버를 만나고 싶어요</h2>
+      <div class="grp-create-warning">⚠️ 선택한 기준이 표시되지만, 꼭 일치하는 분만 들어오는 건 아니에요!</div>
+      <div class="form-section" style="margin-top:28px">
+        <div class="form-section-title">직무/직책</div>
+        <div class="grp-chip-grid" id="gc-jobs"></div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">관심 분야</div>
+        <div class="grp-chip-grid" id="gc-interests"></div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">경력</div>
+        <div class="dual-range-wrap">
+          <div class="dual-range-track"><div class="dual-range-fill" id="gc-career-fill"></div></div>
+          <input type="range" class="range-thumb" id="gc-career-min" min="0" max="4" value="0" oninput="updateGcRange()">
+          <input type="range" class="range-thumb" id="gc-career-max" min="0" max="4" value="4" oninput="updateGcRange()">
+        </div>
+        <div class="range-labels">
+          <span class="range-label active" data-i="0">학생<br><span class="range-sub">-</span></span>
+          <span class="range-label active" data-i="1">신입<br><span class="range-sub">1년 이하</span></span>
+          <span class="range-label active" data-i="2">주니어<br><span class="range-sub">1~3년</span></span>
+          <span class="range-label active" data-i="3">미드레벨<br><span class="range-sub">4~9년</span></span>
+          <span class="range-label active" data-i="4">시니어<br><span class="range-sub">10년 이상</span></span>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">네트워킹 참여 목적</div>
+        <div class="grp-chip-grid" id="gc-purposes"></div>
+      </div>
+    </div>
+  `;
+  buildGrpChips('gc-jobs',      GROUP_JOB_OPTIONS,      () => gcJobs,      gcJobs);
+  buildGrpChips('gc-interests', GROUP_INTEREST_OPTIONS, () => gcInterests, gcInterests);
+  buildGrpChips('gc-purposes',  GROUP_PURPOSE_OPTIONS,  () => gcPurposes,  gcPurposes);
+  updateGcRange();
+}
+
+function buildGrpChips(containerId, options, getArr, arr) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  c.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'grp-chip' + (arr.includes(opt) ? ' selected' : '');
+    btn.textContent = opt;
+    btn.onclick = () => {
+      if (opt === '상관없음') {
+        arr.length = 0;
+      } else {
+        const idx = arr.indexOf('상관없음');
+        if (idx !== -1) arr.splice(idx, 1);
+        const i = arr.indexOf(opt);
+        if (i === -1) arr.push(opt); else arr.splice(i, 1);
+      }
+      buildGrpChips(containerId, options, getArr, arr);
+    };
+    c.appendChild(btn);
+  });
+}
+
+function updateGcRange() {
+  const minEl = document.getElementById('gc-career-min');
+  const maxEl = document.getElementById('gc-career-max');
+  const fill  = document.getElementById('gc-career-fill');
+  if (!minEl || !maxEl || !fill) return;
+  let minV = parseInt(minEl.value), maxV = parseInt(maxEl.value);
+  if (minV > maxV) { minEl.value = maxV; minV = maxV; }
+  if (maxV < minV) { maxEl.value = minV; maxV = minV; }
+  fill.style.left  = (minV * 25) + '%';
+  fill.style.width = ((maxV - minV) * 25) + '%';
+  document.querySelectorAll('#group-create-body .range-label').forEach((l, i) => {
+    l.classList.toggle('active', i >= minV && i <= maxV);
+  });
+  gcCareerMin = minV; gcCareerMax = maxV;
+}
+
+function submitGroupCreate() {
+  const careerLabel = gcCareerMin === 0 && gcCareerMax === 4
+    ? '상관없음'
+    : gcCareerMin === gcCareerMax
+      ? CAREER_LABELS_SHORT[gcCareerMin]
+      : `${CAREER_LABELS_SHORT[gcCareerMin]}~${CAREER_LABELS_SHORT[gcCareerMax]}`;
+  const me = S.people.find(p => p.id === S.myId);
+  const newGroup = {
+    id: 'g' + Date.now(),
+    members: me ? [{avIdx: me.avIdx||0, colIdx: me.colIdx||0}] : [],
+    maxMembers: 4,
+    status: 'open',
+    job:      gcJobs.length      ? gcJobs.join(', ')      : '상관없음',
+    career:   careerLabel,
+    interest: gcInterests.length ? gcInterests.join(', ') : '상관없음',
+    purpose:  gcPurposes.length  ? gcPurposes.join(', ')  : '상관없음',
+  };
+  S.groups.unshift(newGroup);
+  S.joinedGroupIds.add(newGroup.id);
+  showScreen('home');
+  renderHomeList();
+  toast('그룹이 만들어졌어요! 🎉');
+}
+
+// ═══════════════════════════════════
+// GROUP FILTER
+// ═══════════════════════════════════
+function openGroupFilter() {
+  buildGroupFilterSheet();
+  const overlay = document.getElementById('filter-group-sheet');
+  overlay.classList.remove('hidden');
+  initSheetDrag(overlay, overlay.querySelector('.sheet'), closeGroupFilter);
+}
+function closeGroupFilter() { document.getElementById('filter-group-sheet').classList.add('hidden'); }
+function resetGroupFilter() { S.groupFilter = {jobs:[], interests:[], purposes:[], careerMin:0, careerMax:4}; buildGroupFilterSheet(); }
+
+function buildGroupFilterSheet() {
+  const body = document.getElementById('filter-group-body');
+  const f = S.groupFilter;
+  body.innerHTML = `
+    <div class="filter-section">
+      <div class="filter-section-title">직무/직책 <span class="filter-count-badge" id="gfc-job">${f.jobs.length}/${GROUP_JOB_OPTIONS.length}</span></div>
+      <div class="grp-chip-grid" id="gf-jobs"></div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-title">관심분야 <span class="filter-count-badge" id="gfc-int">${f.interests.length}/${GROUP_INTEREST_OPTIONS.length}</span></div>
+      <div class="grp-chip-grid" id="gf-interests"></div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-title">경력</div>
+      <div class="dual-range-wrap">
+        <div class="dual-range-track"><div class="dual-range-fill" id="gf-career-fill"></div></div>
+        <input type="range" class="range-thumb" id="gf-career-min" min="0" max="4" value="${f.careerMin}" oninput="updateGfRange()">
+        <input type="range" class="range-thumb" id="gf-career-max" min="0" max="4" value="${f.careerMax}" oninput="updateGfRange()">
+      </div>
+      <div class="range-labels">
+        <span class="range-label" data-i="0">학생<br><span class="range-sub">-</span></span>
+        <span class="range-label" data-i="1">신입<br><span class="range-sub">1년 이하</span></span>
+        <span class="range-label" data-i="2">주니어<br><span class="range-sub">1~3년</span></span>
+        <span class="range-label" data-i="3">미드레벨<br><span class="range-sub">4~9년</span></span>
+        <span class="range-label" data-i="4">시니어<br><span class="range-sub">10년 이상</span></span>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-section-title">참여 목적 <span class="filter-count-badge" id="gfc-pur">${f.purposes.length}/${GROUP_PURPOSE_OPTIONS.length}</span></div>
+      <div class="grp-chip-grid" id="gf-purposes"></div>
+    </div>
+  `;
+  buildGrpChips('gf-jobs',      GROUP_JOB_OPTIONS,      () => f.jobs,      f.jobs);
+  buildGrpChips('gf-interests', GROUP_INTEREST_OPTIONS, () => f.interests, f.interests);
+  buildGrpChips('gf-purposes',  GROUP_PURPOSE_OPTIONS,  () => f.purposes,  f.purposes);
+  updateGfRange();
+}
+
+function updateGfRange() {
+  const minEl = document.getElementById('gf-career-min');
+  const maxEl = document.getElementById('gf-career-max');
+  const fill  = document.getElementById('gf-career-fill');
+  if (!minEl || !maxEl || !fill) return;
+  let minV = parseInt(minEl.value), maxV = parseInt(maxEl.value);
+  if (minV > maxV) { minEl.value = maxV; minV = maxV; }
+  fill.style.left  = (minV * 25) + '%';
+  fill.style.width = ((maxV - minV) * 25) + '%';
+  document.querySelectorAll('#filter-group-body .range-label').forEach((l, i) => {
+    l.classList.toggle('active', i >= minV && i <= maxV);
+  });
+  S.groupFilter.careerMin = minV; S.groupFilter.careerMax = maxV;
+}
+
+function applyGroupFilter() {
+  closeGroupFilter();
+  renderGroupList();
+  const total = S.groupFilter.jobs.length + S.groupFilter.interests.length + S.groupFilter.purposes.length;
+  const btn = document.getElementById('filter-btn');
+  if (btn) btn.classList.toggle('active', total > 0);
+}
+
+// ═══════════════════════════════════
 // FILTER
 // ═══════════════════════════════════
 function openFilter() {
   buildFilterSheet();
-  document.getElementById('filter-sheet').classList.remove('hidden');
+  const overlay = document.getElementById('filter-sheet');
+  overlay.classList.remove('hidden');
+  initSheetDrag(overlay, overlay.querySelector('.sheet'), closeFilter);
 }
 function closeFilter() { document.getElementById('filter-sheet').classList.add('hidden'); }
+
+function initSheetDrag(overlay, sheet, onClose) {
+  const handle = sheet.querySelector('.sheet-handle');
+  if (!handle) return;
+  let startY = 0, curY = 0, dragging = false;
+
+  function onStart(e) {
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+    curY = 0;
+    dragging = true;
+    sheet.style.transition = 'none';
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    const y = e.touches ? e.touches[0].clientY : e.clientY;
+    curY = Math.max(0, y - startY); // 아래 방향만
+    sheet.style.transform = `translateY(${curY}px)`;
+  }
+  function onEnd() {
+    if (!dragging) return;
+    dragging = false;
+    sheet.style.transition = '';
+    if (curY > 80) {
+      sheet.style.transform = `translateY(100%)`;
+      setTimeout(() => { sheet.style.transform = ''; onClose(); }, 200);
+    } else {
+      sheet.style.transform = '';
+    }
+  }
+
+  handle.addEventListener('touchstart', onStart, { passive: true });
+  handle.addEventListener('touchmove', onMove, { passive: true });
+  handle.addEventListener('touchend', onEnd);
+  handle.addEventListener('mousedown', onStart);
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onEnd);
+}
 
 function buildFilterSheet() {
   const body = document.getElementById('filter-sheet-body');

@@ -188,7 +188,7 @@
     </div>
   </div>
 
-  <!-- 필터 바텀시트 -->
+  <!-- 필터 바텀시트 (1:1) -->
   <div class="sheet-overlay hidden" id="filter-sheet">
     <div class="sheet">
       <div class="sheet-handle"></div>
@@ -201,6 +201,40 @@
         <button class="btn btn-primary" onclick="applyFilter()">필터 적용</button>
       </div>
     </div>
+  </div>
+
+  <!-- 그룹 필터 바텀시트 -->
+  <div class="sheet-overlay hidden" id="filter-group-sheet">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span class="sheet-title">필터</span>
+        <button class="sheet-reset" onclick="resetGroupFilter()">초기화</button>
+      </div>
+      <div class="sheet-body" id="filter-group-body"></div>
+      <div class="sheet-footer">
+        <button class="btn btn-primary" onclick="applyGroupFilter()">필터 적용</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 그룹 만들기 버튼 -->
+  <div class="group-create-footer" id="group-create-footer" style="display:none">
+    <button class="btn btn-primary" style="width:100%" onclick="openGroupCreate()">그룹 만들기</button>
+  </div>
+</div>
+
+<!-- ═══════════ GROUP CREATE ═══════════ -->
+<div class="screen" id="screen-group-create">
+  <div class="topbar">
+    <button class="back-btn" onclick="showScreen('home');renderHomeList()">←</button>
+    <span class="topbar-title">그룹 만들기</span>
+    <div style="width:32px"></div>
+  </div>
+  <div class="scroll-body" id="group-create-body"></div>
+  <div class="group-create-btns">
+    <button class="btn btn-outline" style="flex:1" onclick="showScreen('home');renderHomeList()">취소</button>
+    <button class="btn btn-primary" style="flex:2" onclick="submitGroupCreate()">만들기</button>
   </div>
 </div>
 
