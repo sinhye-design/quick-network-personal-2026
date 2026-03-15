@@ -2274,11 +2274,10 @@ body {
 }
 
 .req-detail-section {
-  margin: 0 12px 10px;
+  margin: 0 16px 8px;
   background: var(--card2);
   border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 14px 16px;
+  padding: 14px;
 }
 
 .req-detail-section-title {
