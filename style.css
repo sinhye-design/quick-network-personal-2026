@@ -2232,9 +2232,10 @@ body {
 
 .req-detail-card {
   margin: 16px;
-  background: var(--card);
+  background: var(--semantic-bg-subtle);
   border-radius: 12px;
   overflow: hidden;
+  padding-bottom: 20px;
 }
 
 .req-detail-profile {
@@ -2265,17 +2266,25 @@ body {
 }
 
 .req-detail-badge {
-  background: var(--card3);
-  color: var(--sub);
-  font-size: 12px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--semantic-fill-subtle);
+  color: var(--text);
+  font-size: 13px;
   font-weight: 600;
-  padding: 4px 10px;
+  padding: 0 12px;
   border-radius: 20px;
+}
+
+.req-badge-timer {
+  color: var(--semantic-text-accent);
 }
 
 .req-detail-section {
   margin: 0 16px 8px;
-  background: var(--card2);
+  background: var(--semantic-bg-normal);
   border-radius: var(--radius);
   padding: 14px;
 }

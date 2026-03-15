@@ -96,9 +96,9 @@ const MOCK_NOTIFS = [
 
 // 나에게 온 네트워킹 요청 (받은 요청)
 const MOCK_INCOMING = [
-  {id:'r1', fromId:'d3', time:'방금 전'},
-  {id:'r2', fromId:'d6', time:'2분 전'},
-  {id:'r3', fromId:'d8', time:'5분 전'},
+  {id:'r1', fromId:'d3', time:'방금 전', arrivedAt: Date.now()},
+  {id:'r2', fromId:'d6', time:'2분 전', arrivedAt: Date.now() - 2*60*1000},
+  {id:'r3', fromId:'d8', time:'5분 전', arrivedAt: Date.now() - 5*60*1000},
 ];
 
 let S = {
@@ -1227,6 +1227,12 @@ function renderNotif() {
   });
 }
 
+let _reqDetailTimer = null;
+
+function _clearReqTimer() {
+  if (_reqDetailTimer) { clearInterval(_reqDetailTimer); _reqDetailTimer = null; }
+}
+
 function openRequestDetail(rid) {
   const req = S.incomingRequests.find(r => r.id === rid);
   if (!req) return;
@@ -1243,7 +1249,7 @@ function openRequestDetail(rid) {
         <div class="req-detail-name">${esc(p.name)}</div>
         <div class="req-detail-role">${[p.role, p.career].filter(Boolean).map(esc).join('(') + (p.career ? ')' : '')}</div>
         <div class="req-detail-badge-row">
-          <span class="req-detail-badge">네트워킹요청 ${S.incomingRequests.length}:${req.time}</span>
+          <span class="req-detail-badge">네트워킹요청 <span class="req-badge-timer" id="req-timer">3:00</span></span>
         </div>
       </div>
       ${purposeObj ? `
@@ -1273,9 +1279,36 @@ function openRequestDetail(rid) {
   `;
 
   showScreen('req-detail');
+
+  // 3분 카운트다운 타이머
+  _clearReqTimer();
+  const DURATION = 3 * 60 * 1000;
+  const arrivedAt = req.arrivedAt || Date.now();
+
+  function tick() {
+    const el = document.getElementById('req-timer');
+    if (!el) { _clearReqTimer(); return; }
+    const remaining = DURATION - (Date.now() - arrivedAt);
+    if (remaining <= 0) {
+      _clearReqTimer();
+      S.incomingRequests = S.incomingRequests.filter(r => r.id !== rid);
+      showScreen('notif');
+      renderNotif();
+      toast('요청 시간이 만료되었어요');
+      return;
+    }
+    const secs = Math.ceil(remaining / 1000);
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    el.textContent = `${m}:${String(s).padStart(2, '0')}`;
+  }
+
+  tick();
+  _reqDetailTimer = setInterval(tick, 1000);
 }
 
 function acceptRequest(rid) {
+  _clearReqTimer();
   const req = S.incomingRequests.find(r => r.id === rid);
   if (!req) return;
   S.incomingRequests = S.incomingRequests.filter(r => r.id !== rid);
@@ -1286,6 +1319,7 @@ function acceptRequest(rid) {
 }
 
 function rejectRequest(rid) {
+  _clearReqTimer();
   S.incomingRequests = S.incomingRequests.filter(r => r.id !== rid);
   showScreen('notif');
   renderNotif();
