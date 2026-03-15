@@ -288,6 +288,7 @@ body {
   padding: 14px 20px;
   background: #1F1F1F;
   flex-shrink: 0;
+  gap: 10px;
 }
 
 .topbar-title {
@@ -311,7 +312,6 @@ body {
   cursor: pointer;
   color: var(--text);
   font-size: 20px;
-  padding: 4px;
   width: 32px;
   height: 32px;
   display: flex;
