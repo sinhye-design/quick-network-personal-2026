@@ -2688,3 +2688,26 @@ body {
   color: var(--semantic-fill-primary);
   font-weight: 600;
 }
+
+/* ── Welcome Rolling Avatars ── */
+.avatar-roll-wrap {
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.avatar-roll-track {
+  display: flex;
+  gap: 12px;
+  animation: avatarRoll 12s linear infinite;
+  width: max-content;
+}
+
+.avatar-roll-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes avatarRoll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}

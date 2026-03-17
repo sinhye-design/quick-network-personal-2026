@@ -303,16 +303,18 @@ function renderWelcome() {
         </div>
         <div style="font-size:18px;font-weight:600;line-height:1.5;color:var(--semantic-text-normal)">지금, IF KAKAO 2026에서<br>놓치지 말아야 할 연결을<br>시작해 보세요!</div>
       </div>
-      <div style="background:var(--semantic-bg-subtle);border-radius:16px;padding:20px">
-        <div style="display:flex;gap:8px;margin-bottom:16px">
-          ${previewPeople.map(p => {
-            const name = AVATARS[(p.avIdx||0) % AVATARS.length];
-            const bg = AV_COLORS[(p.colIdx||0) % AV_COLORS.length];
-            const src = typeof SVG_DATA !== 'undefined' && SVG_DATA[name] ? SVG_DATA[name] : `characters/${name}.svg`;
-            return `<div style="width:100px;height:100px;background-color:${bg};-webkit-mask:url('${src}') no-repeat center/contain;mask:url('${src}') no-repeat center/contain;"></div>`;
-          }).join('')}
+      <div style="background:var(--semantic-bg-subtle);border-radius:16px;padding:20px;overflow:hidden">
+        <div class="avatar-roll-wrap">
+          <div class="avatar-roll-track">
+            ${[...previewPeople, ...previewPeople].map(p => {
+              const name = AVATARS[(p.avIdx||0) % AVATARS.length];
+              const bg = AV_COLORS[(p.colIdx||0) % AV_COLORS.length];
+              const src = typeof SVG_DATA !== 'undefined' && SVG_DATA[name] ? SVG_DATA[name] : `characters/${name}.svg`;
+              return `<div style="width:100px;height:100px;flex-shrink:0;background-color:${bg};-webkit-mask:url('${src}') no-repeat center/contain;mask:url('${src}') no-repeat center/contain;"></div>`;
+            }).join('')}
+          </div>
         </div>
-        <div style="font-size:15px;color:var(--semantic-text-normal);line-height:1.6">
+        <div style="font-size:18px;color:var(--semantic-text-normal);line-height:1.6">
           내가 관심 있는 <span style="color:var(--semantic-text-accent);font-weight:600">[ ${esc(myInterest)} ]</span>참여자가<br>
           <span style="color:var(--semantic-text-accent);font-weight:600">[ ${count} ]</span> 명 있어요
         </div>
