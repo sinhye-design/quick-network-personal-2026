@@ -955,14 +955,13 @@ body {
 .home-header {
   background: #1F1F1F;
   border-bottom: 1px solid var(--semantic-line-normal);
-  padding: 0 16px;
   flex-shrink: 0;
 }
 
 .home-toprow {
   display: flex;
   align-items: center;
-  padding: 14px 0 12px;
+  padding: 14px 20px 12px;
   gap: 8px;
 }
 
@@ -983,7 +982,7 @@ body {
   gap: 0;
   height: 46px;
   border-bottom: 1px solid var(--semantic-line-normal);
-  padding: 0 16px;
+  padding: 0 20px;
   flex-shrink: 0;
 }
 
