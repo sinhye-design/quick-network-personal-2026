@@ -260,32 +260,21 @@ function renderZoneEntry() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   const body = document.getElementById('zone-entry-body');
   body.innerHTML = `
-    <div style="padding:20px 20px 32px">
-      <div style="text-align:center;margin-bottom:20px">
-        <div style="font-size:14px;color:var(--semantic-text-assistive)">개인 QR코드가 생성됐어요</div>
-        <div style="font-size:17px;font-weight:700;margin-top:4px">스태프에게 보여주세요</div>
+    <div style="display:flex;flex-direction:column;align-items:center;padding:40px 20px 32px;gap:32px">
+      <div style="text-align:center">
+        <div style="font-size:14px;color:var(--semantic-text-assistive);margin-bottom:6px">입장 시 QR코드를 보여주세요</div>
       </div>
-      <div class="qr-card">
-        <div class="qr-code-box">${avDiv(me.avIdx||0, me.colIdx||0, 100)}</div>
-        <div class="qr-name">${esc(me.name)}</div>
-        ${me.role ? `<div class="qr-role">${esc(me.role)}</div>` : ''}
-        ${me.status ? `<div class="qr-status">"${esc(me.status)}"</div>` : ''}
-      </div>
-      ${isIOS ? `
-      <div class="add-home-tip">
-        <div class="add-home-tip-title">📲 홈 화면에 바로가기 추가</div>
-        <div class="add-home-tip-desc">Safari 하단 <strong>공유 버튼</strong>을 누른 뒤 <strong>"홈 화면에 추가"</strong>를 눌러 앱처럼 사용하세요!</div>
-      </div>
-      ` : ''}
-      <button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="enterHome()">네트워킹 존 입장하기 →</button>
+      <canvas id="zone-qr" width="220" height="220" style="border-radius:12px;background:#fff;padding:12px"></canvas>
+      <button class="btn btn-primary" style="width:100%" onclick="enterHome()">네트워킹존 입장</button>
     </div>
   `;
+  requestAnimationFrame(() => drawBizQR('zone-qr', me.id + me.name));
 }
 
 function enterHome() {
   showScreen('home');
   renderHomeList();
-  toast('네트워킹 존에 입장했어요! 🎉');
+  toast('네트워킹 존에 입장했어요!');
 }
 
 // ═══════════════════════════════════
@@ -327,9 +316,9 @@ function buildRegStep() {
         <div id="step1-preview"></div>
       </div>
       <div class="form-section">
-        <div class="form-section-title">아바타</div>
+        <div class="form-section-title" style="font-size:14px">아바타</div>
         <div class="avatar-row" id="av-row" style="margin-bottom:16px;"></div>
-        <div class="form-section-title">배경 색상</div>
+        <div class="form-section-title" style="font-size:14px">배경 색상</div>
         <div class="avatar-row" id="color-row"></div>
       </div>
       <div class="form-section">
@@ -1187,7 +1176,8 @@ function drawBizQR(canvasId, seed) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const N = 21, sz = 7, pad = Math.floor((160 - N * sz) / 2);
+  const canvasSize = canvas.width;
+  const N = 21, sz = Math.floor(canvasSize / N), pad = Math.floor((canvasSize - N * sz) / 2);
 
   let h = 5381;
   for (let i = 0; i < seed.length; i++) h = ((h << 5) + h + seed.charCodeAt(i)) | 0;
@@ -1205,7 +1195,7 @@ function drawBizQR(canvasId, seed) {
     return (((h ^ (x*127+y*251)) * 0x9e3779b9) >>> 0) % 3 !== 0;
   }
 
-  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 200, 200);
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvasSize, canvasSize);
   ctx.fillStyle = '#000';
   for (let y = 0; y < N; y++)
     for (let x = 0; x < N; x++)
