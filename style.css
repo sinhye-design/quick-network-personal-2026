@@ -2037,12 +2037,13 @@ body {
   font-size: 14px;
   line-height: 1.5;
   flex: 1;
+  font-weight: 500;
 }
 
 .notif-time {
   font-size: 11px;
   color: var(--semantic-text-assistive);
-  margin-top: 3px;
+  margin-top: 12px;
 }
 .av-circle {
   border-radius: 50%;
