@@ -323,7 +323,7 @@ function buildRegStep() {
 
   if (step===1) {
     body.innerHTML=`
-      <div class="form-section preview-section" style="display:flex; justify-content:center; padding: 10px 0 20px;">
+      <div class="form-section preview-section" style="display:flex; justify-content:center; ">
         <div id="step1-preview"></div>
       </div>
       <div class="form-section">
@@ -360,8 +360,8 @@ function buildRegStep() {
         <div class="chip-row" id="purpose-row"></div>
       </div>
       <div style="display:flex;gap:10px">
-        <button class="btn btn-outline" style="flex:1" onclick="S.regStep=1;buildRegStep()">← 이전</button>
-        <button class="btn btn-primary" style="flex:2" onclick="regStep2Next()">다음 →</button>
+        <button class="btn btn-outline" style="flex:1" onclick="S.regStep=1;buildRegStep()">이전</button>
+        <button class="btn btn-primary" style="flex:2" onclick="regStep2Next()">다음</button>
       </div>
     `;
     buildTagInput(); buildChips('purpose-row',PURPOSES_LIST,()=>rPurpose,v=>rPurpose=v);
@@ -389,8 +389,8 @@ function buildRegStep() {
         </div>
       </div>
       <div style="display:flex;gap:10px">
-        <button class="btn btn-outline" style="flex:1" onclick="S.regStep=2;buildRegStep()">← 이전</button>
-        <button class="btn btn-primary" style="flex:2" onclick="submitReg()">🎉 ${S.editingId?'수정 완료':'등록 완료'}</button>
+        <button class="btn btn-outline" style="flex:1" onclick="S.regStep=2;buildRegStep()">이전</button>
+        <button class="btn btn-primary" style="flex:2" onclick="submitReg()">${S.editingId?'수정 완료':'등록 완료'}</button>
       </div>
     `;
     const suggs=['CTO 찾고 있어요','Series A 준비 중','협업 파트너 구해요','멘토 찾습니다','오픈 마인드'];
