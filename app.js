@@ -92,6 +92,7 @@ const MOCK_CHATS = {
 const MOCK_NOTIFS = [
   {id:'n1',text:'닉네임글자수_123님이 네트워킹을 수락했어요!',time:'방금 전',read:false,chatId:'d1'},
   {id:'n2',text:'오늘 네트워킹 세션에 5명이 참여했어요',time:'1시간 전',read:true,chatId:null},
+  {id:'n3',type:'timeout',text:'닉네임_123님과의 네트워킹 요청이 만료되었어요',subtext:'프론트엔드 개발자 · 3년차',time:'5분 전',read:true,chatId:null},
 ];
 
 // 나에게 온 네트워킹 요청 (받은 요청)
@@ -121,6 +122,7 @@ let S = {
   filterActive: {jobs:[], interests:[], careerMin:0, careerMax:4, purposes:[]},
   notifEnabled: false,
   incomingRequests: [...MOCK_INCOMING],
+  expiredRequests: [],
   notifTab: '1v1',
   groups: [],
   joinedGroupIds: new Set(),
@@ -459,7 +461,7 @@ function buildChips(cid,items,getVal,setVal) {
   items.forEach(item=>{
     const btn=document.createElement('button');
     btn.className='chip'+(getVal()===item.id?' selected':'');
-    btn.innerHTML=`${item.icon} ${item.label}`;
+    btn.innerHTML=`${item.icon ? item.icon + ' ' : ''}${item.label}`;
     btn.onclick=()=>{setVal(item.id);c.querySelectorAll('.chip').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');};
     c.appendChild(btn);
   });
@@ -1140,6 +1142,7 @@ function toggleNotif() {
 }
 
 function renderNotif() {
+  if (_notifListTimer) { clearInterval(_notifListTimer); _notifListTimer = null; }
   const nb = document.getElementById('notif-badge'); if (nb) nb.style.display = 'none';
   const body = document.getElementById('notif-body');
   const incoming = S.incomingRequests || [];
@@ -1156,6 +1159,7 @@ function renderNotif() {
     <div class="toggle-switch${S.notifEnabled ? ' on notif-on' : ''}" onclick="toggleNotif()"></div>
   `;
   body.appendChild(toggleCard);
+  body.insertAdjacentHTML('beforeend', '<div class="list-divider"></div>');
 
   if (S.notifTab === 'group') {
     body.insertAdjacentHTML('beforeend', `<div class="empty-state"><p>그룹 알림이 없어요</p></div>`);
@@ -1166,8 +1170,9 @@ function renderNotif() {
   const allItems = [
     ...incoming.map(r => {
       const p = S.people.find(x => x.id === r.fromId);
-      return { id: r.id, isIncoming: true, fromId: r.fromId, name: p?.name||'?', time: r.time };
+      return { id: r.id, isIncoming: true, fromId: r.fromId, name: p?.name||'알 수 없음', avIdx: p?.avIdx||0, colIdx: p?.colIdx||0, arrivedAt: r.arrivedAt, time: r.time };
     }),
+    ...S.expiredRequests,
     ...MOCK_NOTIFS.map(n => ({...n, isIncoming: false}))
   ];
 
@@ -1176,19 +1181,42 @@ function renderNotif() {
     return;
   }
 
-  allItems.forEach((item, idx) => {
+  const DURATION = 3 * 60 * 1000;
+
+  allItems.forEach((item) => {
     const el = document.createElement('div');
-    el.className = 'notif-item';
     if (item.isIncoming) {
+      el.className = 'notif-item timer-type';
       el.onclick = () => openRequestDetail(item.id);
+      const elapsed = Date.now() - (item.arrivedAt || Date.now());
+      const remaining = Math.max(0, DURATION - elapsed);
+      const m = Math.floor(remaining / 60000);
+      const s = Math.floor((remaining % 60000) / 1000);
+      const timerStr = `${m}:${String(s).padStart(2,'0')}`;
+      el.innerHTML = `
+        <div class="notif-item-timer-row">
+          <span class="notif-item-badge">네트워킹요청 <span class="notif-item-badge-timer" data-arrived="${item.arrivedAt||0}" id="notif-timer-${item.id}">${timerStr}</span></span>
+          <span class="notif-chevron-right"></span>
+        </div>
+        <div class="notif-item-content-row">
+          ${avDiv(item.avIdx, item.colIdx, 36, 32)}
+          <div>
+            <div class="notif-text"><b>${esc(item.name)}님</b>이 네트워킹을 신청했습니다!</div>
+            <div class="notif-item-subtext">3분 내 응답하지 않으면 자동 취소됩니다.</div>
+          </div>
+        </div>
+      `;
+    } else if (item.type === 'timeout') {
+      el.className = 'notif-item timeout-type';
       el.innerHTML = `
         <div class="notif-item-body">
-          <div class="notif-text"><b>${esc(item.name)}님</b>이 네트워킹을 신청했습니다!</div>
-          <div class="notif-text" style="color:var(--semantic-text-assistive);font-size:12px;margin-top:2px">3분 내 응답하지 않으면 자동 취소됩니다.</div>
+          <div class="notif-text">${esc(item.text)}</div>
+          ${item.subtext ? `<div class="notif-item-subtext">${esc(item.subtext)}</div>` : ''}
           <div class="notif-time">${item.time}</div>
         </div>
       `;
     } else {
+      el.className = 'notif-item';
       if (item.chatId) el.onclick = () => openChatRoom(item.chatId);
       el.innerHTML = `
         <div class="notif-dot${item.read?' read':''}"></div>
@@ -1201,9 +1229,45 @@ function renderNotif() {
     }
     body.appendChild(el);
   });
+
+  // 타이머 업데이트 (isIncoming 항목)
+  if (incoming.length > 0) {
+    _notifListTimer = setInterval(() => {
+      let anyExpired = false;
+      document.querySelectorAll('[id^="notif-timer-"]').forEach(span => {
+        const arrivedAt = parseInt(span.dataset.arrived || '0');
+        const remaining = Math.max(0, DURATION - (Date.now() - arrivedAt));
+        if (remaining === 0) {
+          const rid = span.id.replace('notif-timer-', '');
+          const req = S.incomingRequests.find(r => r.id === rid);
+          if (req) {
+            const p = S.people.find(x => x.id === req.fromId);
+            S.expiredRequests.unshift({
+              id: 'exp-' + rid,
+              type: 'timeout',
+              isIncoming: false,
+              text: `${p?.name||'알 수 없음'}님과의 네트워킹 요청이 만료되었어요`,
+              subtext: [p?.role, p?.career ? p.career + '년차' : ''].filter(Boolean).join(' · '),
+              time: '방금 전',
+              read: true,
+              chatId: null,
+            });
+            S.incomingRequests = S.incomingRequests.filter(r => r.id !== rid);
+            anyExpired = true;
+          }
+        } else {
+          const m = Math.floor(remaining / 60000);
+          const s = Math.floor((remaining % 60000) / 1000);
+          span.textContent = `${m}:${String(s).padStart(2,'0')}`;
+        }
+      });
+      if (anyExpired) renderNotif();
+    }, 1000);
+  }
 }
 
 let _reqDetailTimer = null;
+let _notifListTimer = null;
 
 function _clearReqTimer() {
   if (_reqDetailTimer) { clearInterval(_reqDetailTimer); _reqDetailTimer = null; }
@@ -1311,36 +1375,20 @@ function renderMypage() {
   const body=document.getElementById('mypage-body');
   const me=S.people.find(p=>p.id===S.myId);
   body.innerHTML=`
-    <div class="mypage-profile-section">
-      ${avDiv(me?.avIdx||0, me?.colIdx||0, 64)}
-      <div class="mypage-info">
-        <div class="mypage-name">${me?esc(me.name):'프로필 미등록'}</div>
-        <div class="mypage-role">${me?esc(me.role):''}</div>
-        ${me?.status?`<div class="mypage-status">"${esc(me.status)}"</div>`:''}
-      </div>
-    </div>
-    <div class="mypage-menu">
-      <div class="menu-section-title">내 정보</div>
+    <div class="mypage-menu-card">
       <div class="menu-item" onclick="${me?`startReg('${me.id}')`:'startReg()'}">
-        <span class="menu-icon">👤</span>
-        <span class="menu-label">내 정보 확인/수정</span>
-        <span class="menu-arrow">›</span>
+        <span class="menu-label">내 정보 수정</span>
+        <span class="menu-chevron"></span>
       </div>
+      <div class="menu-item-divider"></div>
       <div class="menu-item" onclick="goQR()">
-        <span class="menu-icon">🪪</span>
-        <span class="menu-label">내 명함 미리보기</span>
-        <span class="menu-arrow">›</span>
+        <span class="menu-label">내 명함 보기</span>
+        <span class="menu-chevron"></span>
       </div>
-      <div class="menu-section-title">온라인 명함 보관함</div>
-      <div class="menu-item" onclick="showScreen('chatroom');renderMsgs()">
-        <span class="menu-icon">💬</span>
-        <span class="menu-label">채팅 목록</span>
-        <span class="menu-arrow">›</span>
-      </div>
+      <div class="menu-item-divider"></div>
       <div class="menu-item" onclick="toast('저장된 명함이 없어요')">
-        <span class="menu-icon">📁</span>
-        <span class="menu-label">저장된 네트워킹 명함</span>
-        <span class="menu-arrow">›</span>
+        <span class="menu-label">저장한 명함 목록</span>
+        <span class="menu-chevron"></span>
       </div>
     </div>
   `;
