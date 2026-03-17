@@ -978,12 +978,13 @@ body {
 }
 
 /* Tab bar */
-.tab-bar {
+.tab-bar, .tab-row {
   display: flex;
   gap: 0;
+  height: 46px;
   border-bottom: 1px solid var(--semantic-line-normal);
-  margin: 0 -16px;
   padding: 0 16px;
+  flex-shrink: 0;
 }
 
 .tab-item {
@@ -1024,7 +1025,7 @@ body {
   padding: 6px 12px;
   font-size: 16px;
   font-weight: 600;
-  color: var(--semantic-text-assistive);
+  color: var(--semantic-text-normal);
   cursor: pointer;
   font-family: inherit;
   transition: color .15s;
@@ -1485,6 +1486,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: var(--semantic-bg-normal);
   padding: 12px 14px;
   cursor: pointer;
   font-size: 14px;

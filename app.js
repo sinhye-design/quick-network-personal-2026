@@ -91,7 +91,6 @@ const MOCK_CHATS = {
 
 const MOCK_NOTIFS = [
   {id:'n1',text:'닉네임글자수_123님이 네트워킹을 수락했어요!',time:'방금 전',read:false,chatId:'d1'},
-  {id:'n2',text:'오늘 네트워킹 세션에 5명이 참여했어요',time:'1시간 전',read:true,chatId:null},
   {id:'n3',type:'timeout',text:'닉네임_123님과의 네트워킹 요청이 만료되었어요',subtext:'프론트엔드 개발자 · 3년차',time:'5분 전',read:true,chatId:null},
 ];
 
