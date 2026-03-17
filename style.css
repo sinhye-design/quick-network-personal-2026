@@ -431,6 +431,7 @@ body {
 
 .nav-icon-wrap {
   position: relative;
+  display: flex;
 }
 
 .nav-badge {
@@ -2198,6 +2199,7 @@ body {
   border-radius: 12px;
   font-size: 12px;
   color: var(--semantic-text-normal);
+  font-weight: 600;
 }
 .notif-item-badge-timer {
   color: var(--semantic-text-accent);
