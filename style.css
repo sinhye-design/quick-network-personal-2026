@@ -773,11 +773,6 @@ body {
   color: var(--semantic-text-assistive);
 }
 
-.empty-state .ei {
-  font-size: 48px;
-  margin-bottom: 12px;
-}
-
 .empty-state p {
   font-size: 15px;
 }

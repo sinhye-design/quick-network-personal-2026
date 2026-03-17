@@ -301,7 +301,7 @@ function startReg(editing) {
   if (editing) {
     const p = S.people.find(x=>x.id===editing);
     if (p) {
-      S.regData = {name:p.name,role:p.role,company:p.company||'',bio:p.bio,email:p.email||'',link:p.link||''};
+      S.regData = {name:p.name,role:p.role,company:p.company||'',bio:p.bio,phone:p.phone||'',email:p.email||'',link:p.link||''};
       rAvatar = p.avIdx||0; rColor = p.colIdx||0; rTags=[...(p.tags||[])]; rPurpose=p.purpose||null; rWant=p.want||null;
     }
   } else {
@@ -346,6 +346,7 @@ function buildRegStep() {
       </div>
       <div class="form-section">
         <div class="form-section-title">연락처</div>
+        <div class="field"><label>전화번호</label><input id="r-phone" type="tel" placeholder="010-0000-0000" value="${esc(S.regData.phone||'')}"></div>
         <div class="field"><label>이메일</label><input id="r-email" type="email" placeholder="hello@example.com" value="${esc(S.regData.email||'')}"></div>
         <div class="field"><label>링크드인 / 링크</label><input id="r-link" type="url" placeholder="https://" value="${esc(S.regData.link||'')}"></div>
       </div>
@@ -494,7 +495,7 @@ function regStep1Next() {
   const role=document.getElementById('r-role').value.trim();
   const bio=document.getElementById('r-bio').value.trim();
   if(!name||!role||!bio){toast('이름, 역할, 소개는 필수예요');return;}
-  S.regData={name,role,bio,company:document.getElementById('r-company').value.trim(),email:document.getElementById('r-email').value.trim(),link:document.getElementById('r-link').value.trim()};
+  S.regData={name,role,bio,company:document.getElementById('r-company').value.trim(),phone:document.getElementById('r-phone').value.trim(),email:document.getElementById('r-email').value.trim(),link:document.getElementById('r-link').value.trim()};
   S.regStep=2;buildRegStep();
 }
 
@@ -557,7 +558,7 @@ function renderHomeList() {
   if (!el) return;
   const list = S.people.filter(p => p.id !== S.myId);
   if (!list.length) {
-    el.innerHTML=`<div class="empty-state"><div class="ei">👥</div><p>아직 참여자가 없어요.<br>조금만 기다리면 새로운 만남이 시작될 거예요!</p></div>`;
+    el.innerHTML=`<div class="empty-state"><p>아직 참여자가 없어요.<br>조금만 기다리면 새로운 만남이 시작될 거예요!</p></div>`;
     return;
   }
   el.innerHTML='';
@@ -741,7 +742,7 @@ function renderGroupList() {
 
   el.innerHTML = '';
   if (!list.length) {
-    el.innerHTML = `<div class="empty-state"><div class="ei">👥</div><p>조건에 맞는 그룹이 없어요.<br>필터를 바꾸거나 새 그룹을 만들어보세요!</p></div>`;
+    el.innerHTML = `<div class="empty-state"><p>조건에 맞는 그룹이 없어요.<br>필터를 바꾸거나 새 그룹을 만들어보세요!</p></div>`;
     return;
   }
   list.forEach(g => {
@@ -1160,7 +1161,7 @@ function renderQR() {
               const name = AVATARS[(me.avIdx||0) % AVATARS.length];
               const bg = AV_COLORS[(me.colIdx||0) % AV_COLORS.length];
               const svgBase64 = typeof SVG_DATA !== 'undefined' && SVG_DATA[name] ? SVG_DATA[name] : `characters/${name}.svg`;
-              return `<div style="width:136px;height:136px;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/contain;mask:url('${svgBase64}') no-repeat center/contain;"></div>`;
+              return `<div style="width:136px;height:136px;margin:0px 12px 12px 0;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/contain;mask:url('${svgBase64}') no-repeat center/contain;"></div>`;
             })()}
           </div>
         </div>
