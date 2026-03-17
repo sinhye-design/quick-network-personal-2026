@@ -497,9 +497,8 @@ body {
 
 /* variant="black-transparent" — bg-black/50 text-[#dedede] */
 .btn-outline {
-  background: rgba(0, 0, 0, .5);
-  border: 1.5px solid var(--semantic-line-normal);
-  color: #dedede;
+  background: var(--semantic-bg-subtle);
+  color: var(--semantic-text-normal);
 }
 
 

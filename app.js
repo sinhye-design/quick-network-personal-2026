@@ -315,7 +315,7 @@ function renderWelcome() {
           </div>
         </div>
         <div style="font-size:18px;color:var(--semantic-text-normal);line-height:1.6">
-          내가 관심 있는 [ <span style="color:var(--semantic-text-primary);font-weight:600"> ${esc(myInterest)} </span> ]참여자가 [<br>
+          내가 관심 있는 [ <span style="color:var(--semantic-text-primary);font-weight:600"> ${esc(myInterest)} </span> ]참여자가 <br> [
           <span style="color:var(--semantic-text-accent);font-weight:600"> ${count} </span> ] 명 있어요
         </div>
       </div>
