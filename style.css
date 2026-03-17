@@ -1924,8 +1924,8 @@ body {
 
 /* ── Flip Card ── */
 .biz-card-scene {
-  width: 280px;
-  height: 380px;
+  width: 311px;
+  height: 451px;
   perspective: 1000px;
   cursor: pointer;
 }
@@ -1947,6 +1947,7 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 20px;
+  border: 1px solid var(--gray-neutral-800);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   overflow: hidden;
