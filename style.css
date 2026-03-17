@@ -1548,6 +1548,7 @@ body {
 .accordion-body {
   display: none;
   padding: 4px 14px 12px;
+  background: var(--semantic-bg-normal);
 }
 
 .accordion-item.open .accordion-body {
@@ -1877,7 +1878,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 20px;
   cursor: pointer;
 }
 
@@ -2048,6 +2049,7 @@ body {
 .av-circle {
   border-radius: 50%;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 /* ══════════════════════════════════════ */
@@ -2217,7 +2219,7 @@ body {
 }
 .notif-item-content-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
 }
 .notif-item-subtext {

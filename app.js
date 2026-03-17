@@ -1203,6 +1203,7 @@ function renderNotif() {
             <div class="notif-item-subtext">3분 내 응답하지 않으면 자동 취소됩니다.</div>
           </div>
         </div>
+        <div class="notif-time">${item.time}</div>
       `;
     } else if (item.type === 'timeout') {
       el.className = 'notif-item timeout-type';
