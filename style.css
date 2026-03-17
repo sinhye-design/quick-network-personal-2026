@@ -741,7 +741,7 @@ body {
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 20px 16px 90px;
+  padding: 20px 20px 64px;
 }
 
 .scroll-body::-webkit-scrollbar {
