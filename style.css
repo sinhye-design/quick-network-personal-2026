@@ -909,8 +909,8 @@ body {
   display: flex;
   gap: 4px;
   padding: 10px 16px;
-  background: var(--semantic-bg-subtle);
-  border-bottom: 1px solid var(--semantic-line-normal);
+  /* background: var(--semantic-bg-subtle); */
+  /* border-bottom: 1px solid var(--semantic-line-normal); */
   flex-shrink: 0;
 }
 

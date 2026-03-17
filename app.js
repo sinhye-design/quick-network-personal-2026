@@ -309,13 +309,8 @@ function startReg(editing) {
   }
   const backBtn = document.getElementById('reg-back-btn');
   const logo = document.getElementById('reg-logo');
-  if (editing) {
-    backBtn.style.display = '';
-    logo.style.display = 'none';
-  } else {
-    backBtn.style.display = 'none';
-    logo.style.display = '';
-  }
+  backBtn.style.display = '';
+  logo.style.display = 'none';
   buildRegStep(); showScreen('register');
 }
 
@@ -341,8 +336,8 @@ function buildRegStep() {
         <div class="form-section-title">기본 정보</div>
         <div class="field"><label>이름 / 닉네임 *</label><input id="r-name" type="text" placeholder="닉네임글자수_123" value="${esc(S.regData.name||'')}"></div>
         <div class="field"><label>직업 / 역할 *</label><input id="r-role" type="text" placeholder="프론트엔드 개발자" value="${esc(S.regData.role||'')}"></div>
-        <div class="field"><label>소속</label><input id="r-company" type="text" placeholder="스타트업" value="${esc(S.regData.company||'')}"></div>
-        <div class="field"><label>한줄 소개 *</label><textarea id="r-bio" placeholder="간단하게 자신을 소개해 주세요">${esc(S.regData.bio||'')}</textarea></div>
+        <div class="field"><label>소속 *</label><input id="r-company" type="text" placeholder="스타트업" value="${esc(S.regData.company||'')}"></div>
+        <div class="field"><label>한줄 소개</label><textarea id="r-bio" placeholder="간단하게 자신을 소개해 주세요">${esc(S.regData.bio||'안녕하세요.')}</textarea></div>
       </div>
       <div class="form-section">
         <div class="form-section-title">연락처</div>
@@ -493,9 +488,10 @@ function buildChips(cid,items,getVal,setVal) {
 function regStep1Next() {
   const name=document.getElementById('r-name').value.trim();
   const role=document.getElementById('r-role').value.trim();
-  const bio=document.getElementById('r-bio').value.trim();
-  if(!name||!role||!bio){toast('이름, 역할, 소개는 필수예요');return;}
-  S.regData={name,role,bio,company:document.getElementById('r-company').value.trim(),phone:document.getElementById('r-phone').value.trim(),email:document.getElementById('r-email').value.trim(),link:document.getElementById('r-link').value.trim()};
+  const company=document.getElementById('r-company').value.trim();
+  const bio=document.getElementById('r-bio').value.trim()||'안녕하세요.';
+  if(!name||!role||!company){toast('이름, 역할, 소속은 필수예요');return;}
+  S.regData={name,role,bio,company,phone:document.getElementById('r-phone').value.trim(),email:document.getElementById('r-email').value.trim(),link:document.getElementById('r-link').value.trim()};
   S.regStep=2;buildRegStep();
 }
 
@@ -1626,12 +1622,8 @@ function toast(msg, sub){
 // ═══════════════════════════════════
 function init() {
   load();
-  if (S.myId) {
-    showScreen('home');
-    renderHomeList();
-  } else {
-    showScreen('landing');
-  }
+  // QA: 항상 사전등록 화면으로 시작
+  showScreen('reg-type');
 }
 
 init();
