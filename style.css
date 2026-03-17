@@ -2694,6 +2694,10 @@ body {
   overflow: hidden;
   width: 100%;
   margin-bottom: 16px;
+  position: relative;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .avatar-roll-track {

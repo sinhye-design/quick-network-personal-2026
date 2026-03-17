@@ -260,11 +260,11 @@ function renderZoneEntry() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   const body = document.getElementById('zone-entry-body');
   body.innerHTML = `
-    <div style="display:flex;flex-direction:column;align-items:center;padding:40px 20px 32px;gap:32px">
+    // <div style="display:flex;flex-direction:column;align-items:center;gap:40px">
       <div style="text-align:center">
         <div style="font-size:14px;color:var(--semantic-text-assistive);margin-bottom:6px">입장 시 QR코드를 보여주세요</div>
       </div>
-      <canvas id="zone-qr" width="220" height="220" style="border-radius:12px;background:#fff;padding:12px"></canvas>
+      <canvas id="zone-qr" width="200" height="200" style="background:#fff;padding:12px"></canvas>
       <button class="btn btn-primary" style="width:100%" onclick="enterHome()">네트워킹존 입장</button>
     </div>
   `;
