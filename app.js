@@ -260,7 +260,7 @@ function renderZoneEntry() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   const body = document.getElementById('zone-entry-body');
   body.innerHTML = `
-    // <div style="display:flex;flex-direction:column;align-items:center;gap:40px">
+     <div style="display:flex;flex-direction:column;align-items:center;gap:40px">
       <div style="text-align:center">
         <div style="font-size:14px;color:var(--semantic-text-assistive);margin-bottom:6px">입장 시 QR코드를 보여주세요</div>
       </div>
