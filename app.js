@@ -489,7 +489,7 @@ function regStep1Next() {
   const name=document.getElementById('r-name').value.trim();
   const role=document.getElementById('r-role').value.trim();
   const company=document.getElementById('r-company').value.trim();
-  const bio=document.getElementById('r-bio').value.trim()||'안녕하세요.';
+  const bio=document.getElementById('r-bio').value.trim()||'안녕하세요';
   if(!name||!role||!company){toast('이름, 역할, 소속은 필수예요');return;}
   S.regData={name,role,bio,company,phone:document.getElementById('r-phone').value.trim(),email:document.getElementById('r-email').value.trim(),link:document.getElementById('r-link').value.trim()};
   S.regStep=2;buildRegStep();
