@@ -301,7 +301,7 @@ function renderWelcome() {
           <img src="icons/Logo.svg" width="28" height="28" onerror="this.style.display='none'">
           <span style="font-size:24px;font-weight:600;color:var(--semantic-text-normal)">퀵네트워크</span>
         </div>
-        <div style="font-size:18px;font-weight:500;line-height:1.5;color:var(--semantic-text-normal);">지금, IF KAKAO 2026에서<br>놓치지 말아야 할 연결을 시작해 보세요!</div>
+        <div style="font-size:18px;font-weight:500;line-height:1.5;color:var(--semantic-text-normal);">지금, IF KAKAO 2026 에서<br>놓치지 말아야 할 연결을 시작해 보세요!</div>
       </div>
       <div style="background:var(--semantic-bg-subtle);border-radius:12px;overflow:hidden">
         <div class="avatar-roll-wrap">
@@ -314,8 +314,8 @@ function renderWelcome() {
             }).join('')}
           </div>
         </div>
-        <div style="font-size:18px;color:var(--semantic-text-normal);line-height:1.6;padding:16px 20px 20px">
-          내가 관심 있는 [ <span style="color:var(--semantic-text-primary);font-weight:600">${esc(myInterest)}</span> ]참여자가<br>
+        <div style="font-size:18px;color:var(--semantic-text-normal);line-height:1.6;padding:20px">
+          내가 관심 있는 [ <span style="color:var(--semantic-text-primary);font-weight:600">${esc(myInterest)}</span> ] 참여자가<br>
           [ <span style="color:var(--semantic-text-accent);font-weight:600">${count}</span> ] 명 있어요
         </div>
       </div>

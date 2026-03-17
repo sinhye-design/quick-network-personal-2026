@@ -2702,9 +2702,10 @@ body {
 
 .avatar-roll-track {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   animation: avatarRoll 7s linear infinite;
   width: max-content;
+  padding-top: 24px;
 }
 
 .avatar-roll-track:hover {
