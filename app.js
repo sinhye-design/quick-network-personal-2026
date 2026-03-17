@@ -337,7 +337,7 @@ function buildRegStep() {
         <div class="field"><label>이름 / 닉네임 *</label><input id="r-name" type="text" placeholder="닉네임글자수_123" value="${esc(S.regData.name||'')}"></div>
         <div class="field"><label>직업 / 역할 *</label><input id="r-role" type="text" placeholder="프론트엔드 개발자" value="${esc(S.regData.role||'')}"></div>
         <div class="field"><label>소속 *</label><input id="r-company" type="text" placeholder="스타트업" value="${esc(S.regData.company||'')}"></div>
-        <div class="field"><label>한줄 소개</label><textarea id="r-bio" placeholder="간단하게 자신을 소개해 주세요">${esc(S.regData.bio||'안녕하세요.')}</textarea></div>
+        <div class="field"><label>한줄 소개</label><textarea id="r-bio" placeholder="간단하게 자신을 소개해 주세요">${esc(S.regData.bio||'안녕하세요')}</textarea></div>
       </div>
       <div class="form-section">
         <div class="form-section-title">연락처</div>
