@@ -16,6 +16,14 @@ function iconImg(name, size = 24, style = '') {
   return `<img src="${src}" width="${size}" height="${size}"${style ? ` style="${style}"` : ''} alt="${name}">`;
 }
 
+const GRAPHIC_UP_RIGHT   = "PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9Ijg1IiB2aWV3Qm94PSIwIDAgMTAwIDg1IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8ZyBjbGlwLXBhdGg9InVybCgjY2xpcDBfNDAwMDAxMTJfMjc3MCkiPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTg0LjU0MDUgODNDODQuNTQwNSA4NC4xMDQ2IDg1LjQzNiA4NSA4Ni41NDA1IDg1SDEwMC41NDFDMTAxLjY0NSA4NSAxMDIuNTQxIDg0LjEwNDYgMTAyLjU0MSA4M1Y3MEMxMDIuNTQxIDY4Ljg5NTQgMTAzLjQzNiA2OCAxMDQuNTQxIDY4SDExOEMxMTkuMTA1IDY4IDEyMCA2Ny4xMDQ2IDEyMCA2NlY1M0MxMjAgNTEuODk1NCAxMjAuODk1IDUxIDEyMiA1MUgxMzRDMTM1LjEwNSA1MSAxMzYgNTEuODk1NCAxMzYgNTNWNjZDMTM2IDY3LjEwNDYgMTM2Ljg5NSA2OCAxMzggNjhIMTUyQzE1My4xMDUgNjggMTU0IDY3LjEwNDYgMTU0IDY2VjUyQzE1NCA1MC44OTU0IDE1My4xMDUgNTAgMTUyIDUwSDEzOUMxMzcuODk1IDUwIDEzNyA0OS4xMDQ2IDEzNyA0OFYzNkMxMzcgMzQuODk1NCAxMzcuODk1IDM0IDEzOSAzNEgxNTFDMTUyLjEwNSAzNCAxNTMgMzMuMTA0NiAxNTMgMzJWMTdWMTZWLTMzQzE1MyAtMzQuMTA0NiAxNTIuMTA1IC0zNSAxNTEgLTM1SDEyMEg2OUg2OEg1M0M1MS44OTU0IC0zNSA1MSAtMzQuMTA0NiA1MSAtMzNWLTIwQzUxIC0xOC44OTU0IDUwLjEwNDYgLTE4IDQ5IC0xOEgzNy40NzI4QzM2LjM2ODMgLTE4IDM1LjQ3MjggLTE4Ljg5NTQgMzUuNDcyOCAtMjBWLTMyLjYwOTFDMzUuNDcyOCAtMzMuNzEzNiAzNC41Nzc0IC0zNC42MDkxIDMzLjQ3MjggLTM0LjYwOTFIMTkuOTMyMUMxOC44Mjc2IC0zNC42MDkxIDE3LjkzMjEgLTMzLjcxMzYgMTcuOTMyMSAtMzIuNjA5MVYtMTkuMDY4NEMxNy45MzIxIC0xNy45NjM4IDE4LjgyNzYgLTE3LjA2ODQgMTkuOTMyMSAtMTcuMDY4NEgzMkMzMy4xMDQ2IC0xNy4wNjg0IDM0IC0xNi4xNzI5IDM0IC0xNS4wNjg0Vi0yQzM0IC0wLjg5NTQzMiAzNC44OTU0IDAgMzYgMEg0OC41NDA1QzQ5LjY0NTEgMCA1MC41NDA1IDAuODk1NDMyIDUwLjU0MDUgMlYxNEM1MC41NDA1IDE1LjEwNDYgNDkuNjQ1MSAxNiA0OC41NDA1IDE2SDM1LjU0MDVDMzQuNDM2IDE2IDMzLjU0MDUgMTYuODk1NCAzMy41NDA1IDE4VjMyQzMzLjU0MDUgMzMuMTA0NiAzNC40MzYgMzQgMzUuNTQwNSAzNEg0OS41NDA1QzUwLjY0NTEgMzQgNTEuNTQwNSAzMy4xMDQ2IDUxLjU0MDUgMzJWMTlDNTEuNTQwNSAxNy44OTU0IDUyLjQzNiAxNyA1My41NDA1IDE3SDY1LjU0MDVDNjYuNjQ1MSAxNyA2Ny41NDA1IDE3Ljg5NTQgNjcuNTQwNSAxOVYzMkM2Ny41NDA1IDMzLjEwNDYgNjguNDM2IDM0IDY5LjU0MDUgMzRIODNDODQuMTA0NiAzNCA4NSAzNC44OTU0IDg1IDM2VjQ5Qzg1IDUwLjEwNDYgODUuODk1NCA1MSA4NyA1MUgxMDBDMTAxLjEwNSA1MSAxMDIgNTEuODk1NCAxMDIgNTNWNjVDMTAyIDY2LjEwNDYgMTAxLjEwNSA2NyAxMDAgNjdIODYuNTQwNUM4NS40MzYgNjcgODQuNTQwNSA2Ny44OTU0IDg0LjU0MDUgNjlWODNaTTEwNSA1MEMxMDMuODk1IDUwIDEwMyA0OS4xMDQ2IDEwMyA0OFYzNkMxMDMgMzQuODk1NCAxMDMuODk1IDM0IDEwNSAzNEgxMTdDMTE4LjEwNSAzNCAxMTkgMzQuODk1NCAxMTkgMzZWNDhDMTE5IDQ5LjEwNDYgMTE4LjEwNSA1MCAxMTcgNTBIMTA1Wk0xMTggMTZDMTE5LjEwNSAxNiAxMjAgMTUuMTA0NiAxMjAgMTRWMUMxMjAgLTAuMTA0NTY4IDExOS4xMDUgLTEgMTE4IC0xSDEwNS41NDFDMTA0LjQzNiAtMSAxMDMuNTQxIC0wLjEwNDU2OCAxMDMuNTQxIDFWMTRDMTAzLjU0MSAxNS4xMDQ2IDEwNC40MzYgMTYgMTA1LjU0MSAxNkgxMThaTTUyIC0zQzUyIC0xLjg5NTQzIDUyLjg5NTQgLTEgNTQgLTFINjZDNjcuMTA0NiAtMSA2OCAtMS44OTU0MyA2OCAtM1YtMTVDNjggLTE2LjEwNDYgNjcuMTA0NiAtMTcgNjYgLTE3SDU0QzUyLjg5NTQgLTE3IDUyIC0xNi4xMDQ2IDUyIC0xNVYtM1pNODUuNTQwNSAxOUM4NS41NDA1IDE3Ljg5NTQgODYuNDM2IDE3IDg3LjU0MDUgMTdIMTAwQzEwMS4xMDUgMTcgMTAyIDE3Ljg5NTQgMTAyIDE5VjMxQzEwMiAzMi4xMDQ2IDEwMS4xMDUgMzMgMTAwIDMzSDg3LjU0MDVDODYuNDM2IDMzIDg1LjU0MDUgMzIuMTA0NiA4NS41NDA1IDMxVjE5Wk0xOCAxNUMxOCAxNi4xMDQ2IDE3LjEwNDYgMTcgMTYgMTdIMkMwLjg5NTQzMSAxNyAwIDE2LjEwNDYgMCAxNVYyQzAgMC44OTU0MzIgMC44OTU0MyAwIDIgMEgxNkMxNy4xMDQ2IDAgMTggMC44OTU0MzIgMTggMlYxNVoiIGZpbGw9IiM4NTZCRkYiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF80MDAwMDExMl8yNzcwIj4KPHJlY3Qgd2lkdGg9IjEwMiIgaGVpZ2h0PSI4NyIgZmlsbD0id2hpdGUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgLTIpIi8+CjwvY2xpcFBhdGg+CjwvZGVmcz4KPC9zdmc+Cg==";
+const GRAPHIC_UNDER_LEFT = "PHN2ZyB3aWR0aD0iMTE5IiBoZWlnaHQ9IjEwMiIgdmlld0JveD0iMCAwIDExOSAxMDIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF80MDAwMDExMl8yNzUzKSI+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNMzQuNDU5NSAyQzM0LjQ1OTUgMC44OTU0MzEgMzMuNTY0IDAgMzIuNDU5NSAwSDE4LjQ1OTVDMTcuMzU0OSAwIDE2LjQ1OTUgMC44OTU0MyAxNi40NTk1IDJWMTVDMTYuNDU5NSAxNi4xMDQ2IDE1LjU2NCAxNyAxNC40NTk1IDE3SDFDLTAuMTA0NTY4IDE3IC0xIDE3Ljg5NTQgLTEgMTlWMzJDLTEgMzMuMTA0NiAtMS44OTU0MyAzNCAtMyAzNEgtMTVDLTE2LjEwNDYgMzQgLTE3IDMzLjEwNDYgLTE3IDMyVjE5Qy0xNyAxNy44OTU0IC0xNy44OTU0IDE3IC0xOSAxN0gtMzNDLTM0LjEwNDYgMTcgLTM1IDE3Ljg5NTQgLTM1IDE5VjMzQy0zNSAzNC4xMDQ2IC0zNC4xMDQ2IDM1IC0zMyAzNUgtMjBDLTE4Ljg5NTQgMzUgLTE4IDM1Ljg5NTQgLTE4IDM3VjQ5Qy0xOCA1MC4xMDQ2IC0xOC44OTU0IDUxIC0yMCA1MUgtMzJDLTMzLjEwNDYgNTEgLTM0IDUxLjg5NTQgLTM0IDUzVjY4VjY5VjExOEMtMzQgMTE5LjEwNSAtMzMuMTA0NiAxMjAgLTMyIDEyMEgtMUg1MEg1MUg2NkM2Ny4xMDQ2IDEyMCA2OCAxMTkuMTA1IDY4IDExOFYxMDVDNjggMTAzLjg5NSA2OC44OTU0IDEwMyA3MCAxMDNIODEuNTI3MkM4Mi42MzE3IDEwMyA4My41MjcyIDEwMy44OTUgODMuNTI3MiAxMDVWMTE3LjYwOUM4My41MjcyIDExOC43MTQgODQuNDIyNiAxMTkuNjA5IDg1LjUyNzIgMTE5LjYwOUg5OS4wNjc5QzEwMC4xNzIgMTE5LjYwOSAxMDEuMDY4IDExOC43MTQgMTAxLjA2OCAxMTcuNjA5VjEwNC4wNjhDMTAxLjA2OCAxMDIuOTY0IDEwMC4xNzIgMTAyLjA2OCA5OS4wNjc5IDEwMi4wNjhIODdDODUuODk1NCAxMDIuMDY4IDg1IDEwMS4xNzMgODUgMTAwLjA2OFY4N0M4NSA4NS44OTU0IDg0LjEwNDYgODUgODMgODVINzAuNDU5NUM2OS4zNTQ5IDg1IDY4LjQ1OTUgODQuMTA0NiA2OC40NTk1IDgzVjcxQzY4LjQ1OTUgNjkuODk1NCA2OS4zNTQ5IDY5IDcwLjQ1OTUgNjlIODMuNDU5NUM4NC41NjQgNjkgODUuNDU5NSA2OC4xMDQ2IDg1LjQ1OTUgNjdWNTNDODUuNDU5NSA1MS44OTU0IDg0LjU2NCA1MSA4My40NTk1IDUxSDY5LjQ1OTVDNjguMzU0OSA1MSA2Ny40NTk1IDUxLjg5NTQgNjcuNDU5NSA1M1Y2NkM2Ny40NTk1IDY3LjEwNDYgNjYuNTY0IDY4IDY1LjQ1OTUgNjhINTMuNDU5NUM1Mi4zNTQ5IDY4IDUxLjQ1OTUgNjcuMTA0NiA1MS40NTk1IDY2VjUzQzUxLjQ1OTUgNTEuODk1NCA1MC41NjQgNTEgNDkuNDU5NSA1MUgzNkMzNC44OTU0IDUxIDM0IDUwLjEwNDYgMzQgNDlWMzZDMzQgMzQuODk1NCAzMy4xMDQ2IDM0IDMyIDM0SDE5QzE3Ljg5NTQgMzQgMTcgMzMuMTA0NiAxNyAzMlYyMEMxNyAxOC44OTU0IDE3Ljg5NTQgMTggMTkgMThIMzIuNDU5NUMzMy41NjQgMTggMzQuNDU5NSAxNy4xMDQ2IDM0LjQ1OTUgMTZWMlpNMTQgMzVDMTUuMTA0NiAzNSAxNiAzNS44OTU0IDE2IDM3VjQ5QzE2IDUwLjEwNDYgMTUuMTA0NiA1MSAxNCA1MUgyQzAuODk1NDMyIDUxIDAgNTAuMTA0NiAwIDQ5VjM3QzAgMzUuODk1NCAwLjg5NTQzMiAzNSAyIDM1SDE0Wk0xIDY5Qy0wLjEwNDU2OCA2OSAtMSA2OS44OTU0IC0xIDcxVjg0Qy0xIDg1LjEwNDYgLTAuMTA0NTY4IDg2IDEgODZIMTMuNDU5NUMxNC41NjQgODYgMTUuNDU5NSA4NS4xMDQ2IDE1LjQ1OTUgODRWNzFDMTUuNDU5NSA2OS44OTU0IDE0LjU2NCA2OSAxMy40NTk1IDY5SDFaTTY3IDg4QzY3IDg2Ljg5NTQgNjYuMTA0NiA4NiA2NSA4Nkg1M0M1MS44OTU0IDg2IDUxIDg2Ljg5NTQgNTEgODhWMTAwQzUxIDEwMS4xMDUgNTEuODk1NCAxMDIgNTMgMTAySDY1QzY2LjEwNDYgMTAyIDY3IDEwMS4xMDUgNjcgMTAwVjg4Wk0zMy40NTk1IDY2QzMzLjQ1OTUgNjcuMTA0NiAzMi41NjQgNjggMzEuNDU5NSA2OEgxOUMxNy44OTU0IDY4IDE3IDY3LjEwNDYgMTcgNjZWNTRDMTcgNTIuODk1NCAxNy44OTU0IDUyIDE5IDUySDMxLjQ1OTVDMzIuNTY0IDUyIDMzLjQ1OTUgNTIuODk1NCAzMy40NTk1IDU0VjY2Wk0xMDEgNzBDMTAxIDY4Ljg5NTQgMTAxLjg5NSA2OCAxMDMgNjhIMTE3QzExOC4xMDUgNjggMTE5IDY4Ljg5NTQgMTE5IDcwVjgzQzExOSA4NC4xMDQ2IDExOC4xMDUgODUgMTE3IDg1SDEwM0MxMDEuODk1IDg1IDEwMSA4NC4xMDQ2IDEwMSA4M1Y3MFoiIGZpbGw9IiM4NTZCRkYiLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF80MDAwMDExMl8yNzUzIj4KPHJlY3Qgd2lkdGg9IjEyMSIgaGVpZ2h0PSIxMDQiIGZpbGw9IndoaXRlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMikiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K";
+
+function coloredGraphicSrc(base64, color) {
+  const svg = atob(base64).replace(/#856BFF/g, color);
+  return 'data:image/svg+xml;base64,' + btoa(svg);
+}
+
 function avDiv(charIdx, colorIdx, size = 48, innerSize = null) {
   const name = AVATARS[charIdx % AVATARS.length];
   const bg = AV_COLORS[colorIdx % AV_COLORS.length];
@@ -391,10 +399,9 @@ function buildAvatarPicker() {
   AVATARS.forEach((name,i)=>{
     const d=document.createElement('div');
     d.className='avatar-opt'+(i===rAvatar?' selected':'');
-    const bg = AV_COLORS[rColor % AV_COLORS.length];
     const svgBase64 = typeof SVG_DATA!=='undefined'&&SVG_DATA[name]?SVG_DATA[name]:`characters/${name}.svg`;
     d.innerHTML=`<div class="av-circle" style="width:100%;height:100%;background:#1F1F1F;">
-      <div style="width:100%;height:100%;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/85%;mask:url('${svgBase64}') no-repeat center/85%;"></div>
+      <div style="width:100%;height:100%;background-color:#ffffff;-webkit-mask:url('${svgBase64}') no-repeat center/85%;mask:url('${svgBase64}') no-repeat center/85%;"></div>
     </div>`;
     d.onclick=()=>{rAvatar=i;document.getElementById('av-row').querySelectorAll('.avatar-opt').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');updateStep1Preview();};
     row.appendChild(d);
@@ -1102,26 +1109,88 @@ function applyFilter() {
 function goQR() {
   renderQR(); showScreen('qr');
 }
+
 function renderQR() {
-  const body=document.getElementById('qr-body');
-  const me=S.people.find(p=>p.id===S.myId);
-  if(!me){body.innerHTML=`<div class="empty-state"><div class="ei">🪪</div><p>프로필을 먼저 등록해 주세요</p></div>`;return;}
-  body.innerHTML=`
-    <div class="qr-card">
-      <div class="qr-code-box">${avDiv(me.avIdx||0, me.colIdx||0, 100)}</div>
-      <div class="qr-name">${esc(me.name)}</div>
-      <div class="qr-role">${esc(me.role)}</div>
-      ${me.status?`<div class="qr-status">"${esc(me.status)}"</div>`:''}
-      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px">${(me.tags||[]).map(t=>`<span class="tag primary">${esc(t)}</span>`).join('')}</div>
-      <button class="btn btn-outline btn-sm" onclick="toast('링크가 복사됐어요!')">🔗 링크 복사</button>
+  const body = document.getElementById('qr-body');
+  const me = S.people.find(p => p.id === S.myId);
+  if (!me) {
+    body.innerHTML = `<div class="empty-state"><p>프로필을 먼저 등록해 주세요</p></div>`;
+    return;
+  }
+
+  const rows = [
+    ['직무/직책', me.role     || '-'],
+    ['소속',     me.company  || '-'],
+    ['휴대폰',   me.phone    || '-'],
+    ['이메일',   me.email    || '-'],
+    ['링크',     me.link     || '-'],
+  ];
+
+  body.innerHTML = `
+    <div class="biz-card-scene" onclick="flipBizCard(this)">
+      <div class="biz-card">
+        <div class="biz-card-face biz-card-front">
+          <img class="biz-graphic biz-graphic-tr" src="${coloredGraphicSrc(GRAPHIC_UP_RIGHT, AV_COLORS[me.colIdx||0])}" alt="">
+          <img class="biz-graphic biz-graphic-bl" src="${coloredGraphicSrc(GRAPHIC_UNDER_LEFT, AV_COLORS[me.colIdx||0])}" alt="">
+          <div class="biz-name">${esc(me.name)}</div>
+          <div class="biz-info-table">
+            ${rows.map(([l, v]) => `
+              <div class="biz-info-row">
+                <span class="biz-label">${esc(l)}</span>
+                <span class="biz-value">${esc(v)}</span>
+              </div>`).join('')}
+          </div>
+          <div class="biz-avatar-wrap">
+            ${(() => {
+              const name = AVATARS[(me.avIdx||0) % AVATARS.length];
+              const bg = AV_COLORS[(me.colIdx||0) % AV_COLORS.length];
+              const svgBase64 = typeof SVG_DATA !== 'undefined' && SVG_DATA[name] ? SVG_DATA[name] : `characters/${name}.svg`;
+              return `<div style="width:136px;height:136px;background-color:${bg};-webkit-mask:url('${svgBase64}') no-repeat center/contain;mask:url('${svgBase64}') no-repeat center/contain;"></div>`;
+            })()}
+          </div>
+        </div>
+        <div class="biz-card-face biz-card-back">
+          <canvas id="biz-qr" width="160" height="160"></canvas>
+        </div>
+      </div>
     </div>
-    <div class="profile-info-card">
-      ${me.bio?`<div class="profile-row"><span class="pr-icon">💬</span><div><div class="pr-label">소개</div><div class="pr-val">${esc(me.bio)}</div></div></div>`:''}
-      ${me.email?`<div class="profile-row"><span class="pr-icon">✉️</span><div><div class="pr-label">이메일</div><div class="pr-val">${esc(me.email)}</div></div></div>`:''}
-      ${me.company?`<div class="profile-row"><span class="pr-icon">🏢</span><div><div class="pr-label">소속</div><div class="pr-val">${esc(me.company)}</div></div></div>`:''}
-    </div>
-    <button class="btn btn-outline" onclick="startReg('${me.id}')">✏️ 프로필 수정</button>
+    <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--semantic-text-assistive)">탭하면 QR코드로 전환돼요</div>
   `;
+
+  requestAnimationFrame(() => drawBizQR('biz-qr', me.id + me.name));
+}
+
+function flipBizCard(scene) {
+  scene.querySelector('.biz-card').classList.toggle('flipped');
+}
+
+function drawBizQR(canvasId, seed) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const N = 21, sz = 7, pad = Math.floor((160 - N * sz) / 2);
+
+  let h = 5381;
+  for (let i = 0; i < seed.length; i++) h = ((h << 5) + h + seed.charCodeAt(i)) | 0;
+
+  function cell(x, y) {
+    const inTL = x < 7 && y < 7;
+    const inTR = x > N-8 && y < 7;
+    const inBL = x < 7 && y > N-8;
+    if (inTL || inTR || inBL) {
+      const inner = (inTL && x>=1&&x<=5&&y>=1&&y<=5) || (inTR && x>=N-6&&x<=N-2&&y>=1&&y<=5) || (inBL && x>=1&&x<=5&&y>=N-6&&y<=N-2);
+      const core  = (inTL && x>=2&&x<=4&&y>=2&&y<=4) || (inTR && x>=N-5&&x<=N-3&&y>=2&&y<=4) || (inBL && x>=2&&x<=4&&y>=N-5&&y<=N-3);
+      return core ? true : inner ? false : true;
+    }
+    if (x===7||y===7||x===N-8||(y===N-8&&x<7)) return false;
+    return (((h ^ (x*127+y*251)) * 0x9e3779b9) >>> 0) % 3 !== 0;
+  }
+
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 200, 200);
+  ctx.fillStyle = '#000';
+  for (let y = 0; y < N; y++)
+    for (let x = 0; x < N; x++)
+      if (cell(x, y)) ctx.fillRect(pad + x*sz, pad + y*sz, sz, sz);
 }
 
 // ═══════════════════════════════════
