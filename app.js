@@ -506,10 +506,9 @@ function toggleNetworking() {
   const overlay = document.getElementById('networking-off-overlay');
   if (S.networkingOn) {
     overlay.classList.add('hidden');
-    toast('네트워킹 ON!');
+    toast('네트워킹 ON!', '네트워킹을 원하지 않는다면 스위치를 끌 수 있어요');
   } else {
     overlay.classList.remove('hidden');
-    toast('네트워킹을 종료했어요');
   }
 }
 
@@ -1520,10 +1519,13 @@ function esc(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function toast(msg){
+function toast(msg, sub){
   const el=document.getElementById('toast');
-  el.textContent=msg;el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),2500);
+  el.innerHTML = sub
+    ? `<div class="toast-title">${msg}</div><div class="toast-sub">${sub}</div>`
+    : `<div class="toast-title">${msg}</div>`;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3500);
 }
 
 // ═══════════════════════════════════
