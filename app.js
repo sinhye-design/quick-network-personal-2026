@@ -295,31 +295,31 @@ function renderWelcome() {
   const previewPeople = matched.slice(0, 4).length ? matched.slice(0, 4) : S.people.filter(p => p.id !== me.id).slice(0, 4);
 
   body.innerHTML = `
-    <div style="padding:32px 0px;display:flex;flex-direction:column;gap:32px">
+    <div style="padding:32px 0px 40px;display:flex;flex-direction:column;gap:32px">
       <div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 20px">
           <img src="icons/Logo.svg" width="28" height="28" onerror="this.style.display='none'">
           <span style="font-size:24px;font-weight:600;color:var(--semantic-text-normal)">퀵네트워크</span>
         </div>
-        <div style="font-size:18px;font-weight:500;line-height:1.5;color:var(--semantic-text-normal)">지금, IF KAKAO 2026에서<br>놓치지 말아야 할 연결을 시작해 보세요!</div>
+        <div style="font-size:18px;font-weight:500;line-height:1.5;color:var(--semantic-text-normal);padding:0 20px">지금, IF KAKAO 2026에서<br>놓치지 말아야 할 연결을 시작해 보세요!</div>
       </div>
-      <div style="background:var(--semantic-bg-subtle);border-radius:16px;padding:20px;overflow:hidden">
-        <div class="avatar-roll-wrap">
-          <div class="avatar-roll-track">
-            ${[...previewPeople, ...previewPeople].map(p => {
-              const name = AVATARS[(p.avIdx||0) % AVATARS.length];
-              const bg = AV_COLORS[(p.colIdx||0) % AV_COLORS.length];
-              const src = typeof SVG_DATA !== 'undefined' && SVG_DATA[name] ? SVG_DATA[name] : `characters/${name}.svg`;
-              return `<div style="width:100px;height:100px;flex-shrink:0;background-color:${bg};-webkit-mask:url('${src}') no-repeat center/contain;mask:url('${src}') no-repeat center/contain;"></div>`;
-            }).join('')}
-          </div>
+      <div class="avatar-roll-wrap">
+        <div class="avatar-roll-track">
+          ${[...previewPeople, ...previewPeople].map(p => {
+            const name = AVATARS[(p.avIdx||0) % AVATARS.length];
+            const bg = AV_COLORS[(p.colIdx||0) % AV_COLORS.length];
+            const src = typeof SVG_DATA !== 'undefined' && SVG_DATA[name] ? SVG_DATA[name] : `characters/${name}.svg`;
+            return `<div style="width:100px;height:100px;flex-shrink:0;background-color:${bg};-webkit-mask:url('${src}') no-repeat center/contain;mask:url('${src}') no-repeat center/contain;"></div>`;
+          }).join('')}
         </div>
+      </div>
+      <div style="background:var(--semantic-bg-subtle);border-radius:16px;padding:20px;margin:0 20px">
         <div style="font-size:18px;color:var(--semantic-text-normal);line-height:1.6">
-          내가 관심 있는 [ <span style="color:var(--semantic-text-primary);font-weight:600"> ${esc(myInterest)} </span> ]참여자가 <br> [
-          <span style="color:var(--semantic-text-accent);font-weight:600"> ${count} </span> ] 명 있어요
+          내가 관심 있는 [ <span style="color:var(--semantic-text-primary);font-weight:600">${esc(myInterest)}</span> ]참여자가<br>
+          [ <span style="color:var(--semantic-text-accent);font-weight:600">${count}</span> ] 명 있어요
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-top:auto">
+      <div style="display:flex;flex-direction:column;gap:10px;padding:0 20px">
         <button class="btn btn-primary" onclick="goHomeFromWelcome()">iOS로 입장</button>
         <button class="btn btn-primary" onclick="goHomeFromWelcome()">Android로 입장</button>
       </div>
