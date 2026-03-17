@@ -789,7 +789,7 @@ body {
   left: 20px;
   right: 20px;
   transform: translateY(20px);
-  background: var(--semantic-bg-subtle);
+  background: var(--semantic-bg-normal);
   color: #fff;
   padding: 16px 20px;
   border-radius: 12px;
